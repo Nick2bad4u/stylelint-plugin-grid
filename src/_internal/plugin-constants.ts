@@ -2,29 +2,27 @@
  * @packageDocumentation
  * Static package and docs constants used throughout the Stylelint plugin runtime.
  */
+import type { ArrayValues, UnknownRecord } from "type-fest";
+
 import packageJson from "../../package.json" with { type: "json" };
 
 /** Public npm package name. */
-export const PACKAGE_NAME = "stylelint-plugin-docusaurus";
+export const PACKAGE_NAME = "stylelint-plugin-grid";
 /** Public Stylelint rule namespace. */
-export const PLUGIN_NAMESPACE = "docusaurus";
+export const PLUGIN_NAMESPACE = "grid";
 /** Public GitHub repository URL. */
 export const REPOSITORY_URL =
-    "https://github.com/Nick2bad4u/stylelint-plugin-docusaurus";
+    "https://github.com/Nick2bad4u/stylelint-plugin-grid";
 /** Public documentation site URL. */
 export const DOCS_SITE_URL =
-    "https://nick2bad4u.github.io/stylelint-plugin-docusaurus";
+    "https://nick2bad4u.github.io/stylelint-plugin-grid";
 /** Base URL for authored rule documentation. */
 export const DOCS_RULES_BASE_URL: `${string}/docs/rules` = `${DOCS_SITE_URL}/docs/rules`;
-/** Supported shareable config names exported by this template. */
-export const CONFIG_NAMES = [
-    "docusaurus-recommended",
-    "docusaurus-all",
-    "docusaurus-docs-safe",
-] as const;
+/** Supported shareable config names exported by this package. */
+export const CONFIG_NAMES = ["grid-all", "grid-recommended"] as const;
 
 /** Shareable config names exported by the plugin runtime. */
-export type DocusaurusConfigName = (typeof CONFIG_NAMES)[number];
+export type GridConfigName = ArrayValues<typeof CONFIG_NAMES>;
 
 /**
  * Resolve package version from package.json data.
@@ -38,7 +36,7 @@ function getPackageVersion(pkg: unknown): string {
         return "0.0.0";
     }
 
-    const version = Reflect.get(pkg, "version");
+    const version = (pkg as UnknownRecord)["version"];
 
     return typeof version === "string" ? version : "0.0.0";
 }

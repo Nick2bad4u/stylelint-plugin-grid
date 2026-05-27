@@ -59,6 +59,8 @@ export function getConfigDocPath(
     repositoryRoot?: string
 ): string;
 
+export function getConfigIndexDocPath(repositoryRoot?: string): string;
+
 export function resolveConfigDocTargets(input: {
     readonly configNames: readonly string[];
     readonly hasDocFile?: (path: string) => Promise<boolean>;
@@ -72,6 +74,12 @@ export function resolveConfigDocTargets(input: {
 
 export function generateRulesSectionFromConfig(input: {
     readonly configName: string;
+    readonly configs: Readonly<Record<string, ConfigMatrixConfigModule>>;
+    readonly rules: Readonly<Record<string, ConfigMatrixRuleModule>>;
+}): string;
+
+export function generateRulesSectionFromConfigsIndex(input: {
+    readonly configNames: readonly string[];
     readonly configs: Readonly<Record<string, ConfigMatrixConfigModule>>;
     readonly rules: Readonly<Record<string, ConfigMatrixRuleModule>>;
 }): string;

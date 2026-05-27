@@ -4,7 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import {
     generateRulesSectionFromConfig,
+    generateRulesSectionFromConfigsIndex,
     getConfigDocPath,
+    getConfigIndexDocPath,
     isDirectExecution,
     loadBuiltPluginMetadata,
     normalizeConfigNames,
@@ -69,7 +71,7 @@ describe("sync-configs-rules-matrix automation", () => {
             configs: {
                 strict: {
                     rules: {
-                        "docusaurus/strict-rule": true,
+                        "grid/strict-rule": true,
                     },
                 },
             },
@@ -105,7 +107,7 @@ describe("sync-configs-rules-matrix automation", () => {
             configs: {
                 strict: {
                     rules: {
-                        "docusaurus/strict-rule": true,
+                        "grid/strict-rule": true,
                     },
                 },
             },
@@ -129,6 +131,60 @@ describe("sync-configs-rules-matrix automation", () => {
         );
     });
 
+    it("generates a config index rules matrix from canonical config metadata", () => {
+        expect.hasAssertions();
+
+        const generatedSection = generateRulesSectionFromConfigsIndex({
+            configNames: ["grid-recommended", "grid-all"],
+            configs: {
+                "grid-all": {
+                    rules: {
+                        "grid/policy-rule": true,
+                        "grid/recommended-rule": true,
+                    },
+                },
+                "grid-recommended": {
+                    rules: {
+                        "grid/recommended-rule": true,
+                    },
+                },
+            },
+            rules: {
+                "policy-rule": {
+                    docs: {
+                        description: "Strict policy rule.",
+                        recommended: false,
+                        url: "https://example.test/docs/rules/policy-rule",
+                    },
+                },
+                "recommended-rule": {
+                    docs: {
+                        description: "Recommended rule.",
+                        recommended: true,
+                        url: "https://example.test/docs/rules/recommended-rule",
+                    },
+                    meta: {
+                        fixable: true,
+                    },
+                },
+            },
+        });
+
+        expect(generatedSection).toContain("## Rules by Config");
+        expect(generatedSection).toContain(
+            "| Rule | Fix | [`grid-recommended`](./grid-recommended.md) | [`grid-all`](./grid-all.md) | Description |"
+        );
+        expect(generatedSection).toContain(
+            "| [`policy-rule`](../policy-rule.md) | — | — | ✅ | Strict policy rule. |"
+        );
+        expect(generatedSection).toContain(
+            "| [`recommended-rule`](../recommended-rule.md) | 🔧 | ✅ | ✅ | Recommended rule. |"
+        );
+        expect(getConfigIndexDocPath("C:/repo")).toBe(
+            String.raw`C:\repo\docs\rules\configs\index.md`
+        );
+    });
+
     it("escapes asterisks and opening brackets in config rule descriptions", () => {
         expect.hasAssertions();
 
@@ -137,14 +193,14 @@ describe("sync-configs-rules-matrix automation", () => {
             configs: {
                 strict: {
                     rules: {
-                        "docusaurus/strict-rule": true,
+                        "grid/strict-rule": true,
                     },
                 },
             },
             rules: {
                 "strict-rule": {
                     docs: {
-                        description: "Disallow --ifm-* and [data-theme] usage.",
+                        description: "Disallow area-* and [grid-area] usage.",
                         recommended: false,
                         url: "https://example.test/docs/rules/strict-rule",
                     },
@@ -156,7 +212,7 @@ describe("sync-configs-rules-matrix automation", () => {
         });
 
         expect(generatedSection).toContain(
-            "| [`strict-rule`](https://example.test/docs/rules/strict-rule) | — | Disallow --ifm-\\* and \\[data-theme] usage. |"
+            "| [`strict-rule`](https://example.test/docs/rules/strict-rule) | — | Disallow area-\\* and \\[grid-area] usage. |"
         );
     });
 
@@ -180,10 +236,10 @@ describe("sync-configs-rules-matrix automation", () => {
                 importModule: () =>
                     Promise.resolve({
                         configNames: ["strict"],
-                        docusaurusPluginConfigs: {
+                        gridPluginConfigs: {
                             strict: {
                                 rules: {
-                                    "docusaurus/strict-rule": true,
+                                    "grid/strict-rule": true,
                                 },
                             },
                         },
@@ -206,7 +262,7 @@ describe("sync-configs-rules-matrix automation", () => {
             configs: {
                 strict: {
                     rules: {
-                        "docusaurus/strict-rule": true,
+                        "grid/strict-rule": true,
                     },
                 },
             },
@@ -240,7 +296,7 @@ describe("sync-configs-rules-matrix automation", () => {
                 configs: {
                     strict: {
                         rules: {
-                            "docusaurus/strict-rule": true,
+                            "grid/strict-rule": true,
                         },
                     },
                 },
@@ -257,15 +313,23 @@ describe("sync-configs-rules-matrix automation", () => {
                     },
                 },
             },
-            readFileFn: () =>
+            readFileFn: (filePath) =>
                 Promise.resolve(
-                    [
-                        "# strict",
-                        "",
-                        "## Rules in this config",
-                        "",
-                        "stale table",
-                    ].join("\n")
+                    filePath.endsWith("index.md")
+                        ? [
+                              "# Configs",
+                              "",
+                              "## Rules by Config",
+                              "",
+                              "stale overview table",
+                          ].join("\n")
+                        : [
+                              "# strict",
+                              "",
+                              "## Rules in this config",
+                              "",
+                              "stale table",
+                          ].join("\n")
                 ),
             repositoryRootPath: "C:/repo",
             writeChanges: true,
@@ -284,13 +348,19 @@ describe("sync-configs-rules-matrix automation", () => {
             changed: true,
             updatedFilePaths: [
                 String.raw`C:\repo\docs\rules\configs\strict.md`,
+                String.raw`C:\repo\docs\rules\configs\index.md`,
             ],
         });
-        expect(writes).toHaveLength(1);
+        expect(writes).toHaveLength(2);
         expect(writes[0]?.encoding).toBe("utf8");
         expect(writes[0]?.contents).toContain("## Rules in this config");
         expect(writes[0]?.contents).toContain(
             "| [`strict-rule`](https://example.test/docs/rules/strict-rule) | 🔧 | Strict-only rule. |"
+        );
+        expect(writes[1]?.encoding).toBe("utf8");
+        expect(writes[1]?.contents).toContain("## Rules by Config");
+        expect(writes[1]?.contents).toContain(
+            "| [`strict-rule`](../strict-rule.md) | 🔧 | ✅ | Strict-only rule. |"
         );
     });
 
@@ -305,7 +375,7 @@ describe("sync-configs-rules-matrix automation", () => {
                     configs: {
                         strict: {
                             rules: {
-                                "docusaurus/strict-rule": true,
+                                "grid/strict-rule": true,
                             },
                         },
                     },
@@ -345,7 +415,9 @@ describe("sync-configs-rules-matrix automation", () => {
                 argvEntry: scriptPath,
                 currentImportUrl: scriptUrl,
             })
-        ).toBeTruthy();
+                ? "direct"
+                : "imported"
+        ).toBe("direct");
         expect(
             isDirectExecution({
                 argvEntry: path.resolve(
@@ -354,6 +426,8 @@ describe("sync-configs-rules-matrix automation", () => {
                 ),
                 currentImportUrl: scriptUrl,
             })
-        ).toBeFalsy();
+                ? "direct"
+                : "imported"
+        ).toBe("imported");
     });
 });

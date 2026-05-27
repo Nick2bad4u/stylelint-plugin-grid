@@ -8,7 +8,7 @@ describe("docs site catalog metadata", () => {
 
         /* eslint-disable import-x/no-relative-packages -- this test intentionally validates docs-workspace runtime data within the same monorepo */
         const docsCatalogModule =
-            (await import("../docs/docusaurus/src/data/docsCatalog")) as {
+            (await import("../docs/docusaurus/src/data/docs-catalog")) as {
                 docsCatalogStats: {
                     configDocIds: readonly string[];
                     publicRuleCount: number;
@@ -37,6 +37,7 @@ describe("docs site catalog metadata", () => {
 
         expect(sortedRuleDocIds).toStrictEqual([...ruleNames]);
 
+        expect(docsCatalogStats.ruleDocIds).not.toHaveLength(0);
         expect(docsCatalogStats.shareableConfigCount).toBe(configNames.length);
         expect(docsCatalogStats.configDocIds).toStrictEqual(
             configNames.map((configName) => `configs/${configName}`)

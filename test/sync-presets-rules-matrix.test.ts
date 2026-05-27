@@ -16,6 +16,7 @@ describe("sync-presets-rules-matrix legacy alias", () => {
         expect(getConfigDocPath("strict", "C:/repo")).toBe(
             String.raw`C:\repo\docs\rules\configs\strict.md`
         );
+        expect(getConfigDocPath("strict", "C:/repo")).not.toContain("presets");
         expect(
             normalizeConfigNames(
                 [
@@ -66,7 +67,7 @@ describe("sync-presets-rules-matrix legacy alias", () => {
                 argvEntry: scriptPath,
                 currentImportUrl: scriptUrl,
             })
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             isDirectExecution({
                 argvEntry: path.resolve(
@@ -75,6 +76,6 @@ describe("sync-presets-rules-matrix legacy alias", () => {
                 ),
                 currentImportUrl: scriptUrl,
             })
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });

@@ -19,6 +19,11 @@ describe("sync-peer-stylelint-range script", () => {
                 devDependencyStylelintRange: "^17.7.0",
             })
         ).toBe("^16.0.0 || ^17.7.0");
+        expect(
+            createPeerStylelintRange({
+                devDependencyStylelintRange: "^17.7.0",
+            })
+        ).not.toBe("^17.7.0");
 
         expect(
             createPeerStylelintRange({
@@ -140,7 +145,7 @@ describe("sync-peer-stylelint-range script", () => {
                 argvEntry: scriptPath,
                 currentImportUrl: scriptUrl,
             })
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             isDirectExecution({
@@ -150,6 +155,6 @@ describe("sync-peer-stylelint-range script", () => {
                 ),
                 currentImportUrl: scriptUrl,
             })
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });

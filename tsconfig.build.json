@@ -22,7 +22,7 @@
         ".cache/**",
         "dist/**",
         "coverage/**",
-        "docs/docusaurus/.docusaurus/**",
+        "docs/docusaurus/.grid/**",
         "docs/docusaurus/build/**",
         "eslint.config.bundled_*.mjs",
         "node_modules/**",

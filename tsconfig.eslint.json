@@ -15,7 +15,7 @@
         "**/.angular/**",
         "**/.astro/**",
         "**/.cache/**",
-        "**/.docusaurus/**",
+        "**/.grid/**",
         "**/.eslintcache",
         "**/.expo/**",
         "**/.gradle/**",
@@ -65,7 +65,7 @@
         "**/tmp/**",
         ".cache/**",
         ".vercel/**",
-        "docs/docusaurus/.docusaurus/**",
+        "docs/docusaurus/.grid/**",
         "docs/docusaurus/build/**",
         "docs/docusaurus/node_modules/**",
         "docs/docusaurus/typedoc-plugins/*.d.mts",
@@ -76,6 +76,9 @@
     "extends": "./tsconfig.json",
     "include": [
         "**/*",
-        "**/.*"
+        "**/.*",
+        "knip.config.ts",
+        "plugin.d.mts",
+        "vitest.stryker.config.ts"
     ]
 }

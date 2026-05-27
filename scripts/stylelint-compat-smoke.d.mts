@@ -24,12 +24,12 @@ export interface StylelintLike {
 export interface BuiltPluginSurface {
     readonly builtPluginCjs: unknown;
     readonly configNames: readonly string[];
-    readonly docusaurusPluginConfigs: {
-        readonly "docusaurus-all": import("stylelint").Config & {
+    readonly gridPluginConfigs: {
+        readonly "grid-all": import("stylelint").Config & {
             readonly plugins: (string | import("stylelint").Plugin)[];
             readonly rules: Readonly<Record<string, unknown>>;
         };
-        readonly "docusaurus-recommended": import("stylelint").Config & {
+        readonly "grid-recommended": import("stylelint").Config & {
             readonly plugins: (string | import("stylelint").Plugin)[];
             readonly rules: Readonly<Record<string, unknown>>;
         };
@@ -80,7 +80,7 @@ export function assertPluginSurface(
 ): void;
 
 export function createScenarios(
-    input: Pick<BuiltPluginSurface, "docusaurusPluginConfigs" | "plugin">
+    input: Pick<BuiltPluginSurface, "gridPluginConfigs" | "plugin">
 ): readonly ConfigScenario[];
 
 export function runConfigScenario(

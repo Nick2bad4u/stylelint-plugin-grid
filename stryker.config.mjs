@@ -1,6 +1,11 @@
 // @ts-check
-const processEnvironment = globalThis.process.env;
-const isCI = (processEnvironment["CI"] ?? "").toLowerCase() === "true";
+/** @type {NodeJS.ProcessEnv} */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, n/no-process-env -- Stryker config is a JS runtime config file that must read CI from the Node process environment.
+const processEnvironment = process.env;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- `NodeJS.ProcessEnv` is an index-signature object; destructuring keeps JS typecheck and lint rules aligned.
+const { CI: ciEnvironmentValue = "" } = processEnvironment;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access -- The environment value is normalized defensively before comparison.
+const isCI = ciEnvironmentValue.toLowerCase() === "true";
 
 /** @type {import("@stryker-mutator/api/core").PartialStrykerOptions} */
 const config = {
@@ -23,7 +28,7 @@ const config = {
     coverageAnalysis: "perTest",
     dashboard: {
         baseUrl: "https://dashboard.stryker-mutator.io/api/reports",
-        project: "github.com/Nick2bad4u/stylelint-plugin-docusaurus",
+        project: "github.com/Nick2bad4u/stylelint-plugin-grid",
         reportType:
             /** @type {import("@stryker-mutator/api/core").ReportType} */ (
                 "full"

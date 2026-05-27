@@ -104,7 +104,7 @@
         ".cache/**",
         "coverage/**",
         "dist/**",
-        "docs/docusaurus/.docusaurus/**",
+        "docs/docusaurus/.grid/**",
         "docs/docusaurus/build/**",
         "eslint.config.bundled_*.mjs",
         "node_modules/**",
@@ -115,6 +115,9 @@
         "src/**/*.ts",
         "test/**/*.d.ts",
         "test/**/*.ts",
+        "knip.config.ts",
+        "plugin.d.mts",
+        "vitest.stryker.config.ts",
         "vite.config.ts"
     ],
     "typeAcquisition": {

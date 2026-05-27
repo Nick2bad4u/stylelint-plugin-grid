@@ -22,15 +22,15 @@ import { escapeMarkdownTableCell } from "./_internal/escape-markdown-table-cell.
 /** @typedef {Readonly<Record<string, RuleModule>>} RulesMap */
 
 /**
- * @typedef {Readonly<
- *     Record<string, { rules?: Readonly<Record<string, unknown>> }>
- * >} ConfigMap
+ * /** @typedef {Readonly<{ rules?: Readonly<Record<string, unknown>> }>}
+ * ConfigModule
  */
+/** @typedef {Readonly<Record<string, ConfigModule>>} ConfigMap */
 
 /**
  * @typedef {Readonly<{
  *     configNames?: unknown;
- *     docusaurusPluginConfigs?: ConfigMap;
+ *     gridPluginConfigs?: ConfigMap;
  *     rules?: RulesMap;
  * }>} BuiltPluginModule
  */
@@ -48,6 +48,8 @@ import { escapeMarkdownTableCell } from "./_internal/escape-markdown-table-cell.
 const scriptsDirectoryPath = dirname(fileURLToPath(import.meta.url));
 const repositoryRootPath = resolve(scriptsDirectoryPath, "..");
 const builtPluginModulePath = resolve(repositoryRootPath, "dist", "plugin.js");
+const rulesByConfigSectionHeading = "## Rules by Config";
+const rulesInConfigSectionHeading = "## Rules in this config";
 
 /** @param {string} value */
 const isWindowsAbsolutePath = (value) => /^[A-Za-z]:[\\/]/u.test(value);
@@ -100,8 +102,6 @@ export function normalizeConfigNames(configNamesValue, configs) {
         left.localeCompare(right)
     );
 }
-const sectionHeading = "## Rules in this config";
-
 /**
  * @param {Readonly<{
  *     argvEntry?: string | undefined;
@@ -152,16 +152,16 @@ export const loadBuiltPluginMetadata = async ({
 } = {}) => {
     try {
         const builtPluginModule = await importModule(builtPluginPath);
-        const docusaurusPluginConfigs = /** @type {ConfigMap} */ (
-            builtPluginModule.docusaurusPluginConfigs ?? {}
+        const gridPluginConfigs = /** @type {ConfigMap} */ (
+            builtPluginModule.gridPluginConfigs ?? {}
         );
 
         return {
             configNames: normalizeConfigNames(
                 builtPluginModule.configNames,
-                docusaurusPluginConfigs
+                gridPluginConfigs
             ),
-            configs: docusaurusPluginConfigs,
+            configs: gridPluginConfigs,
             rules: /** @type {RulesMap} */ (builtPluginModule.rules ?? {}),
         };
     } catch (error) {
@@ -190,10 +190,11 @@ const normalizeMarkdownLineEndings = (markdown, lineEnding) =>
 
 /**
  * @param {string} markdown
+ * @param {string} sectionHeading
  *
  * @returns {{ endOffset: number; startOffset: number }}
  */
-const getSectionBounds = (markdown) => {
+const getSectionBounds = (markdown, sectionHeading) => {
     const startOffset = markdown.indexOf(sectionHeading);
 
     if (startOffset < 0) {
@@ -219,6 +220,21 @@ const getRuleFixIndicator = (ruleModule) =>
     ruleModule.meta?.fixable === true ? "🔧" : "—";
 
 /**
+ * @param {string} ruleName
+ * @param {string} docsUrl
+ *
+ * @returns {string}
+ */
+const getConfigDocsRuleLink = (ruleName, docsUrl) => {
+    const publishedDocsPrefix =
+        "https://nick2bad4u.github.io/stylelint-plugin-grid/docs/rules/";
+
+    return docsUrl === `${publishedDocsPrefix}${ruleName}`
+        ? `../${ruleName}.md`
+        : docsUrl;
+};
+
+/**
  * @param {string} configName
  * @param {string} [repositoryRoot]
  *
@@ -233,6 +249,19 @@ export const getConfigDocPath = (
         "rules",
         "configs",
         `${configName}.md`,
+    ]);
+
+/**
+ * @param {string} [repositoryRoot]
+ *
+ * @returns {string}
+ */
+export const getConfigIndexDocPath = (repositoryRoot = repositoryRootPath) =>
+    resolveFromRepositoryRoot(repositoryRoot, [
+        "docs",
+        "rules",
+        "configs",
+        "index.md",
     ]);
 
 /**
@@ -322,7 +351,7 @@ export const generateRulesSectionFromConfig = ({
 
     if (ruleEntries.length === 0) {
         return [
-            sectionHeading,
+            rulesInConfigSectionHeading,
             "",
             "The public rule catalog is currently empty, so this config only registers the package surface for now.",
             "",
@@ -330,7 +359,7 @@ export const generateRulesSectionFromConfig = ({
     }
 
     return [
-        sectionHeading,
+        rulesInConfigSectionHeading,
         "",
         "**Fix legend:** 🔧 = autofixable · — = report only",
         "",
@@ -345,7 +374,108 @@ export const generateRulesSectionFromConfig = ({
                 );
             }
 
-            return `| [\`${ruleName}\`](${docs.url}) | ${getRuleFixIndicator(ruleModule)} | ${escapeMarkdownTableCell(docs.description)} |`;
+            return `| [\`${ruleName}\`](${getConfigDocsRuleLink(ruleName, docs.url)}) | ${getRuleFixIndicator(ruleModule)} | ${escapeMarkdownTableCell(docs.description)} |`;
+        }),
+        "",
+    ].join("\n");
+};
+
+/**
+ * @param {string} configName
+ *
+ * @returns {string}
+ */
+const toConfigDocLink = (configName) =>
+    `[\`${configName}\`](./${configName}.md)`;
+
+/**
+ * @param {Readonly<{
+ *     ruleName: string;
+ *     config: ConfigModule | undefined;
+ * }>} input
+ *
+ * @returns {boolean}
+ */
+const isRuleEnabledInConfig = ({ config, ruleName }) =>
+    Object.keys(config?.rules ?? {}).some(
+        (configuredRuleId) =>
+            configuredRuleId === ruleName ||
+            configuredRuleId.split("/").at(-1) === ruleName
+    );
+
+/**
+ * @param {Readonly<{
+ *     configNames: readonly string[];
+ *     configs: ConfigMap;
+ *     rules: RulesMap;
+ * }>} input
+ *
+ * @returns {string}
+ */
+export const generateRulesSectionFromConfigsIndex = ({
+    configNames,
+    configs,
+    rules,
+}) => {
+    const ruleEntries = Object.entries(rules).toSorted(([left], [right]) =>
+        left.localeCompare(right)
+    );
+
+    if (ruleEntries.length === 0) {
+        return [
+            rulesByConfigSectionHeading,
+            "",
+            "The public rule catalog is currently empty, so the config index only documents the exported config surface for now.",
+            "",
+        ].join("\n");
+    }
+
+    const configColumns = configNames.map(toConfigDocLink);
+
+    return [
+        rulesByConfigSectionHeading,
+        "",
+        "**Fix legend:** 🔧 = autofixable · — = report only",
+        "",
+        "**Config legend:** ✅ = enabled · — = not enabled",
+        "",
+        [
+            "| Rule | Fix |",
+            configColumns.join(" | "),
+            "| Description |",
+        ].join(" "),
+        [
+            "| --- | :-: |",
+            configNames.map(() => ":-:").join(" | "),
+            "| --- |",
+        ].join(" "),
+        ...ruleEntries.map(([ruleName, ruleModule]) => {
+            const docs = ruleModule.docs;
+
+            if (docs === undefined) {
+                throw new TypeError(
+                    `Rule '${ruleName}' is missing docs metadata.`
+                );
+            }
+
+            const configCells = configNames.map((configName) =>
+                isRuleEnabledInConfig({
+                    config: configs[configName],
+                    ruleName,
+                })
+                    ? "✅"
+                    : "—"
+            );
+
+            return [
+                `| [\`${ruleName}\`](../${ruleName}.md) |`,
+                getRuleFixIndicator(ruleModule),
+                "|",
+                configCells.join(" | "),
+                "|",
+                escapeMarkdownTableCell(docs.description),
+                "|",
+            ].join(" ");
         }),
         "",
     ].join("\n");
@@ -354,11 +484,15 @@ export const generateRulesSectionFromConfig = ({
 /**
  * @param {string} markdown
  * @param {string} sectionText
+ * @param {string} sectionHeading
  *
  * @returns {string}
  */
-const replaceSection = (markdown, sectionText) => {
-    const { endOffset, startOffset } = getSectionBounds(markdown);
+const replaceSection = (markdown, sectionText, sectionHeading) => {
+    const { endOffset, startOffset } = getSectionBounds(
+        markdown,
+        sectionHeading
+    );
 
     if (startOffset === markdown.length) {
         return `${markdown.trimEnd()}\n\n${sectionText}\n`;
@@ -440,7 +574,11 @@ export const syncConfigDocs = async ({
             }),
             lineEnding
         );
-        const nextMarkdown = replaceSection(normalizedMarkdown, nextSection);
+        const nextMarkdown = replaceSection(
+            normalizedMarkdown,
+            nextSection,
+            rulesInConfigSectionHeading
+        );
 
         if (nextMarkdown === normalizedMarkdown) {
             continue;
@@ -456,6 +594,40 @@ export const syncConfigDocs = async ({
 
         await writeFileFn(configDocPath, nextMarkdown, "utf8");
         updatedFilePaths.push(configDocPath);
+    }
+
+    const configIndexDocPath = getConfigIndexDocPath(targetRepositoryRootPath);
+    const configIndexMarkdown = await readFileFn(configIndexDocPath, "utf8");
+    const configIndexLineEnding = detectLineEnding(configIndexMarkdown);
+    const normalizedConfigIndexMarkdown = normalizeMarkdownLineEndings(
+        configIndexMarkdown,
+        configIndexLineEnding
+    );
+    const nextConfigIndexSection = normalizeMarkdownLineEndings(
+        generateRulesSectionFromConfigsIndex({
+            configNames: activeMetadata.configNames,
+            configs: activeMetadata.configs,
+            rules: activeMetadata.rules,
+        }),
+        configIndexLineEnding
+    );
+    const nextConfigIndexMarkdown = replaceSection(
+        normalizedConfigIndexMarkdown,
+        nextConfigIndexSection,
+        rulesByConfigSectionHeading
+    );
+
+    if (nextConfigIndexMarkdown !== normalizedConfigIndexMarkdown) {
+        changed = true;
+
+        if (!writeChanges) {
+            throw new Error(
+                "Config documentation tables are out of sync. Run: node scripts/sync-configs-rules-matrix.mjs --write"
+            );
+        }
+
+        await writeFileFn(configIndexDocPath, nextConfigIndexMarkdown, "utf8");
+        updatedFilePaths.push(configIndexDocPath);
     }
 
     return {

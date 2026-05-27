@@ -45,21 +45,19 @@ describe("indexNow route-manifest helpers", () => {
                 changedPaths: ["docs/docusaurus/blog/example.md"],
                 manifestEntries: [
                     {
-                        permalink: "/stylelint-plugin-docusaurus/blog/example/",
+                        permalink: "/stylelint-plugin-grid/blog/example/",
                         sourcePath: "docs/docusaurus/blog/example.md",
                     },
                     {
-                        permalink:
-                            "/stylelint-plugin-docusaurus/blog/tags/example/",
+                        permalink: "/stylelint-plugin-grid/blog/tags/example/",
                         sourcePath: "docs/docusaurus/blog/example.md",
                     },
                 ],
-                siteUrl:
-                    "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/",
+                siteUrl: "https://nick2bad4u.github.io/stylelint-plugin-grid/",
             })
         ).toStrictEqual([
-            "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/blog/example/",
-            "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/blog/tags/example/",
+            "https://nick2bad4u.github.io/stylelint-plugin-grid/blog/example/",
+            "https://nick2bad4u.github.io/stylelint-plugin-grid/blog/tags/example/",
         ]);
     });
 
@@ -71,21 +69,18 @@ describe("indexNow route-manifest helpers", () => {
                 changedPaths: ["docs/rules/overview.md"],
                 manifestEntries: [
                     {
-                        permalink:
-                            "/stylelint-plugin-docusaurus/docs/rules/overview",
+                        permalink: "/stylelint-plugin-grid/docs/rules/overview",
                         sourcePath: "docs/rules/overview.md",
                     },
                     {
-                        permalink:
-                            "/stylelint-plugin-docusaurus/docs/rules/overview",
+                        permalink: "/stylelint-plugin-grid/docs/rules/overview",
                         sourcePath: "docs/rules/overview.md",
                     },
                 ],
-                siteUrl:
-                    "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/",
+                siteUrl: "https://nick2bad4u.github.io/stylelint-plugin-grid/",
             })
         ).toStrictEqual([
-            "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/docs/rules/overview",
+            "https://nick2bad4u.github.io/stylelint-plugin-grid/docs/rules/overview",
         ]);
     });
 

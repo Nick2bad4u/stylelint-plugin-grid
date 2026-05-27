@@ -1,28 +1,29 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
-    "name": "stylelint-plugin-docusaurus",
+    "name": "stylelint-plugin-grid",
     "version": "2.0.2",
     "private": false,
-    "description": "Stylelint rules and shareable configs for Docusaurus stylesheets.",
+    "description": "Stylelint rules for CSS Grid correctness, safe grid patterns, and common layout bug prevention.",
     "keywords": [
         "stylelint",
         "stylelint-plugin",
         "stylelint-config",
         "stylelintconfig",
         "stylelintplugin",
-        "docusaurus",
-        "infima",
+        "grid",
+        "css-grid",
+        "layout",
         "css",
         "postcss"
     ],
-    "homepage": "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/",
+    "homepage": "https://nick2bad4u.github.io/stylelint-plugin-grid/",
     "bugs": {
-        "url": "https://github.com/Nick2bad4u/stylelint-plugin-docusaurus/issues",
+        "url": "https://github.com/Nick2bad4u/stylelint-plugin-grid/issues",
         "email": "20943337+Nick2bad4u@users.noreply.github.com"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Nick2bad4u/stylelint-plugin-docusaurus.git"
+        "url": "git+https://github.com/Nick2bad4u/stylelint-plugin-grid.git"
     },
     "license": "MIT",
     "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://github.com/Nick2bad4u)",
@@ -47,34 +48,24 @@
             },
             "default": "./dist/plugin.js"
         },
-        "./configs/docusaurus-all": {
+        "./configs/grid-all": {
             "import": {
-                "types": "./dist/configs/docusaurus-all.d.ts",
-                "default": "./dist/configs/docusaurus-all.js"
+                "types": "./dist/configs/grid-all.d.ts",
+                "default": "./dist/configs/grid-all.js"
             },
             "require": {
-                "types": "./dist/configs/docusaurus-all.d.cts",
-                "default": "./dist/configs/docusaurus-all.cjs"
+                "types": "./dist/configs/grid-all.d.cts",
+                "default": "./dist/configs/grid-all.cjs"
             }
         },
-        "./configs/docusaurus-docs-safe": {
+        "./configs/grid-recommended": {
             "import": {
-                "types": "./dist/configs/docusaurus-docs-safe.d.ts",
-                "default": "./dist/configs/docusaurus-docs-safe.js"
+                "types": "./dist/configs/grid-recommended.d.ts",
+                "default": "./dist/configs/grid-recommended.js"
             },
             "require": {
-                "types": "./dist/configs/docusaurus-docs-safe.d.cts",
-                "default": "./dist/configs/docusaurus-docs-safe.cjs"
-            }
-        },
-        "./configs/docusaurus-recommended": {
-            "import": {
-                "types": "./dist/configs/docusaurus-recommended.d.ts",
-                "default": "./dist/configs/docusaurus-recommended.js"
-            },
-            "require": {
-                "types": "./dist/configs/docusaurus-recommended.d.cts",
-                "default": "./dist/configs/docusaurus-recommended.cjs"
+                "types": "./dist/configs/grid-recommended.d.cts",
+                "default": "./dist/configs/grid-recommended.cjs"
             }
         },
         "./package.json": "./package.json"
@@ -83,14 +74,11 @@
     "types": "./dist/plugin.d.ts",
     "typesVersions": {
         "*": {
-            "configs/docusaurus-all": [
-                "./dist/configs/docusaurus-all.d.ts"
+            "configs/grid-all": [
+                "./dist/configs/grid-all.d.ts"
             ],
-            "configs/docusaurus-docs-safe": [
-                "./dist/configs/docusaurus-docs-safe.d.ts"
-            ],
-            "configs/docusaurus-recommended": [
-                "./dist/configs/docusaurus-recommended.d.ts"
+            "configs/grid-recommended": [
+                "./dist/configs/grid-recommended.d.ts"
             ]
         }
     },
@@ -120,10 +108,10 @@
         "build": "tsc -b tsconfig.build.json --force && npm run build:types:cjs && npm run build:cjs && npm run build:configs:cjs",
         "build:cjs": "esbuild dist/plugin.js --bundle --format=cjs --platform=node --packages=external --sourcemap --outfile=dist/plugin.cjs --footer:js=\"module.exports = Object.assign(module.exports.default, module.exports);\"",
         "build:clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-        "build:configs:cjs": "node -e \"const fs=require('node:fs');['docusaurus-all','docusaurus-docs-safe','docusaurus-recommended'].forEach(n=>{fs.writeFileSync('dist/configs/'+n+'.cjs','\\\"use strict\\\";\\nconst{docusaurusPluginConfigs}=require(\\\"../plugin.cjs\\\");\\nmodule.exports=docusaurusPluginConfigs[\\\"'+n+'\\\"];\\n','utf8');fs.writeFileSync('dist/configs/'+n+'.d.cts','import type{DocusaurusShareableConfig}from\\\"../plugin.cjs\\\";\\ndeclare const config:DocusaurusShareableConfig;\\nexport=config;\\n','utf8');})\"",
-        "build:eslint-inspector": "npx -y @eslint/config-inspector@latest build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/stylelint-plugin-docusaurus/eslint-inspector/\"",
+        "build:configs:cjs": "node -e \"const fs=require('node:fs');['grid-all','grid-recommended'].forEach(n=>{fs.writeFileSync('dist/configs/'+n+'.cjs','\\\"use strict\\\";\\nconst{gridPluginConfigs}=require(\\\"../plugin.cjs\\\");\\nmodule.exports=gridPluginConfigs[\\\"'+n+'\\\"];\\n','utf8');fs.writeFileSync('dist/configs/'+n+'.d.cts','import type{GridShareableConfig}from\\\"../plugin.cjs\\\";\\ndeclare const config:GridShareableConfig;\\nexport=config;\\n','utf8');})\"",
+        "build:eslint-inspector": "npx -y @eslint/config-inspector@latest build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/stylelint-plugin-grid/eslint-inspector/\"",
         "build:eslint-inspector:local": "npx @eslint/config-inspector",
-        "build:stylelint-inspector": "npx -y stylelint-config-inspector@latest build --outDir \"docs/docusaurus/static/stylelint-inspector\" --base \"/stylelint-plugin-docusaurus/stylelint-inspector/\"",
+        "build:stylelint-inspector": "npx -y stylelint-config-inspector@latest build --outDir \"docs/docusaurus/static/stylelint-inspector\" --base \"/stylelint-plugin-grid/stylelint-inspector/\"",
         "build:stylelint-inspector:local": "npx stylelint-config-inspector@latest",
         "build:types:cjs": "node -e \"require('node:fs').copyFileSync('dist/plugin.d.ts','dist/plugin.d.cts')\"",
         "changelog:generate": "git-cliff --config cliff.toml --output CHANGELOG.md",
@@ -188,7 +176,7 @@
         "lint:exports": "ts-unused-exports tsconfig.json src/plugin.ts --excludePathsFromReport=plugin.ts",
         "lint:fix": "cross-env NODE_OPTIONS=--max_old_space_size=16384 eslint --cache --cache-strategy content --cache-location .cache/.eslintcache --fix",
         "lint:fix:quiet": "cross-env ESLINT_PROGRESS=off NODE_OPTIONS=--max_old_space_size=16384 eslint --cache --cache-strategy content --cache-location .cache/.eslintcache --fix && echo \"Eslint fix done!\"",
-        "lint:grype": "grype . -c .grype.yaml --name stylelint-plugin-docusaurus",
+        "lint:grype": "grype . -c .grype.yaml --name stylelint-plugin-grid",
         "lint:knip": "npm run knip",
         "lint:knip:exports": "npm run knip -- --include exports,nsExports,classMembers,types,nsTypes,enumMembers,duplicates",
         "lint:knip:unused:exports": "npm run knip -- --dependencies --exports",
@@ -198,8 +186,8 @@
         "lint:orphans": "npm run madge:orphans",
         "lint:package": "npm run lint:node-version-files && npm run lint:package-sort && npm run lint:packagelintrc && echo \"Package.json lint done!\"",
         "lint:package:strict": "npm run lint:node-version-files && npm run lint:package-sort && npm run lint:package-check:strict && npm run lint:packagelintrc && echo \"Package.json lint done!\"",
-        "lint:package-check": "publint && attw --pack .",
-        "lint:package-check:strict": "publint && attw --pack . --profile strict",
+        "lint:package-check": "publint && node scripts/run-attw-pack.mjs --pack .",
+        "lint:package-check:strict": "publint && node scripts/run-attw-pack.mjs --pack . --profile strict",
         "lint:package-sort": "sort-package-json \"./package.json\" \"./docs/docusaurus/package.json\"",
         "lint:package-sort-check": "sort-package-json --check \"./package.json\" \"./docs/docusaurus/package.json\"",
         "lint:packagelintrc": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",
@@ -273,7 +261,7 @@
         "@arethetypeswrong/cli": "^0.18.2",
         "@csstools/stylelint-formatter-github": "^2.0.0",
         "@double-great/remark-lint-alt-text": "^1.1.1",
-        "@eslint/config-inspector": "^3.0.2",
+        "@eslint/config-inspector": "^3.0.3",
         "@microsoft/tsdoc-config": "^0.18.1",
         "@stryker-ignorer/console-all": "^0.3.2",
         "@stryker-mutator/core": "^9.6.1",
@@ -281,63 +269,64 @@
         "@stryker-mutator/vitest-runner": "^9.6.1",
         "@types/htmlhint": "^1.1.5",
         "@types/madge": "^5.0.3",
-        "@types/node": "^25.7.0",
+        "@types/node": "^25.9.1",
         "@types/sloc": "^0.2.3",
-        "@typescript-eslint/rule-tester": "^8.59.3",
-        "@vitest/coverage-v8": "^4.1.6",
-        "@vitest/ui": "^4.1.6",
+        "@typescript-eslint/rule-tester": "^8.60.0",
+        "@vitest/coverage-v8": "^4.1.7",
+        "@vitest/ui": "^4.1.7",
         "actionlint": "^2.0.6",
         "all-contributors-cli": "^6.26.1",
-        "cognitive-complexity-ts": "^0.8.1",
+        "cognitive-complexity-ts": "^0.8.2",
         "commitlint": "^21.0.1",
         "commitlint-config-gitmoji": "^2.3.1",
         "cross-env": "^10.1.0",
         "detect-secrets": "^1.0.6",
-        "eslint": "^10.3.0",
-        "eslint-config-nick2bad4u": "^1.0.16",
+        "eslint": "^10.4.0",
+        "eslint-config-nick2bad4u": "^1.2.0",
         "eslint-formatter-unix": "^9.0.1",
         "eslint-rule-benchmark": "^0.8.0",
         "fast-check": "^4.8.0",
         "git-cliff": "^2.13.1",
         "gitleaks-secret-scanner": "^2.1.1",
         "htmlhint": "^1.9.2",
-        "jscpd": "^4.1.1",
-        "knip": "^6.13.1",
+        "jscpd": "^4.2.4",
+        "knip": "^6.14.2",
         "leasot": "^14.4.0",
         "madge": "^8.0.0",
         "markdown-link-check": "^3.14.2",
-        "npm-check-updates": "^22.2.0",
+        "npm-check-updates": "^22.2.1",
         "npm-package-json-lint": "^10.4.0",
         "picocolors": "^1.1.1",
-        "postcss": "^8.5.14",
+        "postcss": "^8.5.15",
         "prettier": "^3.8.3",
-        "prettier-config-nick2bad4u": "^1.0.12",
+        "prettier-config-nick2bad4u": "^1.0.13",
         "publint": "^0.3.21",
         "rehype-katex": "^7.0.1",
         "remark": "^15.0.1",
         "remark-cli": "^12.0.1",
-        "remark-config-nick2bad4u": "^1.0.1",
-        "secretlint": "^13.0.0",
-        "secretlint-config-nick2bad4u": "^1.0.4",
+        "remark-config-nick2bad4u": "^1.0.2",
+        "secretlint": "^13.0.2",
+        "secretlint-config-nick2bad4u": "^1.0.5",
         "sloc": "^0.3.2",
         "sort-package-json": "^3.6.1",
-        "stylelint": "^17.11.0",
-        "stylelint-config-nick2bad4u": "^1.0.10",
+        "storybook": "^10.4.1",
+        "stylelint": "^17.12.0",
+        "stylelint-config-nick2bad4u": "^1.0.12",
         "ts-unused-exports": "^11.0.1",
         "typedoc": "^0.28.19",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.59.3",
+        "typescript-eslint": "^8.60.0",
         "typesync": "^0.14.3",
         "vfile": "^6.0.3",
-        "vite": "^8.0.12",
+        "vite": "^8.0.14",
         "vite-tsconfig-paths": "^6.1.1",
-        "vitest": "^4.1.6",
+        "vitest": "^4.1.7",
         "yamllint-js": "^0.2.4"
     },
     "peerDependencies": {
-        "stylelint": "^16.0.0 || ^17.11.0"
+        "stylelint": "^16.0.0 || ^17.12.0"
     },
-    "packageManager": "npm@11.14.1",
+    "packageManager": "npm@11.16.0",
     "engines": {
         "node": ">=22.0.0"
     },

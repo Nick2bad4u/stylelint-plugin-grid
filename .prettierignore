@@ -12,7 +12,7 @@ coverage/
 dist/
 docs/docusaurus/docs/
 docs/docusaurus/build/
-docs/docusaurus/.docusaurus/
+docs/docusaurus/.grid/
 docs/packages/
 docs/TSDoc/
 docs/Guides/

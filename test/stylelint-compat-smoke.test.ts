@@ -1,51 +1,47 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type {
-    BuiltPluginSurface,
-    StylelintLike,
-} from "../scripts/stylelint-compat-smoke.mjs";
-
 import {
+    type BuiltPluginSurface,
     isDirectExecution,
     normalizeStylelintRuntime,
     parseExpectedStylelintMajor,
     runStylelintCompatSmoke,
+    type StylelintLike,
 } from "../scripts/stylelint-compat-smoke.mjs";
 
 function createMockBuiltPluginSurface(): BuiltPluginSurface {
     const plugin = ["mock-plugin-pack"];
-    const configNames = ["docusaurus-all", "docusaurus-recommended"] as const;
-    const ruleIds = ["mock-rule", "mock-rule-strict"] as const;
-    const ruleNames = [
-        "docusaurus/mock-rule",
-        "docusaurus/mock-rule-strict",
-    ] as const;
+    const configNames = ["grid-all", "grid-recommended"] as const;
+    const ruleNames = ["mock-rule", "mock-rule-strict"] as const;
+    const ruleIds = ["grid/mock-rule", "grid/mock-rule-strict"] as const;
     const meta = {
-        name: "stylelint-plugin-docusaurus",
-        namespace: "docusaurus",
+        name: "stylelint-plugin-grid",
+        namespace: "grid",
     } as const;
     const recommendedRules = {
-        "docusaurus/mock-rule": true,
+        "grid/mock-rule": true,
     } as const;
     const allRules = {
-        "docusaurus/mock-rule": true,
-        "docusaurus/mock-rule-strict": true,
+        "grid/mock-rule": true,
+        "grid/mock-rule-strict": true,
     } as const;
     const rules = {
         "mock-rule": {
-            ruleName: "docusaurus/mock-rule",
+            ruleName: "grid/mock-rule",
         },
         "mock-rule-strict": {
-            ruleName: "docusaurus/mock-rule-strict",
+            ruleName: "grid/mock-rule-strict",
         },
     } as const;
     const builtPluginCjs = Object.assign([...plugin], {
         configNames,
-        docusaurusPluginConfigs: {
-            "docusaurus-all": {
+        gridPluginConfigs: {
+            "grid-all": {
+                plugins: plugin,
                 rules: allRules,
             },
-            "docusaurus-recommended": {
+            "grid-recommended": {
+                plugins: plugin,
                 rules: recommendedRules,
             },
         },
@@ -68,12 +64,12 @@ function createMockBuiltPluginSurface(): BuiltPluginSurface {
                 rules: recommendedRules,
             },
         },
-        docusaurusPluginConfigs: {
-            "docusaurus-all": {
+        gridPluginConfigs: {
+            "grid-all": {
                 plugins: plugin,
                 rules: allRules,
             },
-            "docusaurus-recommended": {
+            "grid-recommended": {
                 plugins: plugin,
                 rules: recommendedRules,
             },
@@ -169,13 +165,11 @@ describe("stylelint compatibility smoke script", () => {
             stylelintRuntimeVersion: "16.22.0",
         });
 
-        expect(lint).toHaveBeenCalledTimes(5);
+        expect(lint).toHaveBeenCalledTimes(3);
         expect(codeFilenames).toStrictEqual([
             "Component.module.css",
             "Component.module.css",
             "Component.module.css",
-            "src/css/custom.css",
-            "src/css/custom.css",
         ]);
     });
 
@@ -236,13 +230,13 @@ describe("stylelint compatibility smoke script", () => {
                 currentImportUrl:
                     "file:///C:/repo/scripts/stylelint-compat-smoke.mjs",
             })
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             isDirectExecution({
                 argvEntry: "C:/repo/test/stylelint-compat-smoke.test.ts",
                 currentImportUrl:
                     "file:///C:/repo/scripts/stylelint-compat-smoke.mjs",
             })
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });

@@ -189,12 +189,11 @@ const getRuleFixIndicator = (ruleModule) =>
  *
  * Mapping:
  *
- * - 🟢 = `docusaurusPluginConfigs["docusaurus-recommended"]`
- * - 🟣 = `docusaurusPluginConfigs["docusaurus-all"]`
- * - 🛡️ = `docusaurusPluginConfigs["docusaurus-docs-safe"]`
+ * - 🟢 = `gridPluginConfigs["grid-recommended"]`
+ * - 🟣 = `gridPluginConfigs["grid-all"]`
  *
- * Rules in `docusaurus-recommended` are also in `docusaurus-docs-safe`, so they
- * show all three badges. Rules only in `docusaurus-all` show just 🟣.
+ * Rules in `grid-recommended` are also in `grid-all`, so they show both badges.
+ * Rules only in `grid-all` show just 🟣.
  *
  * @param {RuleModule} ruleModule
  *
@@ -202,8 +201,8 @@ const getRuleFixIndicator = (ruleModule) =>
  */
 const getPresetKeyIndicator = (ruleModule) =>
     ruleModule.docs?.recommended === true
-        ? "[🟢](./docs/rules/configs/docusaurus-recommended.md) [🛡️](./docs/rules/configs/docusaurus-docs-safe.md) [🟣](./docs/rules/configs/docusaurus-all.md)"
-        : "[🟣](./docs/rules/configs/docusaurus-all.md)";
+        ? "[🟢](./docs/rules/configs/grid-recommended.md) [🟣](./docs/rules/configs/grid-all.md)"
+        : "[🟣](./docs/rules/configs/grid-all.md)";
 
 /**
  * Legend block prepended to the Rules section.
@@ -219,9 +218,8 @@ const RULES_SECTION_LEGEND = [
     "",
     "**Preset key legend:**",
     "",
-    '- [🟢](./docs/rules/configs/docusaurus-recommended.md) — `docusaurusPluginConfigs["docusaurus-recommended"]`',
-    '- [🟣](./docs/rules/configs/docusaurus-all.md) — `docusaurusPluginConfigs["docusaurus-all"]`',
-    '- [🛡️](./docs/rules/configs/docusaurus-docs-safe.md) — `docusaurusPluginConfigs["docusaurus-docs-safe"]`',
+    '- [🟢](./docs/rules/configs/grid-recommended.md) — `gridPluginConfigs["grid-recommended"]`',
+    '- [🟣](./docs/rules/configs/grid-all.md) — `gridPluginConfigs["grid-all"]`',
 ].join("\n");
 
 /** @param {readonly [string, RuleModule]} entry */
@@ -245,9 +243,9 @@ export const generateReadmeRulesSectionFromRules = (rules) => {
         return [
             "## Rules",
             "",
-            "The public `docusaurus/*` rule catalog is currently empty on purpose.",
+            "The public `grid/*` rule catalog is currently empty on purpose.",
             "",
-            "This repository already ships the runtime, tests, docs, and build scaffolding required for future Docusaurus-specific Stylelint rules.",
+            "This repository already ships the runtime, tests, docs, and build scaffolding required for future CSS Grid Stylelint rules.",
             "",
         ].join("\n");
     }

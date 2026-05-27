@@ -1,5 +1,5 @@
 /**
- * Commitlint configuration for stylelint-plugin-docusaurus.
+ * Commitlint configuration for stylelint-plugin-grid.
  *
  * Enforces the repository's hybrid Gitmoji format, e.g.:
  *
@@ -101,18 +101,22 @@ function isGitmojiShortcodeToken(token) {
         return false;
     }
 
-    return [...body].every((character) => {
+    for (const character of body) {
         const isLowercaseLetter = character >= "a" && character <= "z";
         const isNumber = character >= "0" && character <= "9";
 
-        return (
-            isLowercaseLetter ||
-            isNumber ||
-            character === "_" ||
-            character === "+" ||
-            character === "-"
-        );
-    });
+        if (
+            !isLowercaseLetter &&
+            !isNumber &&
+            character !== "_" &&
+            character !== "+" &&
+            character !== "-"
+        ) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -134,26 +138,24 @@ function isValidScope(scope) {
         return false;
     }
 
-    const [firstCharacter = ""] = scope;
-    const isFirstCharacterValid =
-        (firstCharacter >= "a" && firstCharacter <= "z") ||
-        (firstCharacter >= "0" && firstCharacter <= "9");
+    let isFirstCharacter = true;
 
-    if (!isFirstCharacterValid) {
-        return false;
-    }
-
-    return [...scope].every((character) => {
+    for (const character of scope) {
         const isLowercaseLetter = character >= "a" && character <= "z";
         const isNumber = character >= "0" && character <= "9";
 
-        return (
-            isLowercaseLetter ||
-            isNumber ||
-            character === "-" ||
-            character === "/"
-        );
-    });
+        if (
+            !isLowercaseLetter &&
+            !isNumber &&
+            (isFirstCharacter || (character !== "-" && character !== "/"))
+        ) {
+            return false;
+        }
+
+        isFirstCharacter = false;
+    }
+
+    return true;
 }
 
 /**

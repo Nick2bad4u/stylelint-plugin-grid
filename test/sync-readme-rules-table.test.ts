@@ -110,10 +110,10 @@ describe("sync-readme-rules-table automation", () => {
         expect(writes).toHaveLength(1);
         expect(writes[0]?.encoding).toBe("utf8");
         expect(writes[0]?.contents).toContain(
-            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/docusaurus-recommended.md) [🛡️](./docs/rules/configs/docusaurus-docs-safe.md) [🟣](./docs/rules/configs/docusaurus-all.md) | Alpha rule. |"
+            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/grid-recommended.md) [🟣](./docs/rules/configs/grid-all.md) | Alpha rule. |"
         );
         expect(writes[0]?.contents).toContain(
-            "| [`zeta-rule`](https://example.test/docs/rules/zeta-rule) | — | [🟣](./docs/rules/configs/docusaurus-all.md) | Zeta rule. |"
+            "| [`zeta-rule`](https://example.test/docs/rules/zeta-rule) | — | [🟣](./docs/rules/configs/grid-all.md) | Zeta rule. |"
         );
         expect(writes[0]?.contents).toContain("## Next");
     });
@@ -135,7 +135,7 @@ describe("sync-readme-rules-table automation", () => {
         });
 
         expect(generatedSection).toContain(
-            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/docusaurus-recommended.md) [🛡️](./docs/rules/configs/docusaurus-docs-safe.md) [🟣](./docs/rules/configs/docusaurus-all.md) | Alpha uses A \\| B\\\\C<br>and stays readable. |"
+            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/grid-recommended.md) [🟣](./docs/rules/configs/grid-all.md) | Alpha uses A \\| B\\\\C<br>and stays readable. |"
         );
     });
 
@@ -143,11 +143,11 @@ describe("sync-readme-rules-table automation", () => {
         expect.hasAssertions();
 
         const generatedSection = generateReadmeRulesSectionFromRules({
-            "ifm-rule": {
+            "grid-rule": {
                 docs: {
-                    description: "Disallow --ifm-* and [data-theme] usage.",
+                    description: "Disallow area-* and [grid-area] usage.",
                     recommended: false,
-                    url: "https://example.test/docs/rules/ifm-rule",
+                    url: "https://example.test/docs/rules/grid-rule",
                 },
                 meta: {
                     fixable: false,
@@ -156,7 +156,7 @@ describe("sync-readme-rules-table automation", () => {
         });
 
         expect(generatedSection).toContain(
-            "| [`ifm-rule`](https://example.test/docs/rules/ifm-rule) | — | [🟣](./docs/rules/configs/docusaurus-all.md) | Disallow --ifm-\\* and \\[data-theme] usage. |"
+            "| [`grid-rule`](https://example.test/docs/rules/grid-rule) | — | [🟣](./docs/rules/configs/grid-all.md) | Disallow area-\\* and \\[grid-area] usage. |"
         );
     });
 
@@ -250,7 +250,7 @@ describe("sync-readme-rules-table automation", () => {
                 argvEntry: scriptPath,
                 currentImportUrl: scriptUrl,
             })
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             isDirectExecution({
@@ -260,6 +260,6 @@ describe("sync-readme-rules-table automation", () => {
                 ),
                 currentImportUrl: scriptUrl,
             })
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });

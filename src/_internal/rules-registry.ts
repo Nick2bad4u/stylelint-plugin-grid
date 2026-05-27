@@ -4,112 +4,29 @@
  */
 import type { StylelintPluginRuleContract } from "./create-stylelint-rule.js";
 
-import * as noBroadAllResetsOutsideIsolationSubtreesModule from "../rules/no-broad-all-resets-outside-isolation-subtrees.js";
-import * as noColorSchemeOnDocusaurusHtmlRootModule from "../rules/no-color-scheme-on-docusaurus-html-root.js";
-import * as noDirectProjectTokenConsumptionInCssModulesModule from "../rules/no-direct-project-token-consumption-in-css-modules.js";
-import * as noDirectThemeTokenConsumptionInCssModulesModule from "../rules/no-direct-theme-token-consumption-in-css-modules.js";
-import * as noDocusaurusLayerNameCollisionsModule from "../rules/no-docusaurus-layer-name-collisions.js";
-import * as noHardcodedDocusaurusBreakpointValuesModule from "../rules/no-hardcoded-docusaurus-breakpoint-values.js";
-import * as noImportantOnInfimaOrDocusaurusSelectorOverridesModule from "../rules/no-important-on-infima-or-docusaurus-selector-overrides.js";
-import * as noInvalidThemeCustomPropertyScopeModule from "../rules/no-invalid-theme-custom-property-scope.js";
-import * as noMobileNavbarBackdropFilterModule from "../rules/no-mobile-navbar-backdrop-filter.js";
-import * as noMobileNavbarStackingContextTrapsModule from "../rules/no-mobile-navbar-stacking-context-traps.js";
-import * as noNavbarBreakpointDesyncModule from "../rules/no-navbar-breakpoint-desync.js";
-import * as noRevertLayerOutsideIsolationSubtreesModule from "../rules/no-revert-layer-outside-isolation-subtrees.js";
-import * as noSubtreeDataThemeSelectorsModule from "../rules/no-subtree-data-theme-selectors.js";
-import * as noUnanchoredInfimaSubcomponentSelectorsModule from "../rules/no-unanchored-infima-subcomponent-selectors.js";
-import * as noUnsafeThemeInternalSelectorsModule from "../rules/no-unsafe-theme-internal-selectors.js";
-import * as noUnscopedContentElementOverridesModule from "../rules/no-unscoped-content-element-overrides.js";
-import * as noUnstableDocusaurusGeneratedClassSelectorsModule from "../rules/no-unstable-docusaurus-generated-class-selectors.js";
-import * as noUnwrappedGlobalThemeSelectorsInCssModulesModule from "../rules/no-unwrapped-global-theme-selectors-in-css-modules.js";
-import * as preferDataThemeColorModeModule from "../rules/prefer-data-theme-color-mode.js";
-import * as preferDataThemeDocsearchOverridesModule from "../rules/prefer-data-theme-docsearch-overrides.js";
-import * as preferDataThemeOverPrefersColorSchemeModule from "../rules/prefer-data-theme-over-prefers-color-scheme.js";
-import * as preferDocsearchThemeTokensOverStructuralOverridesModule from "../rules/prefer-docsearch-theme-tokens-over-structural-overrides.js";
-import * as preferInfimaThemeTokensOverStructuralOverridesModule from "../rules/prefer-infima-theme-tokens-over-structural-overrides.js";
-import * as preferStableDocusaurusThemeClassNamesModule from "../rules/prefer-stable-docusaurus-theme-class-names.js";
-import * as requireDocsearchColorModePairsModule from "../rules/require-docsearch-color-mode-pairs.js";
-import * as requireDocsearchRootScopeForDocsearchTokenOverridesModule from "../rules/require-docsearch-root-scope-for-docsearch-token-overrides.js";
-import * as requireFontDisplayOnFontFaceModule from "../rules/require-font-display-on-font-face.js";
-import * as requireFontFaceLocalSrcBeforeRemoteModule from "../rules/require-font-face-local-src-before-remote.js";
-import * as requireHtmlPrefixForDocusaurusDataAttributeSelectorsModule from "../rules/require-html-prefix-for-docusaurus-data-attribute-selectors.js";
-import * as requireIfmColorPrimaryScalePerColorModeModule from "../rules/require-ifm-color-primary-scale-per-color-mode.js";
-import * as requireIfmColorPrimaryScaleModule from "../rules/require-ifm-color-primary-scale.js";
-import * as requireLocalAnchorForGlobalThemeOverridesInCssModulesModule from "../rules/require-local-anchor-for-global-theme-overrides-in-css-modules.js";
-import * as requireReducedMotionOverrideForInteractiveTransitionsModule from "../rules/require-reduced-motion-override-for-interactive-transitions.js";
+import * as consistentAreaNamingModule from "../rules/consistent-area-naming.js";
+import * as noInvalidAreasModule from "../rules/no-invalid-areas.js";
+import * as noMismatchedTemplateRowsModule from "../rules/no-mismatched-template-rows.js";
+import * as noOverlappingAreasModule from "../rules/no-overlapping-areas.js";
+import * as noUnknownAreasModule from "../rules/no-unknown-areas.js";
+import * as noUnusedAreasModule from "../rules/no-unused-areas.js";
+import * as preferGapPropertiesModule from "../rules/prefer-gap-properties.js";
+import * as validateAreaShapesModule from "../rules/validate-area-shapes.js";
+import * as validateTrackCountsModule from "../rules/validate-track-counts.js";
 
-/**
- * Public rule registry keyed by unqualified rule name. The scaffold
- * intentionally starts empty. Add new rule modules here as the plugin grows.
- */
-export const docusaurusRules: Readonly<
-    Record<string, StylelintPluginRuleContract>
-> = {
-    "no-broad-all-resets-outside-isolation-subtrees":
-        noBroadAllResetsOutsideIsolationSubtreesModule.default,
-    "no-color-scheme-on-docusaurus-html-root":
-        noColorSchemeOnDocusaurusHtmlRootModule.default,
-    "no-direct-project-token-consumption-in-css-modules":
-        noDirectProjectTokenConsumptionInCssModulesModule.default,
-    "no-direct-theme-token-consumption-in-css-modules":
-        noDirectThemeTokenConsumptionInCssModulesModule.default,
-    "no-docusaurus-layer-name-collisions":
-        noDocusaurusLayerNameCollisionsModule.default,
-    "no-hardcoded-docusaurus-breakpoint-values":
-        noHardcodedDocusaurusBreakpointValuesModule.default,
-    "no-important-on-infima-or-docusaurus-selector-overrides":
-        noImportantOnInfimaOrDocusaurusSelectorOverridesModule.default,
-    "no-invalid-theme-custom-property-scope":
-        noInvalidThemeCustomPropertyScopeModule.default,
-    "no-mobile-navbar-backdrop-filter":
-        noMobileNavbarBackdropFilterModule.default,
-    "no-mobile-navbar-stacking-context-traps":
-        noMobileNavbarStackingContextTrapsModule.default,
-    "no-navbar-breakpoint-desync": noNavbarBreakpointDesyncModule.default,
-    "no-revert-layer-outside-isolation-subtrees":
-        noRevertLayerOutsideIsolationSubtreesModule.default,
-    "no-subtree-data-theme-selectors":
-        noSubtreeDataThemeSelectorsModule.default,
-    "no-unanchored-infima-subcomponent-selectors":
-        noUnanchoredInfimaSubcomponentSelectorsModule.default,
-    "no-unsafe-theme-internal-selectors":
-        noUnsafeThemeInternalSelectorsModule.default,
-    "no-unscoped-content-element-overrides":
-        noUnscopedContentElementOverridesModule.default,
-    "no-unstable-docusaurus-generated-class-selectors":
-        noUnstableDocusaurusGeneratedClassSelectorsModule.default,
-    "no-unwrapped-global-theme-selectors-in-css-modules":
-        noUnwrappedGlobalThemeSelectorsInCssModulesModule.default,
-    "prefer-data-theme-color-mode": preferDataThemeColorModeModule.default,
-    "prefer-data-theme-docsearch-overrides":
-        preferDataThemeDocsearchOverridesModule.default,
-    "prefer-data-theme-over-prefers-color-scheme":
-        preferDataThemeOverPrefersColorSchemeModule.default,
-    "prefer-docsearch-theme-tokens-over-structural-overrides":
-        preferDocsearchThemeTokensOverStructuralOverridesModule.default,
-    "prefer-infima-theme-tokens-over-structural-overrides":
-        preferInfimaThemeTokensOverStructuralOverridesModule.default,
-    "prefer-stable-docusaurus-theme-class-names":
-        preferStableDocusaurusThemeClassNamesModule.default,
-    "require-docsearch-color-mode-pairs":
-        requireDocsearchColorModePairsModule.default,
-    "require-docsearch-root-scope-for-docsearch-token-overrides":
-        requireDocsearchRootScopeForDocsearchTokenOverridesModule.default,
-    "require-font-display-on-font-face":
-        requireFontDisplayOnFontFaceModule.default,
-    "require-font-face-local-src-before-remote":
-        requireFontFaceLocalSrcBeforeRemoteModule.default,
-    "require-html-prefix-for-docusaurus-data-attribute-selectors":
-        requireHtmlPrefixForDocusaurusDataAttributeSelectorsModule.default,
-    "require-ifm-color-primary-scale":
-        requireIfmColorPrimaryScaleModule.default,
-    "require-ifm-color-primary-scale-per-color-mode":
-        requireIfmColorPrimaryScalePerColorModeModule.default,
-    "require-local-anchor-for-global-theme-overrides-in-css-modules":
-        requireLocalAnchorForGlobalThemeOverridesInCssModulesModule.default,
-    "require-reduced-motion-override-for-interactive-transitions":
-        requireReducedMotionOverrideForInteractiveTransitionsModule.default,
-};
+/** Public rule registry keyed by unqualified rule name. */
+export const gridRules: Readonly<Record<string, StylelintPluginRuleContract>> =
+    {
+        "consistent-area-naming": consistentAreaNamingModule.default,
+        "no-invalid-areas": noInvalidAreasModule.default,
+        "no-mismatched-template-rows": noMismatchedTemplateRowsModule.default,
+        "no-overlapping-areas": noOverlappingAreasModule.default,
+        "no-unknown-areas": noUnknownAreasModule.default,
+        "no-unused-areas": noUnusedAreasModule.default,
+        "prefer-gap-properties": preferGapPropertiesModule.default,
+        "validate-area-shapes": validateAreaShapesModule.default,
+        "validate-track-counts": validateTrackCountsModule.default,
+    };
 
 /** Public rule registry type. */
-export type DocusaurusRulesRegistry = typeof docusaurusRules;
+export type GridRulesRegistry = typeof gridRules;

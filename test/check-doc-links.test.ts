@@ -149,7 +149,7 @@ Or <a href='./docs/rules/overview.md'>overview</a>.
         expect.hasAssertions();
 
         const temporaryDirectoryPath = await mkdtemp(
-            path.join(tmpdir(), "stylelint-plugin-docusaurus-check-doc-links-")
+            path.join(tmpdir(), "stylelint-plugin-grid-check-doc-links-")
         );
 
         try {

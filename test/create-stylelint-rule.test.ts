@@ -23,7 +23,7 @@ describe("createStylelintRule helper", () => {
             ruleName: "test/primary-option-array",
         });
 
-        expect(result.rule.primaryOptionArray).toBeTruthy();
+        expect(result.rule.primaryOptionArray).toBe(true);
     });
 
     it("does not set primaryOptionArray when the option is absent", () => {
@@ -44,8 +44,8 @@ describe("createStylelintRule helper", () => {
             ruleName: "test/no-primary-option-array",
         });
 
-        // When not specified, the property should not be explicitly set to true
-        expect(result.rule.primaryOptionArray).not.toBeTruthy();
+        // When not specified, the property should not be explicitly set.
+        expect(result.rule.primaryOptionArray).toBeUndefined();
     });
 
     it("stamps ruleName, messages, and meta on the returned rule", () => {

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Public plugin entrypoint for `stylelint-plugin-docusaurus` exports and
+ * Public plugin entrypoint for `stylelint-plugin-grid` exports and
  * shareable config wiring.
  */
 import type { Config, Plugin as StylelintPlugin } from "stylelint";
@@ -11,46 +11,40 @@ import type { StylelintPluginRuleContract } from "./_internal/create-stylelint-r
 
 import {
     CONFIG_NAMES as configNamesValue,
-    type DocusaurusConfigName as InternalDocusaurusConfigName,
+    type GridConfigName as InternalGridConfigName,
     PACKAGE_NAME as packageNameValue,
     PACKAGE_VERSION as packageVersionValue,
     PLUGIN_NAMESPACE as pluginNamespaceValue,
 } from "./_internal/plugin-constants.js";
-import { docusaurusRules as docusaurusRulesValue } from "./_internal/rules-registry.js";
+import { gridRules as gridRulesValue } from "./_internal/rules-registry.js";
 
 /** Public shareable config map exported by this package. */
-export type DocusaurusConfigMap = Record<
-    DocusaurusConfigName,
-    DocusaurusShareableConfig
->;
+export type GridConfigMap = Record<GridConfigName, GridShareableConfig>;
 /** Shareable config names exposed by this package. */
-export type DocusaurusConfigName = InternalDocusaurusConfigName;
+export type GridConfigName = InternalGridConfigName;
 /** Public fully-qualified rule ids supported by this package. */
-export type DocusaurusRuleId = `${typeof pluginNamespaceValue}/${string}`;
+export type GridRuleId = `${typeof pluginNamespaceValue}/${string}`;
 
 /** Public unqualified rule names supported by this package. */
-export type DocusaurusRuleName = Extract<
-    keyof typeof docusaurusRulesValue,
-    string
->;
+export type GridRuleName = Extract<keyof typeof gridRulesValue, string>;
 
 /** Shareable config shape exported by this package. */
-export type DocusaurusShareableConfig = Config & {
+export type GridShareableConfig = Config & {
     plugins: (string | StylelintPlugin)[];
     rules: NonNullable<Config["rules"]>;
 };
 
 /** Internal ordered registry entry tuple. */
-type DocusaurusRuleEntry = readonly [string, StylelintPluginRuleContract];
+type GridRuleEntry = readonly [string, StylelintPluginRuleContract];
 /** Internal runtime rule registry shape. */
-type DocusaurusRulesMap = Readonly<Record<string, StylelintPluginRuleContract>>;
+type GridRulesMap = Readonly<Record<string, StylelintPluginRuleContract>>;
 
 /** Local package metadata values used to avoid import re-export warnings. */
 const packageMetaName = packageNameValue;
 const packageMetaNamespace = pluginNamespaceValue;
 const packageMetaVersion = packageVersionValue;
 /** Local rule registry alias used to avoid import re-export warnings. */
-const runtimeRules = docusaurusRulesValue;
+const runtimeRules = gridRulesValue;
 /** Local config-name alias used to avoid import re-export warnings. */
 const publicConfigNames = configNamesValue;
 
@@ -66,7 +60,7 @@ export const meta: Readonly<{
 };
 
 /** Public rule registry keyed by unqualified rule name. */
-export const rules: DocusaurusRulesMap = runtimeRules;
+export const rules: GridRulesMap = runtimeRules;
 
 /** Stable ordered unqualified rule names. */
 export const ruleNames: readonly string[] = objectKeys(rules).toSorted(
@@ -74,36 +68,34 @@ export const ruleNames: readonly string[] = objectKeys(rules).toSorted(
 );
 
 /** Stable ordered registry entries used to derive configs and ids. */
-const docusaurusRuleEntries: readonly DocusaurusRuleEntry[] = (() => {
-    const entries: DocusaurusRuleEntry[] = [];
+const gridRuleEntries: readonly GridRuleEntry[] = (() => {
+    const entries: GridRuleEntry[] = [];
 
     for (const ruleName of ruleNames) {
         const rule = rules[ruleName];
 
-        if (!isDefined(rule)) {
-            continue;
+        if (isDefined(rule)) {
+            entries.push([ruleName, rule]);
         }
-
-        entries.push([ruleName, rule]);
     }
 
     return entries;
 })();
 
 /** Default plugin-pack export consumed by Stylelint. */
-export const plugins: readonly StylelintPlugin[] = docusaurusRuleEntries.map(
+export const plugins: readonly StylelintPlugin[] = gridRuleEntries.map(
     ([, rule]) => rule
 );
 
 /** Stable ordered fully qualified rule ids. */
-export const ruleIds: readonly DocusaurusRuleId[] = docusaurusRuleEntries.map(
-    ([, rule]) => rule.ruleName as DocusaurusRuleId
+export const ruleIds: readonly GridRuleId[] = gridRuleEntries.map(
+    ([, rule]) => rule.ruleName as GridRuleId
 );
 
 /** Rule ids included in the recommended shareable config. */
-const recommendedRuleIds: readonly DocusaurusRuleId[] = docusaurusRuleEntries
+const recommendedRuleIds: readonly GridRuleId[] = gridRuleEntries
     .filter(([, rule]) => rule.docs.recommended)
-    .map(([, rule]) => rule.ruleName as DocusaurusRuleId);
+    .map(([, rule]) => rule.ruleName as GridRuleId);
 
 /**
  * Build one shareable Stylelint config.
@@ -113,8 +105,8 @@ const recommendedRuleIds: readonly DocusaurusRuleId[] = docusaurusRuleEntries
  * @returns Shareable Stylelint config.
  */
 function createConfig(
-    enabledRuleIds: readonly DocusaurusRuleId[]
-): DocusaurusShareableConfig {
+    enabledRuleIds: readonly GridRuleId[]
+): GridShareableConfig {
     return {
         plugins: [...plugins],
         rules: (() => {
@@ -130,14 +122,13 @@ function createConfig(
 }
 
 /** Shareable config exports exposed by the package. */
-export const docusaurusPluginConfigs: DocusaurusConfigMap = {
-    "docusaurus-all": createConfig(ruleIds),
-    "docusaurus-docs-safe": createConfig(recommendedRuleIds),
-    "docusaurus-recommended": createConfig(recommendedRuleIds),
+export const gridPluginConfigs: GridConfigMap = {
+    "grid-all": createConfig(ruleIds),
+    "grid-recommended": createConfig(recommendedRuleIds),
 };
 
 /** Stable ordered shareable config names. */
-export const configNames: readonly DocusaurusConfigName[] = publicConfigNames;
+export const configNames: readonly GridConfigName[] = publicConfigNames;
 
 /** Default export consumed by Stylelint when the package is used as a plugin. */
 export default plugins;

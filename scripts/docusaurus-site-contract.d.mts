@@ -113,7 +113,7 @@ export type SearchPluginContract = Readonly<{
 /**
  * Docusaurus config expectations enforced by the site-contract validator.
  */
-export type DocusaurusConfigContract = Readonly<{
+export type GridConfigContract = Readonly<{
     footer?: FooterContract;
     navbar?: NavbarContract;
     path: string;
@@ -131,7 +131,7 @@ export type DocusaurusConfigContract = Readonly<{
  * Top-level contract definition passed into the site-contract validator.
  */
 export type DocusaurusSiteContract = Readonly<{
-    docusaurusConfig?: DocusaurusConfigContract;
+    docusaurusConfig?: GridConfigContract;
     manifestFiles?: readonly ManifestContract[];
     packageJsonFiles?: readonly PackageJsonContract[];
     requiredFiles?: readonly string[];
