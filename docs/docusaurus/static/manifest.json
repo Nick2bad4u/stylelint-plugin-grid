@@ -1,0 +1,94 @@
+{
+    "$schema": "https://www.schemastore.org/web-manifest-combined.json",
+    "background_color": "#2E2A33",
+    "categories": [
+        "developer tools",
+        "documentation",
+        "education",
+        "productivity"
+    ],
+    "description": "Documentation site for stylelint-plugin-docusaurus, including config guidance, template status, and API docs.",
+    "dir": "ltr",
+    "display": "standalone",
+    "display_override": [
+        "window-controls-overlay",
+        "standalone",
+        "browser"
+    ],
+    "icons": [
+        {
+            "purpose": "any",
+            "sizes": "any",
+            "src": "img/logo.svg",
+            "type": "image/svg+xml"
+        },
+        {
+            "purpose": "any",
+            "sizes": "192x192",
+            "src": "img/logo_192x192.png",
+            "type": "image/png"
+        },
+        {
+            "purpose": "any",
+            "sizes": "512x512",
+            "src": "img/logo.png",
+            "type": "image/png"
+        },
+        {
+            "purpose": "any",
+            "sizes": "32x32",
+            "src": "img/favicon.ico",
+            "type": "image/x-icon"
+        }
+    ],
+    "id": "./",
+    "lang": "en",
+    "name": "stylelint-plugin-docusaurus Documentation",
+    "orientation": "any",
+    "prefer_related_applications": false,
+    "scope": ".",
+    "short_name": "Docusaurus Stylelint Docs",
+    "shortcuts": [
+        {
+            "description": "Read the overview and setup guidance for stylelint-plugin-docusaurus.",
+            "icons": [
+                {
+                    "sizes": "192x192",
+                    "src": "img/logo_192x192.png",
+                    "type": "image/png"
+                }
+            ],
+            "name": "Getting Started",
+            "short_name": "Start",
+            "url": "./docs/rules/getting-started"
+        },
+        {
+            "description": "Review the exported shareable configs and their current scope.",
+            "icons": [
+                {
+                    "sizes": "192x192",
+                    "src": "img/logo_192x192.png",
+                    "type": "image/png"
+                }
+            ],
+            "name": "Configs",
+            "short_name": "Configs",
+            "url": "./docs/rules/configs"
+        },
+        {
+            "description": "Open maintainer and architecture documentation for the docs site and plugin internals.",
+            "icons": [
+                {
+                    "sizes": "192x192",
+                    "src": "img/logo_192x192.png",
+                    "type": "image/png"
+                }
+            ],
+            "name": "Developer Docs",
+            "short_name": "Developer",
+            "url": "./docs/developer"
+        }
+    ],
+    "start_url": ".",
+    "theme_color": "#2E2A33"
+}

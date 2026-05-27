@@ -1,0 +1,265 @@
+import { readFileSync } from "node:fs";
+import * as path from "node:path";
+import { pathToFileURL } from "node:url";
+import { describe, expect, it, vi } from "vitest";
+
+import {
+    generateReadmeRulesSectionFromRules,
+    getReadmePath,
+    isDirectExecution,
+    loadBuiltRules,
+    syncReadmeRulesTable,
+} from "../scripts/sync-readme-rules-table.mjs";
+
+describe("sync-readme-rules-table automation", () => {
+    it("resolves README paths from the repository root instead of the current working directory", () => {
+        expect.hasAssertions();
+
+        expect(getReadmePath("C:/repo")).toBe(String.raw`C:\repo\README.md`);
+    });
+
+    it("loads built rules lazily through an injectable module loader", async () => {
+        expect.hasAssertions();
+
+        const builtRules = {
+            "alpha-rule": {
+                docs: {
+                    description: "Alpha rule.",
+                    recommended: true,
+                    url: "https://example.test/docs/rules/alpha-rule",
+                },
+                meta: {
+                    fixable: true,
+                },
+            },
+        };
+
+        await expect(
+            loadBuiltRules({
+                builtPluginPath: "C:/repo/dist/plugin.js",
+                importModule: () =>
+                    Promise.resolve({
+                        rules: builtRules,
+                    }),
+            })
+        ).resolves.toStrictEqual(builtRules);
+    });
+
+    it("rewrites the README rules section with sorted canonical rule rows", async () => {
+        expect.hasAssertions();
+
+        const writes: {
+            contents: string;
+            encoding: string;
+            filePath: string;
+        }[] = [];
+        const result = await syncReadmeRulesTable({
+            readFileFn: () =>
+                Promise.resolve(
+                    [
+                        "# Repo",
+                        "",
+                        "## Rules",
+                        "",
+                        "stale table",
+                        "",
+                        "## Next",
+                        "",
+                        "tail",
+                    ].join("\n")
+                ),
+            readmeFilePath: "C:/repo/README.md",
+            rules: {
+                "alpha-rule": {
+                    docs: {
+                        description: "Alpha rule.",
+                        recommended: true,
+                        url: "https://example.test/docs/rules/alpha-rule",
+                    },
+                    meta: {
+                        fixable: true,
+                    },
+                },
+                "zeta-rule": {
+                    docs: {
+                        description: "Zeta rule.",
+                        recommended: false,
+                        url: "https://example.test/docs/rules/zeta-rule",
+                    },
+                    meta: {
+                        fixable: false,
+                    },
+                },
+            },
+            writeChanges: true,
+            writeFileFn: (filePath, contents, encoding) => {
+                writes.push({
+                    contents,
+                    encoding,
+                    filePath,
+                });
+
+                return Promise.resolve();
+            },
+        });
+
+        expect(result).toStrictEqual({
+            changed: true,
+            readmeFilePath: "C:/repo/README.md",
+        });
+        expect(writes).toHaveLength(1);
+        expect(writes[0]?.encoding).toBe("utf8");
+        expect(writes[0]?.contents).toContain(
+            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/docusaurus-recommended.md) [🛡️](./docs/rules/configs/docusaurus-docs-safe.md) [🟣](./docs/rules/configs/docusaurus-all.md) | Alpha rule. |"
+        );
+        expect(writes[0]?.contents).toContain(
+            "| [`zeta-rule`](https://example.test/docs/rules/zeta-rule) | — | [🟣](./docs/rules/configs/docusaurus-all.md) | Zeta rule. |"
+        );
+        expect(writes[0]?.contents).toContain("## Next");
+    });
+
+    it("escapes markdown table delimiters and line breaks in rule descriptions", () => {
+        expect.hasAssertions();
+
+        const generatedSection = generateReadmeRulesSectionFromRules({
+            "alpha-rule": {
+                docs: {
+                    description: "Alpha uses A | B\\C\nand stays readable.",
+                    recommended: true,
+                    url: "https://example.test/docs/rules/alpha-rule",
+                },
+                meta: {
+                    fixable: true,
+                },
+            },
+        });
+
+        expect(generatedSection).toContain(
+            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/docusaurus-recommended.md) [🛡️](./docs/rules/configs/docusaurus-docs-safe.md) [🟣](./docs/rules/configs/docusaurus-all.md) | Alpha uses A \\| B\\\\C<br>and stays readable. |"
+        );
+    });
+
+    it("escapes asterisks and opening brackets in rule descriptions", () => {
+        expect.hasAssertions();
+
+        const generatedSection = generateReadmeRulesSectionFromRules({
+            "ifm-rule": {
+                docs: {
+                    description: "Disallow --ifm-* and [data-theme] usage.",
+                    recommended: false,
+                    url: "https://example.test/docs/rules/ifm-rule",
+                },
+                meta: {
+                    fixable: false,
+                },
+            },
+        });
+
+        expect(generatedSection).toContain(
+            "| [`ifm-rule`](https://example.test/docs/rules/ifm-rule) | — | [🟣](./docs/rules/configs/docusaurus-all.md) | Disallow --ifm-\\* and \\[data-theme] usage. |"
+        );
+    });
+
+    it("reports synchronized READMEs without rewriting them", async () => {
+        expect.hasAssertions();
+
+        const generatedSection = generateReadmeRulesSectionFromRules({
+            "alpha-rule": {
+                docs: {
+                    description: "Alpha rule.",
+                    recommended: true,
+                    url: "https://example.test/docs/rules/alpha-rule",
+                },
+                meta: {
+                    fixable: true,
+                },
+            },
+        });
+        const writeSpy = vi.fn<
+            (
+                filePath: string,
+                contents: string,
+                encoding: string
+            ) => Promise<void>
+        >(() => Promise.resolve());
+        const result = await syncReadmeRulesTable({
+            readFileFn: () =>
+                Promise.resolve(
+                    [
+                        "# Repo",
+                        "",
+                        generatedSection.trimEnd(),
+                        "",
+                        "## Next",
+                        "",
+                        "tail",
+                    ].join("\n")
+                ),
+            readmeFilePath: "C:/repo/README.md",
+            rules: {
+                "alpha-rule": {
+                    docs: {
+                        description: "Alpha rule.",
+                        recommended: true,
+                        url: "https://example.test/docs/rules/alpha-rule",
+                    },
+                    meta: {
+                        fixable: true,
+                    },
+                },
+            },
+            writeChanges: true,
+            writeFileFn: writeSpy,
+        });
+
+        expect(result).toStrictEqual({
+            changed: false,
+            readmeFilePath: "C:/repo/README.md",
+        });
+        expect(writeSpy).not.toHaveBeenCalled();
+    });
+
+    it("keeps the package sync workflow build-backed and write-mode consistent", () => {
+        expect.hasAssertions();
+
+        const packageJson = JSON.parse(
+            readFileSync(path.resolve("package.json"), "utf8")
+        ) as {
+            scripts?: Record<string, string>;
+        };
+
+        expect(packageJson.scripts?.["precommit"]).toBe(
+            "npm run sync:rules:write"
+        );
+        expect(packageJson.scripts?.["sync:configs-rules-matrix:write"]).toBe(
+            "node scripts/sync-configs-rules-matrix.mjs --write"
+        );
+    });
+
+    it("exposes a direct-execution guard so imports do not run the CLI", () => {
+        expect.hasAssertions();
+
+        const scriptPath = path.resolve(
+            "scripts",
+            "sync-readme-rules-table.mjs"
+        );
+        const scriptUrl = pathToFileURL(scriptPath).href;
+
+        expect(
+            isDirectExecution({
+                argvEntry: scriptPath,
+                currentImportUrl: scriptUrl,
+            })
+        ).toBeTruthy();
+
+        expect(
+            isDirectExecution({
+                argvEntry: path.resolve(
+                    "test",
+                    "sync-readme-rules-table.test.ts"
+                ),
+                currentImportUrl: scriptUrl,
+            })
+        ).toBeFalsy();
+    });
+});
