@@ -430,7 +430,7 @@
         "ini",
         "diff"
     ],
-    "hostedBaseUrl": "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/",
+    "hostedBaseUrl": "https://nick2bad4u.github.io/stylelint-plugin-grid/",
     "includeDocCommentReferences": false,
     "includeVersion": true,
     "inlineTags": [
@@ -527,7 +527,7 @@
         "@sealed",
         "@virtual"
     ],
-    "name": "stylelint-plugin-docusaurus Documentation",
+    "name": "stylelint-plugin-grid Documentation",
     "navigation": {
         "compactFolders": false,
         "excludeReferences": false,

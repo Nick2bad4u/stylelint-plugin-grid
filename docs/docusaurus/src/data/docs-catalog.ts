@@ -51,10 +51,7 @@ const flattenSidebarDocIds = (items: readonly unknown[]): readonly string[] => {
     for (const item of items) {
         if (isSidebarDocItem(item)) {
             docIds.push(item.id);
-            continue;
-        }
-
-        if (isSidebarCategoryItem(item)) {
+        } else if (isSidebarCategoryItem(item)) {
             docIds.push(...flattenSidebarDocIds(item.items));
         }
     }

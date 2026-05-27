@@ -1,48 +1,48 @@
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
+import Layout from "@theme/Layout";
 
-import GitHubStats from "../components/GitHubStats";
-import { docsCatalogStats } from "../data/docsCatalog";
+import GitHubStats from "../components/git-hub-stats";
+import { docsCatalogStats } from "../data/docs-catalog";
 import styles from "./index.module.css";
 
-type HeroBadge = {
+interface HeroBadge {
     readonly description: string;
     readonly icon: string;
     readonly label: string;
-};
+}
 
-type HeroStat = {
+interface HeroStat {
     readonly description: string;
     readonly headline: string;
-};
+}
 
-type HomeCard = {
+interface HomeCard {
     readonly description: string;
     readonly icon: string;
     readonly title: string;
     readonly to: string;
-};
+}
 
 const heroBadges = [
     {
         description:
             "Built around Stylelint's native plugin-pack model and ESM config authoring.",
-        icon: "\uf013",
+        icon: "\uF013",
         label: "Stylelint-native",
     },
     {
         description:
-            "Focused on Docusaurus theme tokens, Infima usage, and component CSS boundaries.",
-        icon: "\uf5fd",
-        label: "Docusaurus-aware",
+            "Focused on authored grid templates, named areas, track counts, and safe layout primitives.",
+        icon: "\uF5FD",
+        label: "Grid-aware",
     },
     {
         description:
             "Template-first infrastructure for rules, docs, sync scripts, and tests.",
-        icon: "\uf0ad",
+        icon: "\uF0AD",
         label: "Template-ready",
     },
 ] as const satisfies readonly HeroBadge[];
@@ -50,64 +50,65 @@ const heroBadges = [
 const heroStats = [
     {
         description:
-            "The plugin now ships focused guardrails for theme scopes, CSS Modules boundaries, selector stability, color mode, DocSearch pairing, navbar/mobile behavior, cascade-layer safety, and Infima token usage.",
-        headline: `\uf0ca ${String(docsCatalogStats.publicRuleCount)} Public Rule${docsCatalogStats.publicRuleCount === 1 ? "" : "s"}`,
-    },
-    {
-        description:
             "Start with a conservative default or opt into the full stable catalog later.",
-        headline: `\ue690 ${String(docsCatalogStats.shareableConfigCount)} Shareable Config${docsCatalogStats.shareableConfigCount === 1 ? "" : "s"}`,
+        headline: `\uE690 ${String(docsCatalogStats.shareableConfigCount)} Shareable Config${docsCatalogStats.shareableConfigCount === 1 ? "" : "s"}`,
     },
     {
         description:
-            "Typed helper scaffolding, docs sync, and Vitest integration are already in place.",
-        headline: "\udb80\udc68 DX-first Template",
+            "The plugin ships focused guardrails for malformed templates, non-rectangular areas, track-count drift, stale area references, and legacy gap aliases.",
+        headline: `\uF0CA ${String(docsCatalogStats.publicRuleCount)} Public Rule${docsCatalogStats.publicRuleCount === 1 ? "" : "s"}`,
+    },
+    // eslint-disable-next-line perfectionist/sort-arrays -- We need this order
+    {
+        description:
+            "Older Stylelint support for users of the previous major version.",
+        headline: "\uDB80\uDC68 Stylelint 16+",
     },
 ] as const satisfies readonly HeroStat[];
 
-const overviewButtonIcon = "\udb81\udf1d";
-const compareConfigsButtonIcon = "\udb85\udc92";
-const heroKickerIcon = "\uf0ad";
-const heroKickerIcon2 = "\uf135";
+const overviewButtonIcon = "\uDB81\uDF1D";
+const compareConfigsButtonIcon = "\uDB85\uDC92";
+const heroKickerIcon = "\uF0AD";
+const heroKickerIcon2 = "\uF135";
 const homepageDescription =
-    "Explore stylelint-plugin-docusaurus documentation, configs, and template guidance for Docusaurus-focused CSS linting.";
+    "Explore stylelint-plugin-grid documentation, configs, and CSS Grid linting guidance.";
 const homepageKeywords =
-    "stylelint-plugin-docusaurus, stylelint, docusaurus, infima, css linting, postcss, docs tooling";
+    "stylelint-plugin-grid, stylelint, css grid, grid-template-areas, css linting, postcss";
 const homepageStructuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
-    codeRepository: "https://github.com/Nick2bad4u/stylelint-plugin-docusaurus",
+    codeRepository: "https://github.com/Nick2bad4u/stylelint-plugin-grid",
     description: homepageDescription,
-    image: "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/img/logo.png",
+    image: "https://nick2bad4u.github.io/stylelint-plugin-grid/img/logo.png",
     license:
-        "https://github.com/Nick2bad4u/stylelint-plugin-docusaurus/blob/main/LICENSE",
-    name: "stylelint-plugin-docusaurus",
+        "https://github.com/Nick2bad4u/stylelint-plugin-grid/blob/main/LICENSE",
+    name: "stylelint-plugin-grid",
     programmingLanguage: "TypeScript",
     runtimePlatform: "Node.js",
-    url: "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/",
+    url: "https://nick2bad4u.github.io/stylelint-plugin-grid/",
 } as const;
 const homepageSocialImageUrl =
-    "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/img/logo.png";
+    "https://nick2bad4u.github.io/stylelint-plugin-grid/img/logo.png";
 
 const homeCards = [
     {
         description:
-            "Install the package, enable a shareable config, and understand the plugin-pack export shape.",
-        icon: "\uf135",
-        title: "Get Started",
-        to: "/docs/rules/getting-started",
-    },
-    {
-        description:
             "Compare the exported configs and understand why `recommended` stays conservative while `all` adds stricter opt-in rules.",
-        icon: "\ue690",
+        icon: "\uE690",
         title: "Configs",
         to: "/docs/rules/configs",
     },
     {
         description:
-            "Read the migration status and template roadmap before designing the first public Docusaurus rules.",
-        icon: "\uf02d",
+            "Install the package, enable a shareable config, and understand the plugin-pack export shape.",
+        icon: "\uF135",
+        title: "Get Started",
+        to: "/docs/rules/getting-started",
+    },
+    {
+        description:
+            "Read the current rule scope and static-analysis boundaries before enabling stricter checks.",
+        icon: "\uF02D",
         title: "Current Status",
         to: "/docs/rules/guides/current-status",
     },
@@ -120,7 +121,7 @@ export default function Home() {
     return (
         <Layout
             description={homepageDescription}
-            title="Stylelint rules for Docusaurus styles"
+            title="Stylelint rules for CSS Grid"
         >
             <Head>
                 <meta content={homepageKeywords} name="keywords" />
@@ -136,14 +137,14 @@ export default function Home() {
                     <div className={styles.heroGrid}>
                         <div>
                             <p className={styles.heroKicker}>
-                                {`${heroKickerIcon} Stylelint template for Docusaurus teams ${heroKickerIcon2}`}
+                                {`${heroKickerIcon} Stylelint plugin for CSS Grid ${heroKickerIcon2}`}
                             </p>
                             <Heading as="h1" className={styles.heroTitle}>
-                                stylelint-plugin-docusaurus
+                                stylelint-plugin-grid
                             </Heading>
                             <p className={styles.heroSubtitle}>
-                                A Stylelint-first plugin scaffold for Docusaurus
-                                stylesheets, built around{" "}
+                                A Stylelint-first plugin for CSS Grid templates,
+                                built around{" "}
                                 <Link
                                     className={`${styles.heroInlineLink} ${styles.heroInlineLinkStylelint}`}
                                     href="https://stylelint.io/developer-guide/plugins/"
@@ -155,11 +156,11 @@ export default function Home() {
                                 and{" "}
                                 <Link
                                     className={`${styles.heroInlineLink} ${styles.heroInlineLinkDocusaurus}`}
-                                    href="https://docusaurus.io/docs/styling-layout"
+                                    href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                 >
-                                    Docusaurus styling
+                                    CSS Grid layout
                                 </Link>
                                 .
                             </p>
@@ -167,8 +168,8 @@ export default function Home() {
                             <div className={styles.heroBadgeRow}>
                                 {heroBadges.map((badge) => (
                                     <article
-                                        key={badge.label}
                                         className={styles.heroBadge}
+                                        key={badge.label}
                                     >
                                         <p className={styles.heroBadgeLabel}>
                                             <span
@@ -208,7 +209,7 @@ export default function Home() {
 
                         <aside className={styles.heroPanel}>
                             <img
-                                alt="stylelint-plugin-docusaurus logo"
+                                alt="stylelint-plugin-grid logo"
                                 className={styles.heroPanelLogo}
                                 decoding="async"
                                 height="240"
@@ -224,8 +225,8 @@ export default function Home() {
                     <div className={styles.heroStats}>
                         {heroStats.map((stat) => (
                             <article
-                                key={stat.headline}
                                 className={styles.heroStatCard}
+                                key={stat.headline}
                             >
                                 <p className={styles.heroStatHeading}>
                                     {stat.headline}
@@ -243,7 +244,7 @@ export default function Home() {
                 <section className="container">
                     <div className={styles.cardGrid}>
                         {homeCards.map((card) => (
-                            <article key={card.title} className={styles.card}>
+                            <article className={styles.card} key={card.title}>
                                 <div className={styles.cardHeader}>
                                     <p className={styles.cardIcon}>
                                         {card.icon}

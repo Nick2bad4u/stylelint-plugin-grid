@@ -1,13 +1,13 @@
 {
     "$schema": "https://www.schemastore.org/web-manifest-combined.json",
-    "background_color": "#2E2A33",
+    "background_color": "#0B1815",
     "categories": [
         "developer tools",
         "documentation",
         "education",
         "productivity"
     ],
-    "description": "Documentation site for stylelint-plugin-docusaurus, including config guidance, template status, and API docs.",
+    "description": "Documentation site for stylelint-plugin-grid, including config guidance, rule docs, and API docs.",
     "dir": "ltr",
     "display": "standalone",
     "display_override": [
@@ -43,14 +43,14 @@
     ],
     "id": "./",
     "lang": "en",
-    "name": "stylelint-plugin-docusaurus Documentation",
+    "name": "stylelint-plugin-grid Documentation",
     "orientation": "any",
     "prefer_related_applications": false,
     "scope": ".",
-    "short_name": "Docusaurus Stylelint Docs",
+    "short_name": "Grid Docs",
     "shortcuts": [
         {
-            "description": "Read the overview and setup guidance for stylelint-plugin-docusaurus.",
+            "description": "Read the overview and setup guidance for stylelint-plugin-grid.",
             "icons": [
                 {
                     "sizes": "192x192",
@@ -90,5 +90,5 @@
         }
     ],
     "start_url": ".",
-    "theme_color": "#2E2A33"
+    "theme_color": "#0B1815"
 }

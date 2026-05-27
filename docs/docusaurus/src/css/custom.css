@@ -24,62 +24,82 @@
 /* You can override the default Infima variables here. */
 
 :root {
-    --ifm-color-primary: #4f46e5;
-    --ifm-color-primary-dark: #4338ca;
-    --ifm-color-primary-darker: #3730a3;
-    --ifm-color-primary-darkest: #312e81;
-    --ifm-color-primary-light: #6366f1;
-    --ifm-color-primary-lighter: #818cf8;
-    --ifm-color-primary-lightest: #a5b4fc;
+    --ifm-color-primary: #0f766e;
+    --ifm-color-primary-dark: #0d665f;
+    --ifm-color-primary-darker: #0b5d56;
+    --ifm-color-primary-darkest: #07413d;
+    --ifm-color-primary-light: #0d9488;
+    --ifm-color-primary-lighter: #14b8a6;
+    --ifm-color-primary-lightest: #5eead4;
     --ifm-code-font-size: 95%;
     --ifm-font-family-base:
         "Inter var", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-    --sb-accent-overview: #22c55e;
-    --sb-accent-started: #0ea5e9;
-    --sb-accent-developer: #8b5cf6;
-    --sb-accent-developer-ops: #ec4899;
-    --sb-accent-rules: #f97316;
-    --sb-accent-presets: #eab308;
+    --sb-accent-overview: #14b8a6;
+    --sb-accent-started: #84cc16;
+    --sb-accent-configs: #f59e0b;
+    --sb-accent-developer: #0ea5e9;
+    --sb-accent-developer-ops: #d946ef;
+    --sb-accent-rules: #f43f5e;
+    --sb-accent-presets: #f59e0b;
     --sb-accent-guides: #06b6d4;
-    --sb-accent-api-overview: #6366f1;
-    --sb-accent-api-types: #14b8a6;
-    --sb-accent-api-runtime: #f43f5e;
-    --sb-accent-dev-charts: #38bdf8;
-    --sb-accent-dev-links: #10b981;
-    --sb-accent-adr: #f59e0b;
-    --sb-accent-rules-guides: #22c55e;
-    --sb-accent-rules-catalog: #a855f7;
+    --sb-accent-api-overview: #8b5cf6;
+    --sb-accent-api-types: #10b981;
+    --sb-accent-api-runtime: #e11d48;
+    --sb-accent-dev-charts: #22d3ee;
+    --sb-accent-dev-links: #65a30d;
+    --sb-accent-adr: #f97316;
+    --sb-accent-rules-guides: #06b6d4;
+    --sb-accent-rules-catalog: #f43f5e;
     --sb-prefix-rule-number: #52525b;
-    --sb-config-recommended: #facc15;
-    --sb-config-all: #a855f7;
+    --sb-config-all: #22d3ee;
+    --sb-config-recommended: #84cc16;
+    --sb-rule-consistent-area-naming: #14b8a6;
+    --sb-rule-no-invalid-areas: #f43f5e;
+    --sb-rule-no-mismatched-template-rows: #f97316;
+    --sb-rule-no-overlapping-areas: #d946ef;
+    --sb-rule-no-unknown-areas: #0ea5e9;
+    --sb-rule-no-unused-areas: #f59e0b;
+    --sb-rule-prefer-gap-properties: #84cc16;
+    --sb-rule-validate-area-shapes: #8b5cf6;
+    --sb-rule-validate-track-counts: #22d3ee;
 }
 
 [data-theme="dark"] {
-    --ifm-color-primary: #818cf8;
-    --ifm-color-primary-dark: #6366f1;
-    --ifm-color-primary-darker: #4f46e5;
-    --ifm-color-primary-darkest: #4338ca;
-    --ifm-color-primary-light: #a5b4fc;
-    --ifm-color-primary-lighter: #c7d2fe;
-    --ifm-color-primary-lightest: #e0e7ff;
-    --sb-accent-overview: #4ade80;
-    --sb-accent-started: #38bdf8;
-    --sb-accent-developer: #c084fc;
-    --sb-accent-developer-ops: #f472b6;
-    --sb-accent-rules: #fb923c;
-    --sb-accent-presets: #facc15;
+    --ifm-color-primary: #34d399;
+    --ifm-color-primary-dark: #10b981;
+    --ifm-color-primary-darker: #0d9488;
+    --ifm-color-primary-darkest: #0f766e;
+    --ifm-color-primary-light: #5eead4;
+    --ifm-color-primary-lighter: #99f6e4;
+    --ifm-color-primary-lightest: #ccfbf1;
+    --sb-accent-overview: #2dd4bf;
+    --sb-accent-started: #a3e635;
+    --sb-accent-configs: #fbbf24;
+    --sb-accent-developer: #38bdf8;
+    --sb-accent-developer-ops: #e879f9;
+    --sb-accent-rules: #fb7185;
+    --sb-accent-presets: #fbbf24;
     --sb-accent-guides: #67e8f9;
-    --sb-accent-api-overview: #a5b4fc;
-    --sb-accent-api-types: #2dd4bf;
+    --sb-accent-api-overview: #c084fc;
+    --sb-accent-api-types: #34d399;
     --sb-accent-api-runtime: #fb7185;
     --sb-accent-dev-charts: #7dd3fc;
-    --sb-accent-dev-links: #34d399;
+    --sb-accent-dev-links: #bef264;
     --sb-accent-adr: #fbbf24;
-    --sb-accent-rules-guides: #4ade80;
-    --sb-accent-rules-catalog: #c084fc;
+    --sb-accent-rules-guides: #67e8f9;
+    --sb-accent-rules-catalog: #fb7185;
     --sb-prefix-rule-number: #a1a1aa;
-    --sb-config-recommended: #fde047;
-    --sb-config-all: #c084fc;
+    --sb-config-all: #67e8f9;
+    --sb-config-recommended: #bef264;
+    --sb-rule-consistent-area-naming: #2dd4bf;
+    --sb-rule-no-invalid-areas: #fb7185;
+    --sb-rule-no-mismatched-template-rows: #fb923c;
+    --sb-rule-no-overlapping-areas: #e879f9;
+    --sb-rule-no-unknown-areas: #38bdf8;
+    --sb-rule-no-unused-areas: #fbbf24;
+    --sb-rule-prefer-gap-properties: #bef264;
+    --sb-rule-validate-area-shapes: #c084fc;
+    --sb-rule-validate-track-counts: #67e8f9;
 }
 
 .navbar .dropdown__menu .navbar-dropdown-divider {
@@ -126,11 +146,12 @@
 
 [data-theme="dark"] .theme-doc-sidebar-menu .menu__link:hover,
 [data-theme="dark"] .theme-doc-sidebar-menu .menu__link:focus {
-    background-color: rgb(129 140 248 / 20%);
+    background-color: rgb(52 211 153 / 18%);
 }
 
 .sb-doc-overview > .menu__link,
 .sb-doc-getting-started > .menu__link,
+.sb-doc-developer > .menu__link,
 .sb-cat-developer > .menu__link,
 .sb-cat-developer-ops > .menu__link,
 .sb-doc-site-contract > .menu__link,
@@ -166,6 +187,15 @@
 
 .sb-cat-guides > .menu__list-item-collapsible .menu__link {
     border-inline-start-color: var(--sb-accent-guides);
+}
+
+.sb-cat-configs > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-configs);
+}
+
+.sb-doc-developer > .menu__link,
+.sb-cat-api-overview > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-api-overview);
 }
 
 .sb-cat-developer-adr > .menu__list-item-collapsible .menu__link {
@@ -310,8 +340,8 @@
 
 .sb-cat-api-overview > .menu__list-item-collapsible .menu__link::before {
     content: "📘";
-    background-color: rgb(99 102 241 / 12%);
-    border: 1px solid rgb(99 102 241 / 40%);
+    background-color: rgb(139 92 246 / 12%);
+    border: 1px solid rgb(139 92 246 / 40%);
     color: var(--sb-accent-api-overview);
 }
 
@@ -373,7 +403,7 @@
 .sb-cat-api-overview:not(.menu__list-item--collapsed)
     > .menu__list-item-collapsible
     .menu__link {
-    box-shadow: inset 0 0 0 1px rgb(99 102 241 / 26%);
+    box-shadow: inset 0 0 0 1px rgb(139 92 246 / 26%);
 }
 
 .sb-cat-dev-links:not(.menu__list-item--collapsed)
@@ -386,8 +416,15 @@
     border-inline-start: 2px solid rgb(139 92 246 / 45%);
 }
 
+.sb-cat-configs .theme-doc-sidebar-item-link-level-2 > .menu__link,
 .sb-cat-rules .theme-doc-sidebar-item-link-level-2 > .menu__link {
-    border-inline-start: 2px solid rgb(249 115 22 / 45%);
+    border-inline-start: 3px solid transparent;
+    border-radius: 0.42rem;
+    line-height: 1.375;
+    margin-block: 0.08rem;
+    padding-block: 0.28rem;
+    padding-inline-start: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
+    text-wrap: pretty;
 }
 
 .sb-cat-guides .theme-doc-sidebar-item-link-level-2 > .menu__link {
@@ -440,7 +477,53 @@
     border-inline-start-color: #10b981;
 }
 
-/* Config palette */
+/* Config and rule palettes */
+
+.sb-cat-configs .sb-config-all > .menu__link,
+.sb-cat-configs .menu__link.sb-config-all {
+    border-inline-start-color: var(--sb-config-all);
+}
+
+.sb-cat-configs .sb-config-recommended > .menu__link,
+.sb-cat-configs .menu__link.sb-config-recommended {
+    border-inline-start-color: var(--sb-config-recommended);
+}
+
+.sb-cat-rules .sb-rule-consistent-area-naming > .menu__link {
+    border-inline-start-color: var(--sb-rule-consistent-area-naming);
+}
+
+.sb-cat-rules .sb-rule-no-invalid-areas > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-invalid-areas);
+}
+
+.sb-cat-rules .sb-rule-no-mismatched-template-rows > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-mismatched-template-rows);
+}
+
+.sb-cat-rules .sb-rule-no-overlapping-areas > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-overlapping-areas);
+}
+
+.sb-cat-rules .sb-rule-no-unknown-areas > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-unknown-areas);
+}
+
+.sb-cat-rules .sb-rule-no-unused-areas > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-unused-areas);
+}
+
+.sb-cat-rules .sb-rule-prefer-gap-properties > .menu__link {
+    border-inline-start-color: var(--sb-rule-prefer-gap-properties);
+}
+
+.sb-cat-rules .sb-rule-validate-area-shapes > .menu__link {
+    border-inline-start-color: var(--sb-rule-validate-area-shapes);
+}
+
+.sb-cat-rules .sb-rule-validate-track-counts > .menu__link {
+    border-inline-start-color: var(--sb-rule-validate-track-counts);
+}
 
 .sb-cat-api-overview .theme-doc-sidebar-item-link-level-2 > .menu__link,
 .sb-cat-api-overview .menu__list .menu__link,
@@ -742,16 +825,6 @@
     .theme-doc-sidebar-item-link-level-3:nth-child(4n)
     > .menu__link {
     border-inline-start-color: #0284c7;
-}
-
-.sb-cat-configs .sb-config-recommended > .menu__link,
-.sb-cat-configs .menu__link.sb-config-recommended {
-    border-inline-start-color: var(--sb-config-recommended);
-}
-
-.sb-cat-configs .sb-config-all > .menu__link,
-.sb-cat-configs .menu__link.sb-config-all {
-    border-inline-start-color: var(--sb-config-all);
 }
 
 .markdown h1,

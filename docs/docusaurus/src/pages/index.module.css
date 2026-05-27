@@ -11,23 +11,23 @@
     overflow: clip;
     padding: 4.45rem 0 3.65rem;
     background:
-        radial-gradient(
-            circle at 86% 12%,
-            rgb(244 114 182 / 28%),
-            transparent 40%
-        ),
-        radial-gradient(
-            circle at 16% 90%,
-            rgb(34 211 238 / 30%),
-            transparent 45%
-        ),
+        linear-gradient(rgb(255 255 255 / 7%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(255 255 255 / 7%) 1px, transparent 1px),
         linear-gradient(
             134deg,
-            #312e81 0%,
-            #4338ca 38%,
-            #3b82f6 72%,
-            #22d3ee 100%
+            #0b1815 0%,
+            #0f2a24 30%,
+            #3b2a10 62%,
+            #3f1222 100%
         );
+    background-position:
+        center,
+        center,
+        0 0;
+    background-size:
+        64px 64px,
+        64px 64px,
+        auto;
     border-block-end: 1px solid rgb(255 255 255 / 18%);
     color: #ffffff;
     isolation: isolate;
@@ -42,22 +42,28 @@
 
 .heroBanner::before {
     z-index: -1;
-    border-radius: 999rem;
-    background: rgb(255 255 255 / 11%);
-    block-size: 24rem;
-    filter: blur(8px);
-    inline-size: 24rem;
-    inset: -40% auto auto -18%;
+    background:
+        linear-gradient(90deg, transparent, rgb(52 211 153 / 20%), transparent),
+        linear-gradient(180deg, transparent, rgb(34 211 238 / 12%), transparent);
+    block-size: 100%;
+    inline-size: 100%;
+    inset: 0;
 }
 
 .heroBanner::after {
     z-index: -1;
-    border-radius: 999rem;
-    background: rgb(255 255 255 / 8%);
-    block-size: 26rem;
-    filter: blur(2px);
-    inline-size: 26rem;
-    inset: auto -12% -46% auto;
+    background: linear-gradient(
+        90deg,
+        transparent 0,
+        transparent calc(50% - 1px),
+        rgb(245 158 11 / 28%) 50%,
+        transparent calc(50% + 1px),
+        transparent 100%
+    );
+    block-size: 100%;
+    inline-size: 34rem;
+    inset: 0 9% 0 auto;
+    opacity: 0.62;
 }
 
 @keyframes hero-panel-shimmer {
@@ -155,28 +161,28 @@
 }
 
 .heroInlineLinkStylelint {
-    border-color: rgb(196 181 253 / 58%);
-    background: rgb(91 33 182 / 30%);
-    color: rgb(243 232 255);
+    border-color: rgb(251 191 36 / 58%);
+    background: rgb(120 53 15 / 34%);
+    color: rgb(254 243 199);
 
     &:hover,
     &:focus {
-        border-color: rgb(216 180 254 / 82%);
-        background: rgb(126 34 206 / 38%);
-        color: rgb(250 245 255);
+        border-color: rgb(253 224 71 / 82%);
+        background: rgb(146 64 14 / 42%);
+        color: rgb(255 251 235);
     }
 }
 
 .heroInlineLinkDocusaurus {
-    border-color: rgb(125 211 252 / 58%);
-    background: rgb(14 116 144 / 30%);
-    color: rgb(224 242 254);
+    border-color: rgb(52 211 153 / 58%);
+    background: rgb(6 95 70 / 32%);
+    color: rgb(209 250 229);
 
     &:hover,
     &:focus {
-        border-color: rgb(103 232 249 / 82%);
-        background: rgb(8 145 178 / 38%);
-        color: rgb(240 249 255);
+        border-color: rgb(94 234 212 / 82%);
+        background: rgb(13 148 136 / 40%);
+        color: rgb(240 253 250);
     }
 }
 
@@ -291,30 +297,30 @@
 }
 
 .heroActionPrimary {
-    border-color: rgb(224 231 255 / 36%);
+    border-color: rgb(190 242 100 / 40%);
     background:
-        linear-gradient(145deg, rgb(129 140 248 / 90%), rgb(99 102 241 / 90%)),
+        linear-gradient(145deg, rgb(20 184 166 / 92%), rgb(132 204 22 / 86%)),
         linear-gradient(180deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 0%));
-    color: rgb(232 239 255);
+    color: rgb(236 253 245);
 
     &:hover,
     &:focus {
-        border-color: rgb(224 231 255 / 50%);
-        color: rgb(242 246 255);
+        border-color: rgb(217 249 157 / 60%);
+        color: rgb(247 254 231);
     }
 }
 
 .heroActionSecondary {
-    border-color: rgb(191 219 254 / 34%);
+    border-color: rgb(251 191 36 / 42%);
     background:
-        linear-gradient(145deg, rgb(186 230 253 / 20%), rgb(147 197 253 / 11%)),
+        linear-gradient(145deg, rgb(245 158 11 / 26%), rgb(244 63 94 / 15%)),
         rgb(15 23 42 / 28%);
-    color: rgb(222 235 255);
+    color: rgb(255 247 237);
 
     &:hover,
     &:focus {
-        border-color: rgb(191 219 254 / 50%);
-        color: rgb(238 246 255);
+        border-color: rgb(253 186 116 / 58%);
+        color: rgb(255 251 235);
     }
 }
 
@@ -331,11 +337,11 @@
     margin: 0;
     backdrop-filter: blur(10px);
     background:
-        linear-gradient(155deg, rgb(15 23 42 / 45%), rgb(15 23 42 / 22%)),
-        rgb(30 41 59 / 28%);
+        linear-gradient(155deg, rgb(8 47 39 / 48%), rgb(63 18 34 / 26%)),
+        rgb(15 23 42 / 28%);
     box-shadow:
         0 20px 30px -26px rgb(15 23 42 / 85%),
-        inset 0 1px 0 rgb(255 255 255 / 15%);
+        inset 0 1px 0 rgb(255 255 255 / 18%);
     isolation: isolate;
     min-block-size: 11rem;
 }
@@ -461,8 +467,8 @@
     background:
         linear-gradient(
             165deg,
-            rgb(79 70 229 / 10%),
-            rgb(14 165 233 / 8%) 56%,
+            rgb(20 184 166 / 10%),
+            rgb(245 158 11 / 8%) 56%,
             transparent
         ),
         var(--live-stats-surface-background);
@@ -481,10 +487,10 @@
 
     display: inline-flex;
     padding: 0.2rem 0.56rem;
-    border: 1px solid rgb(79 70 229 / 24%);
+    border: 1px solid rgb(20 184 166 / 24%);
     border-radius: 999rem;
     margin: 0;
-    background: rgb(79 70 229 / 10%);
+    background: rgb(20 184 166 / 10%);
     color: var(--live-stats-kicker-color);
     font-size: 0.75rem;
     font-weight: 700;
@@ -567,8 +573,8 @@
     background:
         linear-gradient(
             170deg,
-            rgb(79 70 229 / 7%),
-            rgb(14 165 233 / 6%) 48%,
+            rgb(20 184 166 / 7%),
+            rgb(245 158 11 / 6%) 48%,
             transparent
         ),
         var(--card-background);
@@ -589,7 +595,7 @@
 
     &:hover,
     &:focus {
-        border-color: rgb(99 102 241 / 35%);
+        border-color: rgb(20 184 166 / 35%);
         box-shadow: var(--card-hover-shadow);
         transform: translateY(-2px);
     }
@@ -613,7 +619,7 @@
     justify-content: center;
     border-radius: 0.6rem;
     margin: 0;
-    background: rgb(79 70 229 / 14%);
+    background: rgb(20 184 166 / 14%);
     block-size: 1.9rem;
     font-family:
         "NerdFontSymbols Nerd Font Symbols", "Symbols Nerd Font Mono",

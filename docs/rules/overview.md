@@ -1,47 +1,49 @@
 ---
 title: Overview
-description: Overview of stylelint-plugin-docusaurus and its current package surface.
+description: Overview of stylelint-plugin-grid and its package surface.
 ---
 
-# stylelint-plugin-docusaurus
+# stylelint-plugin-grid
 
-`stylelint-plugin-docusaurus` is a Stylelint plugin focused on Docusaurus styling conventions, theme-token hygiene, selector stability, CSS Modules boundaries, color-mode correctness, and mobile navbar safety.
+`stylelint-plugin-grid` validates authored CSS Grid templates, area
+assignments, and grid-specific compatibility patterns that generic declaration
+rules do not understand.
 
-The repository was intentionally converted from a mature ESLint-plugin template into a Stylelint-first package. The infrastructure was already strong; the public rule catalog has now grown into a broader Docusaurus-specific surface.
+The package intentionally focuses on static CSS that Stylelint can inspect
+reliably: `grid-template-areas`, sibling template track declarations, and
+single-name `grid-area` assignments.
 
-## What the package currently exports
+## Exports
 
 - A default Stylelint plugin pack export.
-- A plugin-scoped shareable config map: `docusaurusPluginConfigs`
-  - `docusaurus-recommended`
-  - `docusaurus-all`
-  - `docusaurus-docs-safe`
-- Static runtime metadata and typed helper infrastructure for future rule authoring.
+- A plugin-scoped shareable config map: `gridPluginConfigs`
+  - `grid-recommended`
+  - `grid-all`
+- Static metadata exports: `meta`, `rules`, `ruleNames`, `ruleIds`, and
+  `configNames`.
 
-## Current rule status
+## Rule Families
 
-The public rule catalog now includes **33** Docusaurus-specific rules.
+The initial catalog covers:
 
-The current families cover:
+- malformed `grid-template-areas` row strings and area tokens
+- non-rectangular named areas
+- row and column track-count drift
+- unknown or unused named area references
+- duplicate single-name area assignments that can create overlapping grid items
+- consistent grid area naming
+- migration from legacy `grid-gap` aliases to modern gap properties
 
-- theme-token scope and Infima primary-scale guardrails
-- color-mode selector correctness, prefers-color-scheme guidance, and DocSearch color-mode/token/root-scope correctness
-- stable theme class usage and unsafe internal selector detection
-- CSS Modules boundaries for global theme selectors, hidden global overrides, and token consumption (framework and project-scoped tokens)
-- mobile navbar/sidebar safety and breakpoint alignment (including hardcoded Docusaurus breakpoint detection)
-- cascade-layer, `revert-layer`, and broad `all` reset safety
-- HTML data-attribute and content-wrapper selector hygiene
-- interactive-transition reduced-motion accessibility guardrails
-- `@font-face` font-display and local-src ordering correctness
-- Infima/Docusaurus selector override quality (`!important` escalation, `color-scheme` interference)
+The package does not try to infer runtime layout across separate files,
+framework conditionals, or class composition. Rules that need same-stylesheet
+knowledge are kept out of `grid-recommended` unless their false-positive risk is
+low.
 
-## What comes next
+## Next Steps
 
-Future public rules can continue extending Docusaurus-specific authoring concerns such as:
-
-- stricter curated stable-class mappings
-- broader theme-surface token guidance
-- additional swizzle-safe customization contracts
-- more Docusaurus v4 cascade-layer guardrails
-
-The package surface is still intentionally curated: the goal is Docusaurus-specific signal, not a duplicate of generic CSS linting plugins.
+- [Install and configure the plugin](./getting-started.md).
+- [Compare the shareable configs](./configs/).
+- [Review the current static-analysis boundaries](./guides/current-status.md).
+- Start with [`no-invalid-areas`](./no-invalid-areas.md),
+  [`validate-area-shapes`](./validate-area-shapes.md), and
+  [`validate-track-counts`](./validate-track-counts.md) for template correctness.

@@ -1,24 +1,7 @@
-import { existsSync, readdirSync } from "node:fs";
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-
 import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
-const apiDocsDirectoryPath = resolve(
-    fileURLToPath(new URL("./site-docs/developer/api", import.meta.url))
-);
-
-const hasGeneratedApiDocs = (() => {
-    if (!existsSync(apiDocsDirectoryPath)) {
-        return false;
-    }
-
-    return readdirSync(apiDocsDirectoryPath, {
-        recursive: true,
-    }).some((entryName) => /\.(?:md|mdx)$/u.test(String(entryName)));
-})();
-
 const generatedApiSidebarCategory = {
+    className: "sb-cat-api-overview",
     collapsed: false,
     items: [
         {
@@ -40,16 +23,18 @@ const generatedApiSidebarCategory = {
 const sidebars = {
     docs: [
         {
+            className: "sb-doc-developer",
             id: "developer/index",
             label: "Developer Docs",
             type: "doc",
         },
         {
+            className: "sb-doc-site-contract",
             id: "developer/docusaurus-site-contract",
             label: "🧭 Docs Site Contract",
             type: "doc",
         },
-        ...(hasGeneratedApiDocs ? [generatedApiSidebarCategory] : []),
+        generatedApiSidebarCategory,
     ],
 } satisfies SidebarsConfig;
 

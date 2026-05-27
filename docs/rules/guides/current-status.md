@@ -1,54 +1,36 @@
 ---
 title: Current Status
-description: Current status of the public rule catalog for stylelint-plugin-docusaurus.
+description: Current scope of the CSS Grid safety rule catalog.
 ---
 
 # Current Status
 
-The public `docusaurus/*` rule catalog is no longer empty.
+The repository has been re-identified as `stylelint-plugin-grid` and now
+ships a focused CSS Grid rule catalog.
 
-## What has shipped so far
+## Stable Scope
 
-The public catalog now includes **26** rules instead of the initial starter set.
+- Grid area template parsing is intentionally conservative.
+- Track-count validation handles explicit tracks and integer `repeat(...)`
+  notation.
+- Rules skip dynamic values such as `var(...)`, `repeat(auto-fit, ...)`, and
+  multi-value `grid-area` line placement when static analysis would be
+  unreliable.
 
-Newer additions now cover:
+## Deliberate Non-Goals
 
-- CSS Modules global-selector boundaries
-- CSS Modules local-anchor requirements for explicit global theme overrides
-- content-wrapper scoping for broad element overrides
-- explicit root `data-theme` selector correctness
-- prefers-color-scheme guidance for Docusaurus theme tokens and global theme surfaces
-- curated token-over-structure guidance for common DocSearch surfaces
-- explicit root-scope requirements for DocSearch token declarations
-- responsive navbar/sidebar breakpoint alignment
-- paired color-mode requirements for Infima primary scales and DocSearch tokens
-- curated token-over-structure guidance for common Infima surfaces
-- reserved cascade-layer names, `revert-layer` isolation safety, and broad `all` reset safety
+- Inferring component relationships across files.
+- Guessing whether duplicate `grid-area` assignments are intentional overlays.
+- Rewriting `grid-template-areas` strings automatically.
 
-## Why the catalog is still curated
+Those choices keep the plugin useful on save instead of turning it into a noisy
+layout oracle.
 
-This repository is being turned into the **Stylelint** counterpart of the maintainer's ESLint plugin template.
+## Related Docs
 
-The previous repository content contained a large amount of utility-library-specific rule content that does not belong in a Docusaurus-focused Stylelint plugin. Instead of renaming that content into something misleading, the obsolete rule corpus was removed and the Stylelint runtime/template infrastructure was rebuilt cleanly.
-
-## What is already ready
-
-With the expanded public rule catalog, the repository now includes the important long-term pieces:
-
-- typed Stylelint plugin runtime scaffolding
-- package exports and CJS/ESM build output
-- Vitest-based Stylelint integration-test helpers
-- Docusaurus docs-site scaffolding
-- README/config sync infrastructure driven by real rule metadata
-
-## What a future rule must include
-
-Every future public rule should ship with:
-
-1. a typed rule module in `src/rules/`
-2. static authored docs metadata
-3. a hand-written docs page in `docs/rules/`
-4. Vitest coverage using real `stylelint.lint(...)` execution
-5. registration in the plugin runtime and shareable configs
-
-The package is now in active rule-authoring mode rather than template-only mode, but the same implementation bar still applies to each future addition.
+- [Getting Started](../getting-started.md) shows the recommended baseline config.
+- [`grid-all`](../configs/grid-all.md) includes the stricter same-stylesheet rules.
+- [`no-unused-areas`](../no-unused-areas.md),
+  [`no-overlapping-areas`](../no-overlapping-areas.md), and
+  [`consistent-area-naming`](../consistent-area-naming.md) are the main rules to
+  review before opting into stricter policy checks.

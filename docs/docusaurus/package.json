@@ -1,9 +1,9 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
-    "name": "@stylelint-plugin-docusaurus/docs",
+    "name": "@stylelint-plugin-grid/docs",
     "version": "0.1.0",
     "private": true,
-    "description": "Docusaurus documentation site for stylelint-plugin-docusaurus.",
+    "description": "Docusaurus documentation site for stylelint-plugin-grid.",
     "keywords": [
         "docusaurus",
         "documentation",
@@ -11,13 +11,13 @@
         "stylelint-plugin",
         "css"
     ],
-    "homepage": "https://nick2bad4u.github.io/stylelint-plugin-docusaurus/",
+    "homepage": "https://nick2bad4u.github.io/stylelint-plugin-grid/",
     "bugs": {
-        "url": "https://github.com/Nick2bad4u/stylelint-plugin-docusaurus/issues"
+        "url": "https://github.com/Nick2bad4u/stylelint-plugin-grid/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Nick2bad4u/stylelint-plugin-docusaurus.git"
+        "url": "git+https://github.com/Nick2bad4u/stylelint-plugin-grid.git"
     },
     "license": "MIT",
     "author": "Nick2bad4u",
@@ -25,7 +25,7 @@
         {
             "name": "Nick2bad4u",
             "email": "20943337+Nick2bad4u@users.noreply.github.com",
-            "url": "https://nick2bad4u.github.io/stylelint-plugin-docusaurus"
+            "url": "https://nick2bad4u.github.io/stylelint-plugin-grid"
         }
     ],
     "sideEffects": false,
@@ -64,9 +64,9 @@
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.10.1",
         "@docusaurus/tsconfig": "^3.10.1",
-        "@eslint/config-inspector": "^3.0.2",
+        "@eslint/config-inspector": "^3.0.3",
         "@mdx-js/react": "^3.1.1",
-        "@types/react": "^19.2.14",
+        "@types/react": "^19.2.15",
         "@types/react-dom": "^19.2.3",
         "docusaurus-plugin-image-zoom": "^3.0.1",
         "react": "^19.2.6",
@@ -76,7 +76,7 @@
         "typedoc": "^0.28.19",
         "typedoc-docusaurus-theme": "^1.4.2",
         "typedoc-plugin-coverage": "^4.0.3",
-        "typedoc-plugin-dt-links": "^2.0.54",
+        "typedoc-plugin-dt-links": "^2.0.56",
         "typedoc-plugin-external-package-links": "^0.2.0",
         "typedoc-plugin-markdown": "^4.11.0",
         "typedoc-plugin-mdn-links": "^5.1.1",
@@ -90,7 +90,7 @@
         "react": "^19.2.4",
         "react-dom": "^19.2.4"
     },
-    "packageManager": "npm@11.14.1",
+    "packageManager": "npm@11.16.0",
     "engines": {
         "node": ">=22.0.0"
     },
