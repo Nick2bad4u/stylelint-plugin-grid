@@ -78,9 +78,27 @@ const sidebars: SidebarsConfig = {
                     type: "doc",
                 },
                 {
+                    className: "sb-rule-no-dense-auto-flow",
+                    id: "no-dense-auto-flow",
+                    label: "no-dense-auto-flow",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-no-invalid-auto-repeat",
+                    id: "no-invalid-auto-repeat",
+                    label: "no-invalid-auto-repeat",
+                    type: "doc",
+                },
+                {
                     className: "sb-rule-no-invalid-areas",
                     id: "no-invalid-areas",
                     label: "no-invalid-areas",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-no-invalid-minmax",
+                    id: "no-invalid-minmax",
+                    label: "no-invalid-minmax",
                     type: "doc",
                 },
                 {
@@ -111,6 +129,12 @@ const sidebars: SidebarsConfig = {
                     className: "sb-rule-prefer-gap-properties",
                     id: "prefer-gap-properties",
                     label: "prefer-gap-properties",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-require-explicit-rows-with-column-flow",
+                    id: "require-explicit-rows-with-column-flow",
+                    label: "require-explicit-rows-with-column-flow",
                     type: "doc",
                 },
                 {

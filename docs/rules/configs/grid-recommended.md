@@ -28,6 +28,8 @@ after checking the same-file assumptions documented in
 | Rule | Fix | Description |
 | --- | :-: | --- |
 | [`no-invalid-areas`](../no-invalid-areas.md) | — | Disallow malformed `grid-template-areas` declarations. |
+| [`no-invalid-auto-repeat`](../no-invalid-auto-repeat.md) | — | Disallow definitely invalid CSS Grid auto-repeat track sizes. |
+| [`no-invalid-minmax`](../no-invalid-minmax.md) | — | Disallow flexible `fr` values as the minimum argument in CSS Grid `minmax()` track sizes. |
 | [`no-mismatched-template-rows`](../no-mismatched-template-rows.md) | — | Require `grid-template-rows` track count to match `grid-template-areas` row count. |
 | [`no-unknown-areas`](../no-unknown-areas.md) | — | Disallow single-name `grid-area` references that do not match any named area declared in the same stylesheet. |
 | [`prefer-gap-properties`](../prefer-gap-properties.md) | 🔧 | Prefer modern `gap`, `row-gap`, and `column-gap` properties over legacy grid gap aliases. |

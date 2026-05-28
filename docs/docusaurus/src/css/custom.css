@@ -54,12 +54,16 @@
     --sb-config-all: #22d3ee;
     --sb-config-recommended: #84cc16;
     --sb-rule-consistent-area-naming: #14b8a6;
+    --sb-rule-no-dense-auto-flow: #fb7185;
+    --sb-rule-no-invalid-auto-repeat: #6366f1;
     --sb-rule-no-invalid-areas: #f43f5e;
+    --sb-rule-no-invalid-minmax: #0f766e;
     --sb-rule-no-mismatched-template-rows: #f97316;
     --sb-rule-no-overlapping-areas: #d946ef;
     --sb-rule-no-unknown-areas: #0ea5e9;
     --sb-rule-no-unused-areas: #f59e0b;
     --sb-rule-prefer-gap-properties: #84cc16;
+    --sb-rule-require-explicit-rows-with-column-flow: #0891b2;
     --sb-rule-validate-area-shapes: #8b5cf6;
     --sb-rule-validate-track-counts: #22d3ee;
 }
@@ -92,12 +96,16 @@
     --sb-config-all: #67e8f9;
     --sb-config-recommended: #bef264;
     --sb-rule-consistent-area-naming: #2dd4bf;
+    --sb-rule-no-dense-auto-flow: #fda4af;
+    --sb-rule-no-invalid-auto-repeat: #a5b4fc;
     --sb-rule-no-invalid-areas: #fb7185;
+    --sb-rule-no-invalid-minmax: #5eead4;
     --sb-rule-no-mismatched-template-rows: #fb923c;
     --sb-rule-no-overlapping-areas: #e879f9;
     --sb-rule-no-unknown-areas: #38bdf8;
     --sb-rule-no-unused-areas: #fbbf24;
     --sb-rule-prefer-gap-properties: #bef264;
+    --sb-rule-require-explicit-rows-with-column-flow: #22d3ee;
     --sb-rule-validate-area-shapes: #c084fc;
     --sb-rule-validate-track-counts: #67e8f9;
 }
@@ -493,8 +501,20 @@
     border-inline-start-color: var(--sb-rule-consistent-area-naming);
 }
 
+.sb-cat-rules .sb-rule-no-dense-auto-flow > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-dense-auto-flow);
+}
+
+.sb-cat-rules .sb-rule-no-invalid-auto-repeat > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-invalid-auto-repeat);
+}
+
 .sb-cat-rules .sb-rule-no-invalid-areas > .menu__link {
     border-inline-start-color: var(--sb-rule-no-invalid-areas);
+}
+
+.sb-cat-rules .sb-rule-no-invalid-minmax > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-invalid-minmax);
 }
 
 .sb-cat-rules .sb-rule-no-mismatched-template-rows > .menu__link {
@@ -515,6 +535,12 @@
 
 .sb-cat-rules .sb-rule-prefer-gap-properties > .menu__link {
     border-inline-start-color: var(--sb-rule-prefer-gap-properties);
+}
+
+.sb-cat-rules .sb-rule-require-explicit-rows-with-column-flow > .menu__link {
+    border-inline-start-color: var(
+        --sb-rule-require-explicit-rows-with-column-flow
+    );
 }
 
 .sb-cat-rules .sb-rule-validate-area-shapes > .menu__link {

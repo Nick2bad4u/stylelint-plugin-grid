@@ -43,6 +43,13 @@ export type GridTemplateDiagnostic = Readonly<{
     token?: string;
 }>;
 
+/** One CSS function call found in a declaration value. */
+export type GridValueFunctionCall = Readonly<{
+    body: string;
+    name: string;
+    source: string;
+}>;
+
 const cssWideKeywords: ReadonlySet<string> = new Set([
     "inherit",
     "initial",
@@ -135,6 +142,53 @@ export function findSiblingDeclaration(
     });
 
     return match ?? undefined;
+}
+
+/** Find balanced function calls by name inside one declaration value. */
+export function findValueFunctionCalls(
+    value: string,
+    functionName: string
+): readonly GridValueFunctionCall[] {
+    const calls: GridValueFunctionCall[] = [];
+    const normalizedFunctionName = functionName.toLowerCase();
+    let index = 0;
+
+    while (index < value.length) {
+        const openParenthesisIndex = value.indexOf("(", index);
+
+        if (openParenthesisIndex === -1) {
+            break;
+        }
+
+        const nameStartIndex = findFunctionNameStart(
+            value,
+            openParenthesisIndex
+        );
+        const name = value.slice(nameStartIndex, openParenthesisIndex);
+        const closeParenthesisIndex = findMatchingParenthesis(
+            value,
+            openParenthesisIndex
+        );
+
+        if (closeParenthesisIndex < 0) {
+            break;
+        }
+
+        if (name.toLowerCase() === normalizedFunctionName) {
+            calls.push({
+                body: value.slice(
+                    openParenthesisIndex + 1,
+                    closeParenthesisIndex
+                ),
+                name,
+                source: value.slice(nameStartIndex, closeParenthesisIndex + 1),
+            });
+        }
+
+        index = closeParenthesisIndex + 1;
+    }
+
+    return calls;
 }
 
 /** Return each named area's bounding box from a parsed template. */
@@ -282,6 +336,16 @@ export function parseGridTemplateAreas(
     };
 }
 
+/** Split one comma-separated CSS value at top-level commas only. */
+export function splitTopLevelCommas(value: string): readonly string[] {
+    return splitTopLevel(value, /,/v);
+}
+
+/** Split one CSS value at top-level whitespace only. */
+export function splitTopLevelWhitespace(value: string): readonly string[] {
+    return splitTopLevel(value, /\s/v);
+}
+
 function countRepeatTracks(token: string): number | undefined {
     if (!token.startsWith("repeat(") || !token.endsWith(")")) {
         return undefined;
@@ -334,6 +398,42 @@ function extractCssStringLiterals(value: string): readonly string[] {
     return rows;
 }
 
+function findFunctionNameStart(
+    value: string,
+    openParenthesisIndex: number
+): number {
+    let index = openParenthesisIndex - 1;
+
+    while (index >= 0 && isFunctionNameCharacter(value[index] ?? "")) {
+        index -= 1;
+    }
+
+    return index + 1;
+}
+
+function findMatchingParenthesis(
+    value: string,
+    openParenthesisIndex: number
+): number {
+    let parenthesisDepth = 0;
+
+    for (let index = openParenthesisIndex; index < value.length; index += 1) {
+        const character = value[index];
+
+        if (character === "(") {
+            parenthesisDepth += 1;
+        } else if (character === ")") {
+            parenthesisDepth -= 1;
+
+            if (parenthesisDepth === 0) {
+                return index;
+            }
+        }
+    }
+
+    return -1;
+}
+
 function getAreaNames(rows: readonly (readonly string[])[]): readonly string[] {
     const names = new Set<string>();
 
@@ -351,6 +451,16 @@ function getAreaNames(rows: readonly (readonly string[])[]): readonly string[] {
 
 function getOwningRule(declaration: Readonly<Declaration>): Rule | undefined {
     return declaration.parent?.type === "rule" ? declaration.parent : undefined;
+}
+
+function isFunctionNameCharacter(character: string): boolean {
+    return (
+        character === "-" ||
+        character === "_" ||
+        (character >= "0" && character <= "9") ||
+        (character >= "A" && character <= "Z") ||
+        (character >= "a" && character <= "z")
+    );
 }
 
 function isLineNameList(token: string): boolean {
@@ -430,12 +540,4 @@ function splitTopLevel(
     }
 
     return tokens;
-}
-
-function splitTopLevelCommas(value: string): readonly string[] {
-    return splitTopLevel(value, /,/v);
-}
-
-function splitTopLevelWhitespace(value: string): readonly string[] {
-    return splitTopLevel(value, /\s/v);
 }

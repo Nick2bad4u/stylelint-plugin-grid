@@ -28,10 +28,13 @@ The initial catalog covers:
 
 - malformed `grid-template-areas` row strings and area tokens
 - non-rectangular named areas
+- invalid auto-repeat and `minmax()` track sizing syntax
 - row and column track-count drift
 - unknown or unused named area references
 - duplicate single-name area assignments that can create overlapping grid items
 - consistent grid area naming
+- dense auto-placement patterns that can disconnect visual and source order
+- column auto-placement blocks that omit explicit row sizing
 - migration from legacy `grid-gap` aliases to modern gap properties
 
 The package does not try to infer runtime layout across separate files,
@@ -45,5 +48,7 @@ low.
 - [Compare the shareable configs](./configs/).
 - [Review the current static-analysis boundaries](./guides/current-status.md).
 - Start with [`no-invalid-areas`](./no-invalid-areas.md),
+  [`no-invalid-auto-repeat`](./no-invalid-auto-repeat.md),
+  [`no-invalid-minmax`](./no-invalid-minmax.md),
   [`validate-area-shapes`](./validate-area-shapes.md), and
   [`validate-track-counts`](./validate-track-counts.md) for template correctness.

@@ -102,12 +102,16 @@ describe("stylelint-plugin-grid runtime", () => {
         ]);
         expect(ruleNames).toStrictEqual([
             "consistent-area-naming",
+            "no-dense-auto-flow",
             "no-invalid-areas",
+            "no-invalid-auto-repeat",
+            "no-invalid-minmax",
             "no-mismatched-template-rows",
             "no-overlapping-areas",
             "no-unknown-areas",
             "no-unused-areas",
             "prefer-gap-properties",
+            "require-explicit-rows-with-column-flow",
             "validate-area-shapes",
             "validate-track-counts",
         ]);
@@ -151,6 +155,8 @@ describe("stylelint-plugin-grid runtime", () => {
         ]);
         expect(gridPluginConfigs["grid-recommended"].rules).toStrictEqual({
             "grid/no-invalid-areas": true,
+            "grid/no-invalid-auto-repeat": true,
+            "grid/no-invalid-minmax": true,
             "grid/no-mismatched-template-rows": true,
             "grid/no-unknown-areas": true,
             "grid/prefer-gap-properties": true,
@@ -159,12 +165,16 @@ describe("stylelint-plugin-grid runtime", () => {
         });
         expect(gridPluginConfigs["grid-all"].rules).toStrictEqual({
             "grid/consistent-area-naming": true,
+            "grid/no-dense-auto-flow": true,
             "grid/no-invalid-areas": true,
+            "grid/no-invalid-auto-repeat": true,
+            "grid/no-invalid-minmax": true,
             "grid/no-mismatched-template-rows": true,
             "grid/no-overlapping-areas": true,
             "grid/no-unknown-areas": true,
             "grid/no-unused-areas": true,
             "grid/prefer-gap-properties": true,
+            "grid/require-explicit-rows-with-column-flow": true,
             "grid/validate-area-shapes": true,
             "grid/validate-track-counts": true,
         });

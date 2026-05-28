@@ -31,12 +31,16 @@ declare const styles: {
     readonly "sb-inline-rule-number": string;
     readonly "sb-inline-runtime-kind": string;
     readonly "sb-rule-consistent-area-naming": string;
+    readonly "sb-rule-no-dense-auto-flow": string;
+    readonly "sb-rule-no-invalid-auto-repeat": string;
     readonly "sb-rule-no-invalid-areas": string;
+    readonly "sb-rule-no-invalid-minmax": string;
     readonly "sb-rule-no-mismatched-template-rows": string;
     readonly "sb-rule-no-overlapping-areas": string;
     readonly "sb-rule-no-unknown-areas": string;
     readonly "sb-rule-no-unused-areas": string;
     readonly "sb-rule-prefer-gap-properties": string;
+    readonly "sb-rule-require-explicit-rows-with-column-flow": string;
     readonly "sb-rule-validate-area-shapes": string;
     readonly "sb-rule-validate-track-counts": string;
     readonly "theme-doc-markdown": string;

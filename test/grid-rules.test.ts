@@ -55,6 +55,159 @@ describe("grid rule behavior", () => {
         );
     });
 
+    it("reports definitely invalid auto-repeat track sizes", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .cards {
+                    grid-template-columns: repeat(auto-fit, 1fr);
+                    grid-template-rows: repeat(auto-fill, minmax(auto, 1fr));
+                }
+            `,
+            config: { rules: { "grid/no-invalid-auto-repeat": true } },
+        });
+
+        expect(result.warnings).toHaveLength(2);
+        expect(getWarningTexts(result)).toContain(
+            "Use a fixed track size inside `repeat(auto-fit, ...)`; `1fr` can make the grid template declaration invalid. (grid/no-invalid-auto-repeat)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Use a fixed track size inside `repeat(auto-fill, ...)`; `minmax(auto, 1fr)` can make the grid template declaration invalid. (grid/no-invalid-auto-repeat)"
+        );
+    });
+
+    it("accepts fixed auto-repeat track sizes", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .cards {
+                    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+                    grid-template-rows: repeat(auto-fill, [card] minmax(0, 1fr));
+                    grid-template-columns: repeat(auto-fit, minmax(auto, 10rem));
+                }
+            `,
+            config: { rules: { "grid/no-invalid-auto-repeat": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports flexible minimums in minmax track sizes", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-columns: minmax(1fr, 20rem) 2fr;
+                    grid-auto-rows: minmax(0.5fr, auto);
+                }
+            `,
+            config: { rules: { "grid/no-invalid-minmax": true } },
+        });
+
+        expect(result.warnings).toHaveLength(2);
+        expect(getWarningTexts(result)).toContain(
+            "Do not use flexible track breadth `1fr` as the minimum in `minmax()`; use an inflexible minimum such as `0`, a length, or a percentage. (grid/no-invalid-minmax)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Do not use flexible track breadth `0.5fr` as the minimum in `minmax()`; use an inflexible minimum such as `0`, a length, or a percentage. (grid/no-invalid-minmax)"
+        );
+    });
+
+    it("accepts inflexible minimums in minmax track sizes", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-columns: minmax(0, 1fr) minmax(12rem, 20rem);
+                    grid-auto-rows: minmax(25%, auto);
+                }
+            `,
+            config: { rules: { "grid/no-invalid-minmax": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports dense grid auto-flow", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .cards {
+                    grid-auto-flow: column dense;
+                }
+            `,
+            config: { rules: { "grid/no-dense-auto-flow": true } },
+        });
+
+        expect(result.warnings).toHaveLength(1);
+        expect(getWarningTexts(result)).toContain(
+            "Avoid `grid-auto-flow: dense`; dense packing can disconnect visual order from source order. (grid/no-dense-auto-flow)"
+        );
+    });
+
+    it("accepts sparse grid auto-flow", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .cards {
+                    grid-auto-flow: column;
+                }
+            `,
+            config: { rules: { "grid/no-dense-auto-flow": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports column auto-flow without explicit row sizing", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .cards {
+                    grid-auto-flow: column;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            `,
+            config: {
+                rules: {
+                    "grid/require-explicit-rows-with-column-flow": true,
+                },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(1);
+        expect(getWarningTexts(result)).toContain(
+            "Pair `grid-auto-flow: column` with explicit row sizing in the same block, such as `grid-template-rows` or `grid-auto-rows`. (grid/require-explicit-rows-with-column-flow)"
+        );
+    });
+
+    it("accepts column auto-flow with explicit row sizing", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .cards {
+                    grid-auto-flow: column;
+                    grid-auto-rows: minmax(10rem, auto);
+                }
+            `,
+            config: {
+                rules: {
+                    "grid/require-explicit-rows-with-column-flow": true,
+                },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
     it("reports non-rectangular named areas", async () => {
         expect.hasAssertions();
 
