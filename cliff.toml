@@ -226,6 +226,6 @@ offline = true
 # GitHub repository metadata used by the changelog template.
 [remote.github]
 owner = "Nick2bad4u"
-repo = "stylelint-plugin-docusaurus"
+repo = "stylelint-plugin-grid"
 # api_url = "https://api.github.com"
 # native_tls = false

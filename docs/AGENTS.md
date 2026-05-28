@@ -35,7 +35,7 @@ applyTo: "docs/**"
 
 Rule documentation files in the repository's rule-docs location (commonly `docs/rules/<rule-id>.md`) should follow this structure closely:
 
-1. **Title:** The bare rule ID as the H1 header (for example `# no-theme-token-leaks`).
+1. **Title:** The bare rule ID as the H1 header (for example `# validate-area-shapes`).
 2. **Description:** A short, one-sentence description of what the rule does.
 3. **Meta Badges (Optional):** Badges for `Recommended`, `Fixable`, or syntax requirements only if the repository’s current docs pattern uses them.
 4. **Rule Details:** An explanation of the problem the rule solves. Why is this pattern bad?
@@ -48,7 +48,7 @@ Rule documentation files in the repository's rule-docs location (commonly `docs/
    - Default values clearly marked.
    - Examples for each option.
 7. **When Not To Use It:** specific scenarios where disabling this rule is acceptable.
-8. **Further Reading:** Links to Stylelint docs, Docusaurus docs, MDN, CSS specs, or relevant framework docs.
+8. **Further Reading:** Links to Stylelint docs, MDN, CSS specs, or relevant framework docs.
 
   </structure>
 
@@ -87,37 +87,39 @@ Rule documentation files in the repository's rule-docs location (commonly `docs/
 ## Example Doc
 
 ```markdown
-# no-theme-token-leaks
+# validate-area-shapes
 
-Disallow leaking Docusaurus theme custom properties into non-theme selectors.
+Require every named grid template area to form one contiguous rectangle.
 
-This rule helps keep theme tokens scoped and predictable across Docusaurus stylesheets.
+This rule catches invalid grid area maps before the browser drops the template.
 
 ## Targeted pattern scope
 
-This rule focuses on declarations that reference reserved Docusaurus theme custom properties from selectors where the token should not be consumed directly.
+This rule focuses on `grid-template-areas` declarations that use the same named area in a shape that is not rectangular.
 
-- `color: var(--ifm-color-primary)` inside selectors that should instead use a component-scoped alias.
+- `"main side" "main main"` is invalid because the `main` area forms an L shape.
 
-Indirect wrappers and selectors that intentionally define or forward the token can be excluded to keep reporting accurate.
+Malformed templates should be handled by `grid/no-invalid-areas` first so shape-specific reporting stays accurate.
 
 ## What this rule reports
 
-This rule reports declarations when a reserved theme token is consumed in a disallowed selector context.
+This rule reports each named grid area that does not fill its bounding rectangle.
 
 ## Why this rule exists
 
-Unscoped theme-token usage makes large Docusaurus stylesheets harder to refactor safely.
+CSS Grid named areas must be rectangular. Non-rectangular templates do not mean "creative spanning"; they are invalid CSS Grid templates.
 
-- Theme changes become harder to audit.
-- Component CSS can accidentally couple itself to global token names.
-- Consistent reporting makes token boundaries easier to maintain across the site.
+- Browsers ignore invalid area maps.
+- Layout bugs can hide behind otherwise valid declarations.
+- The failure is easier to diagnose at the authored template string than after rendering.
 
 ## ❌ Incorrect
 
 ```css
 .my-component {
-  color: var(--ifm-color-primary);
+  grid-template-areas:
+    "main side"
+    "main main";
 }
 ```
 
@@ -125,43 +127,31 @@ Unscoped theme-token usage makes large Docusaurus stylesheets harder to refactor
 
 ```css
 .my-component {
-  --component-link-color: var(--ifm-color-primary);
-  color: var(--component-link-color);
-}
-```
-
-## Additional examples
-
-### ✅ Correct — Repository-wide usage
-
-```css
-[data-theme="dark"] .navbar {
-  --navbar-border-color: var(--ifm-color-primary);
+  grid-template-areas:
+    "main side"
+    "main side";
 }
 ```
 
 ## Stylelint config example
 
 ```js
-import docusaurusPlugin, { configs } from "stylelint-plugin-docusaurus";
+import { gridPluginConfigs } from "stylelint-plugin-grid";
 
-export default {
-  ...configs.recommended,
-  plugins: [...docusaurusPlugin],
-};
+export default gridPluginConfigs["grid-recommended"];
 ```
 
-> Replace `stylelint-plugin-docusaurus`, `docusaurus`, and `no-theme-token-leaks` with the actual package name, namespace, and rule ID used in the target repository.
+> Replace `validate-area-shapes` with the actual rule ID used in the target documentation page.
 
 ## When not to use it
 
-Disable this rule if the project intentionally consumes global Docusaurus theme tokens directly in local component selectors and that coupling is acceptable.
+Disable this rule only if your stylesheet intentionally contains browser-specific fallback templates that another build step rewrites before shipping.
 
 ## Further reading
 
 - [Stylelint plugin guide](https://stylelint.io/developer-guide/plugins)
-- [Docusaurus styling guide](https://docusaurus.io/docs/styling-layout)
-- [Infima docs](https://infima.dev/)
+- [MDN: Grid template areas](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas)
+- [CSS Grid Layout Module](https://drafts.csswg.org/css-grid/)
 
   </examples>
 </instructions>

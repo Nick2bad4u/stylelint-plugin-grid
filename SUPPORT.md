@@ -1,6 +1,6 @@
 # Support
 
-Thanks for using `stylelint-plugin-docusaurus`.
+Thanks for using `stylelint-plugin-grid`.
 
 ## How to get help
 
@@ -8,9 +8,9 @@ Thanks for using `stylelint-plugin-docusaurus`.
    - [README.md](./README.md)
    - [docs/rules/overview.md](./docs/rules/overview.md)
 2. Search existing issues:
-   - <https://github.com/Nick2bad4u/stylelint-plugin-docusaurus/issues>
+   - <https://github.com/Nick2bad4u/stylelint-plugin-grid/issues>
 3. Open a new issue if needed:
-   - <https://github.com/Nick2bad4u/stylelint-plugin-docusaurus/issues/new>
+   - <https://github.com/Nick2bad4u/stylelint-plugin-grid/issues/new>
 
 ## What to include in an issue
 
@@ -18,7 +18,7 @@ Please include:
 
 - Node.js version
 - Stylelint version
-- `stylelint-plugin-docusaurus` version
+- `stylelint-plugin-grid` version
 - minimal reproduction stylesheet/config
 - expected behavior and actual behavior
 

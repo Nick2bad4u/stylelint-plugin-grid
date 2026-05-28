@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a reproducible bug in stylelint-plugin-docusaurus
+about: Report a reproducible bug in stylelint-plugin-grid
 title: "Bug: "
 labels:
     - bug
@@ -51,7 +51,7 @@ assignees: []
 - Node.js version:
 - npm version:
 - Stylelint version:
-- `stylelint-plugin-docusaurus` version/commit:
+- `stylelint-plugin-grid` version/commit:
 - OS:
 
 ## Additional context

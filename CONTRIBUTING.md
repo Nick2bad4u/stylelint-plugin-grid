@@ -1,4 +1,4 @@
-# Contributing to stylelint-plugin-docusaurus
+# Contributing to stylelint-plugin-grid
 
 Thanks for your interest in contributing.
 
@@ -78,7 +78,7 @@ Format:
 
 Examples:
 
-- `:sparkles: [feat](rule) add first Docusaurus theme-token rule`
+- `:sparkles: [feat](rule) add first grid area validation rule`
 - `:bug: [fix](docs) correct config usage example`
 - `:memo: [docs] refine getting-started guide`
 

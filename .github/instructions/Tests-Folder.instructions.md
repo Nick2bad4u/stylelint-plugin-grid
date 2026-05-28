@@ -63,7 +63,7 @@ applyTo: "test/**, tests/**"
           ...configs.recommended,
           rules: {
             ...configs.recommended.rules,
-            'docusaurus/my-rule': true,
+            'grid/my-rule': true,
           },
         },
       });
@@ -124,16 +124,16 @@ import { describe, expect, it } from 'vitest';
 import plugin, { configs } from '../src/plugin';
 import { lintWithConfig } from './_internal/stylelint-test-helpers';
 
-describe('docusaurus/my-rule', () => {
+describe('grid/my-rule', () => {
   it('reports invalid CSS', async () => {
     const result = await lintWithConfig({
-      code: '.DocSearch-Button { color: red; }',
+code: '.layout { grid-template-areas: "main"; }',
       config: {
         ...configs.recommended,
         plugins: [...plugin],
         rules: {
           ...configs.recommended.rules,
-          'docusaurus/my-rule': true,
+          'grid/my-rule': true,
         },
       },
     });

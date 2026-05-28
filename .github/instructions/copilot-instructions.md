@@ -132,7 +132,7 @@ applyTo: "**"
   - Test cases must cover:
     1. Valid CSS/SCSS/MDX/CSS-in-JS code (false positive prevention).
     2. Invalid code (true positives).
-    3. Edge cases (nested rules, comments, custom properties, Docusaurus/Infima patterns, custom syntaxes).
+    3. Edge cases (nested rules, comments, custom properties, CSS Grid templates, custom syntaxes).
     4. Fixer output (verify the code after autofix remains parseable and semantically sane).
 
 ## General Instructions
