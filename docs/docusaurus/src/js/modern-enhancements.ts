@@ -8,6 +8,10 @@
  * Lightweight client-side enhancement bootstrap for the docs site.
  */
 
+interface EnhancementsWindow {
+    initializeAdvancedFeatures?: InitializeAdvancedFeatures;
+}
+
 type InitializeAdvancedFeatures = () => void;
 
 declare global {
@@ -21,9 +25,15 @@ export const initializeAdvancedFeatures: InitializeAdvancedFeatures = () => {
     // Intentionally minimal for the Stylelint template bootstrap phase.
 };
 
-if (globalThis.window !== undefined) {
-    globalThis.window.initializeAdvancedFeatures = initializeAdvancedFeatures;
+const browserWindow: unknown = Reflect.get(globalThis, "window");
+
+if (isEnhancementsWindow(browserWindow)) {
+    browserWindow.initializeAdvancedFeatures = initializeAdvancedFeatures;
     globalThis.queueMicrotask(() => {
         initializeAdvancedFeatures();
     });
+}
+
+function isEnhancementsWindow(value: unknown): value is EnhancementsWindow {
+    return typeof value === "object" && value !== null;
 }

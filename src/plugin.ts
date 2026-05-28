@@ -82,20 +82,32 @@ const gridRuleEntries: readonly GridRuleEntry[] = (() => {
     return entries;
 })();
 
+function isGridRuleId(ruleName: string): ruleName is GridRuleId {
+    return ruleName.startsWith(`${pluginNamespaceValue}/`);
+}
+
+function toGridRuleId(ruleName: string): GridRuleId {
+    if (!isGridRuleId(ruleName)) {
+        throw new Error(`Unexpected Stylelint rule id "${ruleName}".`);
+    }
+
+    return ruleName;
+}
+
 /** Default plugin-pack export consumed by Stylelint. */
 export const plugins: readonly StylelintPlugin[] = gridRuleEntries.map(
     ([, rule]) => rule
 );
 
 /** Stable ordered fully qualified rule ids. */
-export const ruleIds: readonly GridRuleId[] = gridRuleEntries.map(
-    ([, rule]) => rule.ruleName as GridRuleId
+export const ruleIds: readonly GridRuleId[] = gridRuleEntries.map(([, rule]) =>
+    toGridRuleId(rule.ruleName)
 );
 
 /** Rule ids included in the recommended shareable config. */
 const recommendedRuleIds: readonly GridRuleId[] = gridRuleEntries
     .filter(([, rule]) => rule.docs.recommended)
-    .map(([, rule]) => rule.ruleName as GridRuleId);
+    .map(([, rule]) => toGridRuleId(rule.ruleName));
 
 /**
  * Build one shareable Stylelint config.

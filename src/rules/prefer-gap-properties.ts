@@ -72,6 +72,7 @@ const ruleFunction: RuleBase<boolean, undefined> =
         });
     };
 
+/** Public Stylelint rule definition. */
 const rule: StylelintPluginRule<boolean, undefined, typeof messages> =
     createStylelintRule<boolean, undefined, typeof messages>({
         docs,

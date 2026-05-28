@@ -106,6 +106,7 @@
                 "dependencies",
                 "devDependencies",
                 "peerDependencies",
+                "peerDependenciesMeta",
                 "optionalDependencies",
                 "bundledDependencies",
                 "packageManager",

@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 import Link from "@docusaurus/Link";
 
 import styles from "./GitHubStats.module.css";
@@ -53,7 +55,9 @@ const liveBadges = [
 /**
  * Renders live repository and package badges for the docs homepage.
  */
-export default function GitHubStats({ className = "" }: GitHubStatsProps) {
+export default function GitHubStats({
+    className = "",
+}: GitHubStatsProps): ReactElement {
     const badgeListClassName = [styles.liveBadgeList, className]
         .filter(Boolean)
         .join(" ");

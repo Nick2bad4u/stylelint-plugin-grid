@@ -34,7 +34,8 @@
         "site-docs"
     ],
     "scripts": {
-        "build": "npm run docs:api && npm --prefix ../.. run build:eslint-inspector && npm --prefix ../.. run build:stylelint-inspector && docusaurus build",
+        "prebuild": "node -e \"require('node:fs').mkdirSync('../../.cache',{recursive:true})\"",
+        "build": "npm run docs:api && npm --prefix ../.. run build:eslint-inspector && npm --prefix ../.. run build:stylelint-inspector && cross-env NODE_OPTIONS=--localstorage-file=../../.cache/docusaurus-localstorage docusaurus build",
         "build:fast": "cross-env DOCUSAURUS_ENABLE_EXPERIMENTAL=true docusaurus build",
         "build:local": "npm run docs:api && npm --prefix ../.. run build:eslint-inspector:local && npm --prefix ../.. run build:stylelint-inspector:local && cross-env NODE_OPTIONS=--no-deprecation docusaurus build",
         "clear": "docusaurus clear",
@@ -64,7 +65,7 @@
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.10.1",
         "@docusaurus/tsconfig": "^3.10.1",
-        "@eslint/config-inspector": "^3.0.3",
+        "@eslint/config-inspector": "^3.0.4",
         "@mdx-js/react": "^3.1.1",
         "@types/react": "^19.2.15",
         "@types/react-dom": "^19.2.3",
@@ -89,6 +90,14 @@
     "peerDependencies": {
         "react": "^19.2.4",
         "react-dom": "^19.2.4"
+    },
+    "peerDependenciesMeta": {
+        "react": {
+            "optional": false
+        },
+        "react-dom": {
+            "optional": false
+        }
     },
     "packageManager": "npm@11.16.0",
     "engines": {

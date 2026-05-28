@@ -67,6 +67,14 @@ const resolveOptionalModule = (moduleSpecifier: string): string | undefined => {
     }
 };
 
+const isWebpackWarningWithMessage = (
+    warning: unknown
+): warning is Readonly<{ message: string }> =>
+    typeof warning === "object" &&
+    warning !== null &&
+    "message" in warning &&
+    typeof warning.message === "string";
+
 /**
  * Optional ESM entry used to avoid webpack warnings from VS Code CSS language
  * service packages.
@@ -105,19 +113,11 @@ const suppressKnownWebpackWarningsPlugin: PluginModule = () => ({
                  * during docs builds. This is third-party noise, not a
                  * site-level problem.
                  */
-                (warning: unknown) => {
-                    const warningRecord = warning as
-                        | Readonly<Record<string, unknown>>
-                        | undefined;
-                    const warningMessage = warningRecord?.["message"];
-
-                    return (
-                        typeof warningMessage === "string" &&
-                        warningMessage.includes(
-                            "Critical dependency: require function is used in a way in which dependencies cannot be statically extracted"
-                        )
-                    );
-                },
+                (warning: unknown) =>
+                    isWebpackWarningWithMessage(warning) &&
+                    warning.message.includes(
+                        "Critical dependency: require function is used in a way in which dependencies cannot be statically extracted"
+                    ),
             ],
             resolve: {
                 alias: {
@@ -621,7 +621,12 @@ const config = {
             title: "stylelint-plugin-grid",
         },
         prism: {
-            additionalLanguages: ["bash", "json", "yaml", "typescript"],
+            additionalLanguages: [
+                "bash",
+                "json",
+                "yaml",
+                "typescript",
+            ],
             darkTheme: prismThemes.dracula,
             defaultLanguage: "typescript",
             theme: prismThemes.github,

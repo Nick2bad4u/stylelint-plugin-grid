@@ -24,6 +24,13 @@ const config = [
     },
 
     {
+        files: ["src/_internal/grid-template-analysis.ts", "src/rules/**/*.ts"],
+        rules: {
+            "@typescript-eslint/prefer-readonly-parameter-types": "off",
+        },
+    },
+
+    {
         files: ["docs/docusaurus/src/pages/index.tsx"],
         rules: {
             "canonical/filename-no-index": "off",
@@ -34,6 +41,15 @@ const config = [
         files: ["docs/docusaurus/src/**/*.{ts,tsx}"],
         rules: {
             "import-x/no-unresolved": "off",
+        },
+    },
+
+    {
+        files: ["test/**/*.{ts,tsx}"],
+        rules: {
+            "@typescript-eslint/prefer-readonly-parameter-types": "off",
+            "vitest/prefer-to-be-falsy": "off",
+            "vitest/prefer-to-be-truthy": "off",
         },
     },
 

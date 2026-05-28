@@ -24,10 +24,24 @@ const stylelintConfig = {
         (entry) =>
             entry !== "stylelint-plugin-docusaurus/configs/docusaurus-all"
     ),
-    overrides: (sharedConfig.overrides ?? []).map((override) => ({
-        ...override,
-        rules: withoutDocusaurusRules(override.rules),
-    })),
+    overrides: [
+        ...(sharedConfig.overrides ?? []).map((override) => ({
+            ...override,
+            rules: withoutDocusaurusRules(override.rules),
+        })),
+        {
+            files: ["docs/docusaurus/src/**/*.css"],
+            rules: {
+                "css-performance-budget/no-excessive-filter-effects": null,
+                "css-performance-budget/no-expensive-animation-properties":
+                    null,
+                "css-performance-budget/no-giant-selector-lists": null,
+                "css-performance-budget/no-heavy-selectors": null,
+                "css-performance-budget/no-layout-thrashing-properties": null,
+                "css-performance-budget/no-paint-heavy-declarations": null,
+            },
+        },
+    ],
     rules: withoutDocusaurusRules(sharedConfig.rules),
 };
 

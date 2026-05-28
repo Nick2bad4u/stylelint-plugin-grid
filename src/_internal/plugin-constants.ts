@@ -4,7 +4,8 @@
  */
 import type { ArrayValues, UnknownRecord } from "type-fest";
 
-import packageJson from "../../package.json" with { type: "json" };
+import packageJson from "stylelint-plugin-grid/package.json" with { type: "json" };
+import { keyIn } from "ts-extras";
 
 /** Public npm package name. */
 export const PACKAGE_NAME = "stylelint-plugin-grid";
@@ -32,13 +33,21 @@ export type GridConfigName = ArrayValues<typeof CONFIG_NAMES>;
  * @returns The package version, or `0.0.0` when unavailable.
  */
 function getPackageVersion(pkg: unknown): string {
-    if (typeof pkg !== "object" || pkg === null) {
-        return "0.0.0";
-    }
+    return hasStringVersion(pkg) ? pkg.version : "0.0.0";
+}
 
-    const version = (pkg as UnknownRecord)["version"];
+function hasStringVersion(
+    pkg: unknown
+): pkg is Readonly<{ version: string }> & UnknownRecord {
+    return (
+        isUnknownRecord(pkg) &&
+        keyIn(pkg, "version") &&
+        typeof pkg["version"] === "string"
+    );
+}
 
-    return typeof version === "string" ? version : "0.0.0";
+function isUnknownRecord(pkg: unknown): pkg is UnknownRecord {
+    return typeof pkg === "object" && pkg !== null && !Array.isArray(pkg);
 }
 
 /** Published package version resolved from `package.json`. */

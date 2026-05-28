@@ -133,7 +133,7 @@ export function findSiblingDeclaration(
     propertyName: string
 ): Declaration | undefined {
     const parent = safeCastTo<Container | undefined>(declaration.parent);
-    let match: Declaration | null = null;
+    let match: Declaration | undefined;
 
     parent?.walkDecls(propertyName, (candidate) => {
         if (candidate.parent === parent) {
@@ -141,7 +141,7 @@ export function findSiblingDeclaration(
         }
     });
 
-    return match ?? undefined;
+    return match;
 }
 
 /** Find balanced function calls by name inside one declaration value. */
@@ -525,7 +525,7 @@ function splitTopLevel(
         ) {
             const token = value.slice(tokenStart, index).trim();
 
-            if (token !== "") {
+            if (token.length > 0) {
                 tokens.push(token);
             }
 
@@ -535,7 +535,7 @@ function splitTopLevel(
 
     const finalToken = value.slice(tokenStart).trim();
 
-    if (finalToken !== "") {
+    if (finalToken.length > 0) {
         tokens.push(finalToken);
     }
 

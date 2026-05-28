@@ -41,7 +41,9 @@ const docs = {
 
 const patterns: Readonly<Record<AreaNamingStyle, RegExp>> = {
     "camel-case": /^[a-z][0-9A-Za-z]*$/v,
+    // eslint-disable-next-line security/detect-unsafe-regex -- Anchored naming-style pattern over short CSS identifiers.
     "kebab-case": /^[a-z][0-9a-z]*(?:-[0-9a-z]+)*$/v,
+    // eslint-disable-next-line security/detect-unsafe-regex -- Anchored naming-style pattern over short CSS identifiers.
     "snake-case": /^[a-z][0-9a-z]*(?:_[0-9a-z]+)*$/v,
 };
 
@@ -68,7 +70,7 @@ function reportRejectedAreaName(input: {
     });
 }
 
-const ruleFunction: RuleBase<boolean, SecondaryOptions> =
+const ruleFunction: RuleBase<boolean, SecondaryOptions | undefined> =
     (primary, secondary) => (root, result) => {
         if (
             !validateOptions(
@@ -120,12 +122,18 @@ const ruleFunction: RuleBase<boolean, SecondaryOptions> =
         }
     };
 
-const rule: StylelintPluginRule<boolean, SecondaryOptions, typeof messages> =
-    createStylelintRule<boolean, SecondaryOptions, typeof messages>({
+/** Public Stylelint rule definition. */
+const rule: StylelintPluginRule<
+    boolean,
+    SecondaryOptions | undefined,
+    typeof messages
+> = createStylelintRule<boolean, SecondaryOptions | undefined, typeof messages>(
+    {
         docs,
         messages,
         rule: ruleFunction,
         ruleName,
-    });
+    }
+);
 
 export default rule;

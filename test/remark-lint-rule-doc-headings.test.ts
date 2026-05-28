@@ -4,9 +4,9 @@ import { remark } from "remark";
 import { VFile } from "vfile";
 import { describe, expect, it } from "vitest";
 
-import type { RemarkLintRuleDocHeadingsOptions } from "../scripts/remark-lint-rule-doc-headings.d.mts";
-
-import remarkLintRuleDocHeadings from "../scripts/remark-lint-rule-doc-headings.mjs";
+import remarkLintRuleDocHeadings, {
+    type RemarkLintRuleDocHeadingsOptions,
+} from "../scripts/remark-lint-rule-doc-headings.mjs";
 
 const repositoryRoot = path.resolve(
     fileURLToPath(new URL("..", import.meta.url))
