@@ -132,6 +132,364 @@ describe("grid rule behavior", () => {
         expect(result.warnings).toHaveLength(0);
     });
 
+    it("reports invalid fixed repeat counts", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-columns: repeat(0, 1fr);
+                    grid-template-rows: repeat(2.5, auto);
+                    grid-template-columns: repeat(-2, minmax(0, 1fr));
+                }
+            `,
+            config: { rules: { "grid/no-invalid-repeat-count": true } },
+        });
+
+        expect(result.warnings).toHaveLength(3);
+        expect(getWarningTexts(result)).toContain(
+            "Use a positive integer repeat count; `0` is not a valid fixed `repeat()` count. (grid/no-invalid-repeat-count)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Use a positive integer repeat count; `2.5` is not a valid fixed `repeat()` count. (grid/no-invalid-repeat-count)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Use a positive integer repeat count; `-2` is not a valid fixed `repeat()` count. (grid/no-invalid-repeat-count)"
+        );
+    });
+
+    it("accepts valid repeat counts and dynamic repeat counts", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-columns: repeat(12, minmax(0, 1fr));
+                    grid-template-rows: repeat(+2, auto);
+                    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+                    grid-template-rows: repeat(var(--rows), auto);
+                }
+            `,
+            config: { rules: { "grid/no-invalid-repeat-count": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports non-positive grid span counts", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-column: span 0 / span 2;
+                    grid-row-start: span -1;
+                    grid-area: 1 / span -2 / 3 / 4;
+                }
+            `,
+            config: { rules: { "grid/no-invalid-span": true } },
+        });
+
+        expect(result.warnings).toHaveLength(3);
+        expect(getWarningTexts(result)).toContain(
+            "Use a positive Grid span count; `span 0` cannot place a grid item. (grid/no-invalid-span)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Use a positive Grid span count; `span -1` cannot place a grid item. (grid/no-invalid-span)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Use a positive Grid span count; `span -2` cannot place a grid item. (grid/no-invalid-span)"
+        );
+    });
+
+    it("accepts positive and dynamic grid span counts", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-column: span 2 / sidebar-end;
+                    grid-row-start: span var(--rows);
+                    grid-area: header;
+                }
+            `,
+            config: { rules: { "grid/no-invalid-span": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports grid placement line zero", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-column: 0 / 2;
+                    grid-row-end: 0;
+                }
+            `,
+            config: { rules: { "grid/no-zero-grid-lines": true } },
+        });
+
+        expect(result.warnings).toHaveLength(2);
+        expect(getWarningTexts(result)).toContain(
+            "Do not use Grid line `0`; CSS Grid line numbering starts at `1` and `-1`. (grid/no-zero-grid-lines)"
+        );
+    });
+
+    it("accepts nonzero grid placement lines and dynamic values", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-column: 1 / -1;
+                    grid-row: var(--row-start) / var(--row-end);
+                    grid-area: main;
+                }
+            `,
+            config: { rules: { "grid/no-zero-grid-lines": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports reversed or zero-width numeric grid placement ranges", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-column: 4 / 2;
+                    grid-row: 3 / 3;
+                    grid-area: 5 / 2 / 4 / 4;
+                }
+
+                .other {
+                    grid-column-start: 7;
+                    grid-column-end: 6;
+                }
+            `,
+            config: {
+                rules: { "grid/no-reversed-placement-lines": true },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(4);
+        expect(getWarningTexts(result)).toContain(
+            "Use an end line after the start line for `grid-column`; `2` is not after `4`. (grid/no-reversed-placement-lines)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Use an end line after the start line for `grid-row`; `3` is not after `3`. (grid/no-reversed-placement-lines)"
+        );
+    });
+
+    it("accepts ordered, named, span, and dynamic grid placement ranges", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-column: 2 / 4;
+                    grid-row: span 2 / 5;
+                    grid-area: 1 / content-start / 3 / content-end;
+                }
+
+                .other {
+                    grid-column-start: var(--start);
+                    grid-column-end: var(--end);
+                }
+            `,
+            config: {
+                rules: { "grid/no-reversed-placement-lines": true },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports grid container properties made ineffective by display", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    display: contents;
+                    grid-template-columns: 1fr 1fr;
+                    grid-auto-flow: column;
+                }
+
+                .cards {
+                    display: grid;
+                    display: flex;
+                    grid-template-areas: "card card";
+                }
+            `,
+            config: {
+                rules: { "grid/no-ineffective-container-properties": true },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(3);
+        expect(getWarningTexts(result)).toContain(
+            "`grid-template-columns` has no grid-container effect when the final same-block `display` value is `contents`; use `grid` or `inline-grid`, or remove the grid container declaration. (grid/no-ineffective-container-properties)"
+        );
+    });
+
+    it("accepts grid container properties with grid-capable or unknown display", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    display: block;
+                    display: grid;
+                    grid-template-columns: minmax(0, 1fr);
+                }
+
+                .dynamic {
+                    display: var(--layout-display);
+                    grid-template-areas: "main";
+                }
+            `,
+            config: {
+                rules: { "grid/no-ineffective-container-properties": true },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports same-block conflicting grid placement declarations", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-area: sidebar;
+                    grid-column: 2 / 4;
+                    grid-row-start: 1;
+                }
+
+                .other {
+                    grid-column: 1 / 3;
+                    grid-column-start: 2;
+                }
+            `,
+            config: { rules: { "grid/no-conflicting-placement": true } },
+        });
+
+        expect(result.warnings).toHaveLength(3);
+        expect(getWarningTexts(result)).toContain(
+            "Avoid conflicting Grid placement declarations; `grid-column` writes the same placement slot as earlier `grid-area` in this block. (grid/no-conflicting-placement)"
+        );
+    });
+
+    it("accepts non-overlapping grid placement declarations", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .item {
+                    grid-row: 1 / 3;
+                    grid-column: 2 / 4;
+                }
+            `,
+            config: { rules: { "grid/no-conflicting-placement": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports named area templates without required explicit tracks", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-areas: "nav main";
+                }
+
+                .strict {
+                    grid-template-areas: "main";
+                    grid-template-columns: minmax(0, 1fr);
+                }
+            `,
+            config: {
+                rules: {
+                    "grid/require-explicit-tracks-with-areas": [
+                        true,
+                        { rows: true },
+                    ],
+                },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(3);
+        expect(getWarningTexts(result)).toContain(
+            "Pair `grid-template-areas` with `grid-template-columns` in the same block so named areas have explicit track sizing. (grid/require-explicit-tracks-with-areas)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Pair `grid-template-areas` with `grid-template-rows` in the same block so named areas have explicit track sizing. (grid/require-explicit-tracks-with-areas)"
+        );
+    });
+
+    it("accepts named area templates with configured explicit tracks", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-areas: "nav main";
+                    grid-template-columns: auto minmax(0, 1fr);
+                }
+            `,
+            config: {
+                rules: { "grid/require-explicit-tracks-with-areas": true },
+            },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
+    it("reports bare flexible grid column tracks", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-columns: 1fr minmax(0, 2fr) +3fr;
+                }
+            `,
+            config: { rules: { "grid/prefer-minmax-zero-fr": true } },
+        });
+
+        expect(result.warnings).toHaveLength(2);
+        expect(getWarningTexts(result)).toContain(
+            "Wrap bare flexible column track `1fr` in `minmax(0, 1fr)` to avoid content-driven overflow. (grid/prefer-minmax-zero-fr)"
+        );
+        expect(getWarningTexts(result)).toContain(
+            "Wrap bare flexible column track `+3fr` in `minmax(0, +3fr)` to avoid content-driven overflow. (grid/prefer-minmax-zero-fr)"
+        );
+    });
+
+    it("accepts minmax-wrapped, repeated, and row flexible tracks", async () => {
+        expect.hasAssertions();
+
+        const result = await lintWithConfig({
+            code: `
+                .layout {
+                    grid-template-columns: minmax(0, 1fr) repeat(2, 1fr);
+                    grid-template-rows: 1fr;
+                }
+            `,
+            config: { rules: { "grid/prefer-minmax-zero-fr": true } },
+        });
+
+        expect(result.warnings).toHaveLength(0);
+    });
+
     it("reports dense grid auto-flow", async () => {
         expect.hasAssertions();
 

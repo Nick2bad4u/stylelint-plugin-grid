@@ -587,7 +587,7 @@ export function createScenarios({ gridPluginConfigs, plugin }) {
     grid-template-areas:
         "header header"
         "nav main";
-    grid-template-columns: 12rem 1fr;
+    grid-template-columns: 12rem minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
 }
 

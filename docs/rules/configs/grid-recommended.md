@@ -27,11 +27,17 @@ after checking the same-file assumptions documented in
 
 | Rule | Fix | Description |
 | --- | :-: | --- |
+| [`no-conflicting-placement`](../no-conflicting-placement.md) | — | Disallow same-block CSS Grid placement declarations that write the same placement slot. |
+| [`no-ineffective-container-properties`](../no-ineffective-container-properties.md) | — | Disallow CSS Grid container declarations in blocks whose final literal display value is not grid-capable. |
 | [`no-invalid-areas`](../no-invalid-areas.md) | — | Disallow malformed `grid-template-areas` declarations. |
 | [`no-invalid-auto-repeat`](../no-invalid-auto-repeat.md) | — | Disallow definitely invalid CSS Grid auto-repeat track sizes. |
 | [`no-invalid-minmax`](../no-invalid-minmax.md) | — | Disallow flexible `fr` values as the minimum argument in CSS Grid `minmax()` track sizes. |
+| [`no-invalid-repeat-count`](../no-invalid-repeat-count.md) | — | Disallow invalid fixed repeat counts in CSS Grid track templates. |
+| [`no-invalid-span`](../no-invalid-span.md) | — | Disallow non-positive `span` counts in CSS Grid placement declarations. |
 | [`no-mismatched-template-rows`](../no-mismatched-template-rows.md) | — | Require `grid-template-rows` track count to match `grid-template-areas` row count. |
+| [`no-reversed-placement-lines`](../no-reversed-placement-lines.md) | — | Disallow reversed or zero-width numeric CSS Grid placement line ranges. |
 | [`no-unknown-areas`](../no-unknown-areas.md) | — | Disallow single-name `grid-area` references that do not match any named area declared in the same stylesheet. |
+| [`no-zero-grid-lines`](../no-zero-grid-lines.md) | — | Disallow line `0` in CSS Grid placement declarations. |
 | [`prefer-gap-properties`](../prefer-gap-properties.md) | 🔧 | Prefer modern `gap`, `row-gap`, and `column-gap` properties over legacy grid gap aliases. |
 | [`validate-area-shapes`](../validate-area-shapes.md) | — | Require every named grid template area to form one contiguous rectangle. |
 | [`validate-track-counts`](../validate-track-counts.md) | — | Require template row and column track counts to match `grid-template-areas` dimensions. |

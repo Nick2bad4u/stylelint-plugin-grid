@@ -78,9 +78,21 @@ const sidebars: SidebarsConfig = {
                     type: "doc",
                 },
                 {
+                    className: "sb-rule-no-conflicting-placement",
+                    id: "no-conflicting-placement",
+                    label: "no-conflicting-placement",
+                    type: "doc",
+                },
+                {
                     className: "sb-rule-no-dense-auto-flow",
                     id: "no-dense-auto-flow",
                     label: "no-dense-auto-flow",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-no-ineffective-container-properties",
+                    id: "no-ineffective-container-properties",
+                    label: "no-ineffective-container-properties",
                     type: "doc",
                 },
                 {
@@ -102,6 +114,18 @@ const sidebars: SidebarsConfig = {
                     type: "doc",
                 },
                 {
+                    className: "sb-rule-no-invalid-repeat-count",
+                    id: "no-invalid-repeat-count",
+                    label: "no-invalid-repeat-count",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-no-invalid-span",
+                    id: "no-invalid-span",
+                    label: "no-invalid-span",
+                    type: "doc",
+                },
+                {
                     className: "sb-rule-no-mismatched-template-rows",
                     id: "no-mismatched-template-rows",
                     label: "no-mismatched-template-rows",
@@ -111,6 +135,12 @@ const sidebars: SidebarsConfig = {
                     className: "sb-rule-no-overlapping-areas",
                     id: "no-overlapping-areas",
                     label: "no-overlapping-areas",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-no-reversed-placement-lines",
+                    id: "no-reversed-placement-lines",
+                    label: "no-reversed-placement-lines",
                     type: "doc",
                 },
                 {
@@ -126,15 +156,33 @@ const sidebars: SidebarsConfig = {
                     type: "doc",
                 },
                 {
+                    className: "sb-rule-no-zero-grid-lines",
+                    id: "no-zero-grid-lines",
+                    label: "no-zero-grid-lines",
+                    type: "doc",
+                },
+                {
                     className: "sb-rule-prefer-gap-properties",
                     id: "prefer-gap-properties",
                     label: "prefer-gap-properties",
                     type: "doc",
                 },
                 {
+                    className: "sb-rule-prefer-minmax-zero-fr",
+                    id: "prefer-minmax-zero-fr",
+                    label: "prefer-minmax-zero-fr",
+                    type: "doc",
+                },
+                {
                     className: "sb-rule-require-explicit-rows-with-column-flow",
                     id: "require-explicit-rows-with-column-flow",
                     label: "require-explicit-rows-with-column-flow",
+                    type: "doc",
+                },
+                {
+                    className: "sb-rule-require-explicit-tracks-with-areas",
+                    id: "require-explicit-tracks-with-areas",
+                    label: "require-explicit-tracks-with-areas",
                     type: "doc",
                 },
                 {

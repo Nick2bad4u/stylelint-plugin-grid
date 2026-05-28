@@ -341,6 +341,11 @@ export function splitTopLevelCommas(value: string): readonly string[] {
     return splitTopLevel(value, /,/v);
 }
 
+/** Split one slash-separated CSS value at top-level slashes only. */
+export function splitTopLevelSlashes(value: string): readonly string[] {
+    return splitTopLevel(value, /\//v);
+}
+
 /** Split one CSS value at top-level whitespace only. */
 export function splitTopLevelWhitespace(value: string): readonly string[] {
     return splitTopLevel(value, /\s/v);

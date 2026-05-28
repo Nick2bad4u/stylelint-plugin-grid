@@ -54,16 +54,24 @@
     --sb-config-all: #22d3ee;
     --sb-config-recommended: #84cc16;
     --sb-rule-consistent-area-naming: #14b8a6;
+    --sb-rule-no-conflicting-placement: #ef4444;
     --sb-rule-no-dense-auto-flow: #fb7185;
+    --sb-rule-no-ineffective-container-properties: #7c3aed;
     --sb-rule-no-invalid-auto-repeat: #6366f1;
     --sb-rule-no-invalid-areas: #f43f5e;
     --sb-rule-no-invalid-minmax: #0f766e;
+    --sb-rule-no-invalid-repeat-count: #2563eb;
+    --sb-rule-no-invalid-span: #dc2626;
     --sb-rule-no-mismatched-template-rows: #f97316;
     --sb-rule-no-overlapping-areas: #d946ef;
+    --sb-rule-no-reversed-placement-lines: #ea580c;
     --sb-rule-no-unknown-areas: #0ea5e9;
     --sb-rule-no-unused-areas: #f59e0b;
+    --sb-rule-no-zero-grid-lines: #be123c;
     --sb-rule-prefer-gap-properties: #84cc16;
+    --sb-rule-prefer-minmax-zero-fr: #16a34a;
     --sb-rule-require-explicit-rows-with-column-flow: #0891b2;
+    --sb-rule-require-explicit-tracks-with-areas: #0d9488;
     --sb-rule-validate-area-shapes: #8b5cf6;
     --sb-rule-validate-track-counts: #22d3ee;
 }
@@ -96,16 +104,24 @@
     --sb-config-all: #67e8f9;
     --sb-config-recommended: #bef264;
     --sb-rule-consistent-area-naming: #2dd4bf;
+    --sb-rule-no-conflicting-placement: #f87171;
     --sb-rule-no-dense-auto-flow: #fda4af;
+    --sb-rule-no-ineffective-container-properties: #c084fc;
     --sb-rule-no-invalid-auto-repeat: #a5b4fc;
     --sb-rule-no-invalid-areas: #fb7185;
     --sb-rule-no-invalid-minmax: #5eead4;
+    --sb-rule-no-invalid-repeat-count: #93c5fd;
+    --sb-rule-no-invalid-span: #fca5a5;
     --sb-rule-no-mismatched-template-rows: #fb923c;
     --sb-rule-no-overlapping-areas: #e879f9;
+    --sb-rule-no-reversed-placement-lines: #fdba74;
     --sb-rule-no-unknown-areas: #38bdf8;
     --sb-rule-no-unused-areas: #fbbf24;
+    --sb-rule-no-zero-grid-lines: #f472b6;
     --sb-rule-prefer-gap-properties: #bef264;
+    --sb-rule-prefer-minmax-zero-fr: #86efac;
     --sb-rule-require-explicit-rows-with-column-flow: #22d3ee;
+    --sb-rule-require-explicit-tracks-with-areas: #5eead4;
     --sb-rule-validate-area-shapes: #c084fc;
     --sb-rule-validate-track-counts: #67e8f9;
 }
@@ -501,8 +517,18 @@
     border-inline-start-color: var(--sb-rule-consistent-area-naming);
 }
 
+.sb-cat-rules .sb-rule-no-conflicting-placement > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-conflicting-placement);
+}
+
 .sb-cat-rules .sb-rule-no-dense-auto-flow > .menu__link {
     border-inline-start-color: var(--sb-rule-no-dense-auto-flow);
+}
+
+.sb-cat-rules .sb-rule-no-ineffective-container-properties > .menu__link {
+    border-inline-start-color: var(
+        --sb-rule-no-ineffective-container-properties
+    );
 }
 
 .sb-cat-rules .sb-rule-no-invalid-auto-repeat > .menu__link {
@@ -517,12 +543,24 @@
     border-inline-start-color: var(--sb-rule-no-invalid-minmax);
 }
 
+.sb-cat-rules .sb-rule-no-invalid-repeat-count > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-invalid-repeat-count);
+}
+
+.sb-cat-rules .sb-rule-no-invalid-span > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-invalid-span);
+}
+
 .sb-cat-rules .sb-rule-no-mismatched-template-rows > .menu__link {
     border-inline-start-color: var(--sb-rule-no-mismatched-template-rows);
 }
 
 .sb-cat-rules .sb-rule-no-overlapping-areas > .menu__link {
     border-inline-start-color: var(--sb-rule-no-overlapping-areas);
+}
+
+.sb-cat-rules .sb-rule-no-reversed-placement-lines > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-reversed-placement-lines);
 }
 
 .sb-cat-rules .sb-rule-no-unknown-areas > .menu__link {
@@ -533,13 +571,27 @@
     border-inline-start-color: var(--sb-rule-no-unused-areas);
 }
 
+.sb-cat-rules .sb-rule-no-zero-grid-lines > .menu__link {
+    border-inline-start-color: var(--sb-rule-no-zero-grid-lines);
+}
+
 .sb-cat-rules .sb-rule-prefer-gap-properties > .menu__link {
     border-inline-start-color: var(--sb-rule-prefer-gap-properties);
+}
+
+.sb-cat-rules .sb-rule-prefer-minmax-zero-fr > .menu__link {
+    border-inline-start-color: var(--sb-rule-prefer-minmax-zero-fr);
 }
 
 .sb-cat-rules .sb-rule-require-explicit-rows-with-column-flow > .menu__link {
     border-inline-start-color: var(
         --sb-rule-require-explicit-rows-with-column-flow
+    );
+}
+
+.sb-cat-rules .sb-rule-require-explicit-tracks-with-areas > .menu__link {
+    border-inline-start-color: var(
+        --sb-rule-require-explicit-tracks-with-areas
     );
 }
 
