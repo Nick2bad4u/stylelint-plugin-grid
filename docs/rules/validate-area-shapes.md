@@ -9,9 +9,9 @@ authored template declaration instead of leaving it to browser behavior.
 
 ```css
 .layout {
-  grid-template-areas:
-    "main side"
-    "main main";
+ grid-template-areas:
+  "main side"
+  "main main";
 }
 ```
 
@@ -19,9 +19,9 @@ authored template declaration instead of leaving it to browser behavior.
 
 ```css
 .layout {
-  grid-template-areas:
-    "main side"
-    "main side";
+ grid-template-areas:
+  "main side"
+  "main side";
 }
 ```
 
@@ -29,10 +29,10 @@ authored template declaration instead of leaving it to browser behavior.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/validate-area-shapes": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/validate-area-shapes": true,
+ },
 };
 ```
 

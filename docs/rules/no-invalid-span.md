@@ -10,13 +10,13 @@ invalid or ignored.
 
 ```css
 .item {
-  grid-column: span 0 / span 2;
+ grid-column: span 0 / span 2;
 }
 ```
 
 ```css
 .item {
-  grid-row-start: span -1;
+ grid-row-start: span -1;
 }
 ```
 
@@ -24,13 +24,13 @@ invalid or ignored.
 
 ```css
 .item {
-  grid-column: span 2 / sidebar-end;
+ grid-column: span 2 / sidebar-end;
 }
 ```
 
 ```css
 .item {
-  grid-row-start: span var(--rows);
+ grid-row-start: span var(--rows);
 }
 ```
 
@@ -38,10 +38,10 @@ invalid or ignored.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-invalid-span": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-invalid-span": true,
+ },
 };
 ```
 

@@ -9,13 +9,13 @@ edge. Line `0` does not exist, so placement values using `0` are invalid.
 
 ```css
 .item {
-  grid-column: 0 / 2;
+ grid-column: 0 / 2;
 }
 ```
 
 ```css
 .item {
-  grid-row-end: 0;
+ grid-row-end: 0;
 }
 ```
 
@@ -23,13 +23,13 @@ edge. Line `0` does not exist, so placement values using `0` are invalid.
 
 ```css
 .item {
-  grid-column: 1 / -1;
+ grid-column: 1 / -1;
 }
 ```
 
 ```css
 .item {
-  grid-row: var(--row-start) / var(--row-end);
+ grid-row: var(--row-start) / var(--row-end);
 }
 ```
 
@@ -37,10 +37,10 @@ edge. Line `0` does not exist, so placement values using `0` are invalid.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-zero-grid-lines": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-zero-grid-lines": true,
+ },
 };
 ```
 

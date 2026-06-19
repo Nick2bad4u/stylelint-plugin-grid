@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 name: Release
 
-run-name: ${{ github.event_name == 'workflow_dispatch' && format('Manual release ({0}) by @{1}', inputs.version || inputs.release_type, github.actor) || format('Tagged release {0} by @{1}', github.ref_name, github.actor) }}
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('Manual release ({0}) by @{1}', inputs.version || inputs.release_type, github.actor) || format('Tagged release {0} by @{1}', github.ref_name, github.actor) }} # yamllint disable-line rule:line-length
 
 concurrency:
     group: "${{ github.workflow }}-${{ github.repository }}"
@@ -97,7 +97,7 @@ jobs:
                   fi
 
             - name: Checkout repository
-              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
               with:
                   fetch-depth: 0
                   fetch-tags: true
@@ -294,7 +294,9 @@ jobs:
 
                   npm pack --json --pack-destination "$assets_dir" > "$pack_metadata_path"
 
+                  # yamllint disable rule:line-length
                   tarball_filename=$(node -e "const fs = require('node:fs'); const packMetadata = JSON.parse(fs.readFileSync(process.argv[1], 'utf8')); process.stdout.write(packMetadata[0].filename);" "$pack_metadata_path")
+                  # yamllint enable rule:line-length
                   tarball_path="${assets_dir}/${tarball_filename}"
                   safe_package_name=$(printf '%s' "$PACKAGE_NAME" | sed 's/^@//; s#/#-#g')
                   zip_basename="${safe_package_name}-${VERSION}"

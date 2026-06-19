@@ -7,11 +7,11 @@ match the dimensions of `grid-template-areas`.
 
 ```css
 .layout {
-  grid-template-areas:
-    "nav main"
-    "nav footer";
-  grid-template-columns: 12rem;
-  grid-template-rows: auto auto auto;
+ grid-template-areas:
+  "nav main"
+  "nav footer";
+ grid-template-columns: 12rem;
+ grid-template-rows: auto auto auto;
 }
 ```
 
@@ -19,11 +19,11 @@ match the dimensions of `grid-template-areas`.
 
 ```css
 .layout {
-  grid-template-areas:
-    "nav main"
-    "nav footer";
-  grid-template-columns: 12rem 1fr;
-  grid-template-rows: auto auto;
+ grid-template-areas:
+  "nav main"
+  "nav footer";
+ grid-template-columns: 12rem 1fr;
+ grid-template-rows: auto auto;
 }
 ```
 

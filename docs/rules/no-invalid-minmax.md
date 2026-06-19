@@ -12,13 +12,13 @@ length, or a percentage instead.
 
 ```css
 .layout {
-  grid-template-columns: minmax(1fr, 20rem) 2fr;
+ grid-template-columns: minmax(1fr, 20rem) 2fr;
 }
 ```
 
 ```css
 .layout {
-  grid-auto-rows: minmax(0.5fr, auto);
+ grid-auto-rows: minmax(0.5fr, auto);
 }
 ```
 
@@ -26,13 +26,13 @@ length, or a percentage instead.
 
 ```css
 .layout {
-  grid-template-columns: minmax(0, 1fr) minmax(12rem, 20rem);
+ grid-template-columns: minmax(0, 1fr) minmax(12rem, 20rem);
 }
 ```
 
 ```css
 .layout {
-  grid-auto-rows: minmax(10rem, auto);
+ grid-auto-rows: minmax(10rem, auto);
 }
 ```
 
@@ -40,10 +40,10 @@ length, or a percentage instead.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-invalid-minmax": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-invalid-minmax": true,
+ },
 };
 ```
 

@@ -68,7 +68,6 @@
         "docs/docusaurus/.grid/**",
         "docs/docusaurus/build/**",
         "docs/docusaurus/node_modules/**",
-        "docs/docusaurus/typedoc-plugins/*.d.mts",
         "docs/docusaurus/site-docs/developer/api/**",
         "eslint.config.bundled_*.mjs",
         "test/fixtures/**"

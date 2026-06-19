@@ -11,14 +11,14 @@ dynamic values.
 
 ```css
 .item {
-  grid-column: 4 / 2;
+ grid-column: 4 / 2;
 }
 ```
 
 ```css
 .item {
-  grid-row-start: 7;
-  grid-row-end: 6;
+ grid-row-start: 7;
+ grid-row-end: 6;
 }
 ```
 
@@ -26,13 +26,13 @@ dynamic values.
 
 ```css
 .item {
-  grid-column: 2 / 4;
+ grid-column: 2 / 4;
 }
 ```
 
 ```css
 .item {
-  grid-row: span 2 / 5;
+ grid-row: span 2 / 5;
 }
 ```
 
@@ -40,10 +40,10 @@ dynamic values.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-reversed-placement-lines": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-reversed-placement-lines": true,
+ },
 };
 ```
 

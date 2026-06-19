@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import * as path from "node:path";
 import { pathToFileURL } from "node:url";
+import { format } from "prettier";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -109,11 +110,11 @@ describe("sync-readme-rules-table automation", () => {
         });
         expect(writes).toHaveLength(1);
         expect(writes[0]?.encoding).toBe("utf8");
-        expect(writes[0]?.contents).toContain(
-            "| [`alpha-rule`](https://example.test/docs/rules/alpha-rule) | 🔧 | [🟢](./docs/rules/configs/grid-recommended.md) [🟣](./docs/rules/configs/grid-all.md) | Alpha rule. |"
+        expect(writes[0]?.contents).toMatch(
+            /\| \[`alpha-rule`\]\(https:\/\/example\.test\/docs\/rules\/alpha-rule\) +\| +🔧 +\| +\[🟢\]\(\.\/docs\/rules\/configs\/grid-recommended\.md\) \[🟣\]\(\.\/docs\/rules\/configs\/grid-all\.md\) +\| +Alpha rule\. +\|/v
         );
-        expect(writes[0]?.contents).toContain(
-            "| [`zeta-rule`](https://example.test/docs/rules/zeta-rule) | — | [🟣](./docs/rules/configs/grid-all.md) | Zeta rule. |"
+        expect(writes[0]?.contents).toMatch(
+            /\| \[`zeta-rule`\]\(https:\/\/example\.test\/docs\/rules\/zeta-rule\) +\| +— +\| +\[🟣\]\(\.\/docs\/rules\/configs\/grid-all\.md\) +\| +Zeta rule\. +\|/v
         );
         expect(writes[0]?.contents).toContain("## Next");
     });
@@ -182,19 +183,23 @@ describe("sync-readme-rules-table automation", () => {
                 encoding: string
             ) => Promise<void>
         >(() => Promise.resolve());
+        const synchronizedReadme = await format(
+            [
+                "# Repo",
+                "",
+                generatedSection.trimEnd(),
+                "",
+                "## Next",
+                "",
+                "tail",
+            ].join("\n"),
+            {
+                filepath: "C:/repo/README.md",
+                parser: "markdown",
+            }
+        );
         const result = await syncReadmeRulesTable({
-            readFileFn: () =>
-                Promise.resolve(
-                    [
-                        "# Repo",
-                        "",
-                        generatedSection.trimEnd(),
-                        "",
-                        "## Next",
-                        "",
-                        "tail",
-                    ].join("\n")
-                ),
+            readFileFn: () => Promise.resolve(synchronizedReadme),
             readmeFilePath: "C:/repo/README.md",
             rules: {
                 "alpha-rule": {

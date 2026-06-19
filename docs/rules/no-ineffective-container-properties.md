@@ -13,16 +13,16 @@ ineffective.
 
 ```css
 .layout {
-  display: contents;
-  grid-template-columns: 1fr 1fr;
+ display: contents;
+ grid-template-columns: 1fr 1fr;
 }
 ```
 
 ```css
 .layout {
-  display: grid;
-  display: flex;
-  grid-template-areas: "main side";
+ display: grid;
+ display: flex;
+ grid-template-areas: "main side";
 }
 ```
 
@@ -30,15 +30,15 @@ ineffective.
 
 ```css
 .layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 16rem;
+ display: grid;
+ grid-template-columns: minmax(0, 1fr) 16rem;
 }
 ```
 
 ```css
 .layout {
-  display: var(--layout-display);
-  grid-template-areas: "main";
+ display: var(--layout-display);
+ grid-template-areas: "main";
 }
 ```
 
@@ -46,10 +46,10 @@ ineffective.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-ineffective-container-properties": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-ineffective-container-properties": true,
+ },
 };
 ```
 

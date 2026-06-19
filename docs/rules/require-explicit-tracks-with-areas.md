@@ -11,7 +11,7 @@ common.
 
 ```css
 .layout {
-  grid-template-areas: "nav main";
+ grid-template-areas: "nav main";
 }
 ```
 
@@ -19,8 +19,8 @@ With `{ rows: true }`:
 
 ```css
 .layout {
-  grid-template-areas: "main";
-  grid-template-columns: minmax(0, 1fr);
+ grid-template-areas: "main";
+ grid-template-columns: minmax(0, 1fr);
 }
 ```
 
@@ -28,8 +28,8 @@ With `{ rows: true }`:
 
 ```css
 .layout {
-  grid-template-areas: "nav main";
-  grid-template-columns: auto minmax(0, 1fr);
+ grid-template-areas: "nav main";
+ grid-template-columns: auto minmax(0, 1fr);
 }
 ```
 
@@ -37,9 +37,9 @@ With `{ rows: true }`:
 
 ```css
 .layout {
-  grid-template-areas: "main";
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto;
+ grid-template-areas: "main";
+ grid-template-columns: minmax(0, 1fr);
+ grid-template-rows: auto;
 }
 ```
 
@@ -47,16 +47,16 @@ With `{ rows: true }`:
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/require-explicit-tracks-with-areas": [
-      true,
-      {
-        columns: true,
-        rows: false
-      }
-    ]
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/require-explicit-tracks-with-areas": [
+   true,
+   {
+    columns: true,
+    rows: false,
+   },
+  ],
+ },
 };
 ```
 
@@ -64,10 +64,10 @@ export default {
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/require-explicit-tracks-with-areas": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/require-explicit-tracks-with-areas": true,
+ },
 };
 ```
 

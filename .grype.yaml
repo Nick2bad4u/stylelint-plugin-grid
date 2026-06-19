@@ -20,7 +20,7 @@ db:
     auto-update: true
 
     # CA certificate for secure database downloads
-    ca-cert: ""
+    ca-cert: "" # yamllint disable-line rule:empty-values
 
     # Database cache location (uses system-appropriate default)
     cache-dir: "~/Library/Caches/grype/db"
@@ -41,7 +41,7 @@ db:
 
     # Database integrity validation for security
     validate-by-hash-on-start: true
-default-image-pull-source: "" # registry, docker, podman
+default-image-pull-source: "" # yamllint disable-line rule:empty-values
 
 # Distro specification for enhanced matching (format: <distro>:<version>)
 # Enhanced logging configuration for debugging and monitoring
@@ -51,9 +51,9 @@ dev:
         debug: false # show SQL queries in trace logging (requires -vv)
 
     # Resource profiling for performance analysis
-    profile: "" # cpu, mem
+    profile: "" # yamllint disable-line rule:empty-values
 
-distro: ""
+distro: "" # yamllint disable-line rule:empty-values
 
 exclude:
     # Source code and testing exclusions
@@ -163,11 +163,11 @@ external-sources:
         rate-limit: 200ms # optimized for better performance
 
         search-maven-upstream: true
-fail-on-severity: "" # negligible, low, medium, high, critical
+fail-on-severity: "" # yamllint disable-line rule:empty-values
 
-file: ""
+file: "" # yamllint disable-line rule:empty-values
 
-ignore-wontfix: "" # ignore vulnerabilities with specific fix states: fixed,not-fixed,unknown,wont-fix
+ignore-wontfix: "" # yamllint disable-line rule:empty-values
 
 # Output configuration specifies how results are displayed
 # Modern Grype includes EPSS data in JSON output for risk-based decision making
@@ -175,7 +175,7 @@ ignore-wontfix: "" # ignore vulnerabilities with specific fix states: fixed,not-
 # Database debugging configuration
 log:
     # Log file path (stdout if empty)
-    file: ""
+    file: "" # yamllint disable-line rule:empty-values
 
     # Logging level for appropriate verbosity
     level: "warn" # error, warn, info, debug, trace
@@ -231,10 +231,10 @@ only-notfixed: false # show only vulnerabilities without fixes
 output: "table" # table, json, cyclonedx, sarif, template (use 'json' for EPSS data)
 
 # Template file for custom output formatting (when output=template)
-output-template-file: ""
+output-template-file: "" # yamllint disable-line rule:empty-values
 
 # Platform specification for multi-architecture scanning
-platform: "" # e.g., 'linux/arm64', 'linux/amd64'
+platform: "" # yamllint disable-line rule:empty-values
 
 # Pretty-print JSON output for readability
 pretty: true
@@ -255,7 +255,7 @@ registry:
     auth: []
 
     # CA certificate for registry communication
-    ca-cert: ""
+    ca-cert: "" # yamllint disable-line rule:empty-values
 
     # TLS configuration for secure registry communication
     insecure-skip-tls-verify: false

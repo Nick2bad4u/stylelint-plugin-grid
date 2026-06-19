@@ -135,7 +135,7 @@ exclude-severities:
     - "INFO"
 
 # Include experimental queries for comprehensive scanning
-include-queries: ""
+include-queries: "" # yamllint disable-line rule:empty-values
 log-file: true
 log-level: "INFO"
 log-path: ".kics.log"

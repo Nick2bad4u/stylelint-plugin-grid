@@ -15,13 +15,13 @@ implicit grid syntax make a conservative static check much noisier.
 
 ```css
 .cards {
-  grid-auto-flow: dense;
+ grid-auto-flow: dense;
 }
 ```
 
 ```css
 .cards {
-  grid-auto-flow: column dense;
+ grid-auto-flow: column dense;
 }
 ```
 
@@ -29,13 +29,13 @@ implicit grid syntax make a conservative static check much noisier.
 
 ```css
 .cards {
-  grid-auto-flow: row;
+ grid-auto-flow: row;
 }
 ```
 
 ```css
 .cards {
-  grid-auto-flow: column;
+ grid-auto-flow: column;
 }
 ```
 
@@ -43,10 +43,10 @@ implicit grid syntax make a conservative static check much noisier.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-dense-auto-flow": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-dense-auto-flow": true,
+ },
 };
 ```
 

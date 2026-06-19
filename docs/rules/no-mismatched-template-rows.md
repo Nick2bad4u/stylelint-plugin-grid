@@ -7,10 +7,10 @@ count when both declarations appear in the same block.
 
 ```css
 .layout {
-  grid-template-areas:
-    "header"
-    "main";
-  grid-template-rows: auto;
+ grid-template-areas:
+  "header"
+  "main";
+ grid-template-rows: auto;
 }
 ```
 
@@ -18,10 +18,10 @@ count when both declarations appear in the same block.
 
 ```css
 .layout {
-  grid-template-areas:
-    "header"
-    "main";
-  grid-template-rows: auto 1fr;
+ grid-template-areas:
+  "header"
+  "main";
+ grid-template-rows: auto 1fr;
 }
 ```
 

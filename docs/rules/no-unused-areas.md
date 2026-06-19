@@ -11,11 +11,11 @@ templates and items live in separate files.
 
 ```css
 .layout {
-  grid-template-areas: "header main";
+ grid-template-areas: "header main";
 }
 
 .main {
-  grid-area: main;
+ grid-area: main;
 }
 ```
 
@@ -31,14 +31,14 @@ templates and items live in separate files.
 
 ```css
 .layout {
-  grid-template-areas: "header main";
+ grid-template-areas: "header main";
 }
 
 .header {
-  grid-area: header;
+ grid-area: header;
 }
 
 .main {
-  grid-area: main;
+ grid-area: main;
 }
 ```
