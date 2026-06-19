@@ -12,15 +12,7 @@ import type { KnipConfig } from "knip";
 const knipConfig: KnipConfig = {
     $schema: "https://unpkg.com/knip@5/schema.json",
     entry: [],
-    ignore: [
-        "docs/docusaurus/src/css/custom.css.d.ts",
-        "docs/docusaurus/typedoc-plugins/hashToBangLinks.mjs",
-        "docs/docusaurus/typedoc-plugins/hashToBangLinksCore.d.mts",
-        "docs/docusaurus/typedoc-plugins/hashToBangLinksCore.mjs",
-        "docs/docusaurus/typedoc-plugins/prefixDocLinks.mjs",
-        "docs/docusaurus/typedoc-plugins/prefixDocLinksCore.d.mts",
-        "docs/docusaurus/typedoc-plugins/prefixDocLinksCore.mjs",
-    ],
+    ignore: ["docs/docusaurus/src/css/custom.css.d.ts"],
     ignoreBinaries: [
         "git-cz",
         "grype",

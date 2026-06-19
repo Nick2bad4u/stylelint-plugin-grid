@@ -8,9 +8,9 @@ This rule is autofixable.
 
 ```css
 .layout {
-  display: grid;
-  grid-gap: 1rem;
-  grid-column-gap: 2rem;
+ display: grid;
+ grid-gap: 1rem;
+ grid-column-gap: 2rem;
 }
 ```
 
@@ -18,9 +18,9 @@ This rule is autofixable.
 
 ```css
 .layout {
-  display: grid;
-  gap: 1rem;
-  column-gap: 2rem;
+ display: grid;
+ gap: 1rem;
+ column-gap: 2rem;
 }
 ```
 
@@ -28,10 +28,10 @@ This rule is autofixable.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/prefer-gap-properties": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/prefer-gap-properties": true,
+ },
 };
 ```
 

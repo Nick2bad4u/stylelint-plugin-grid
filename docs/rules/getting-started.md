@@ -23,7 +23,7 @@ Or extend a subpath config from a larger Stylelint config:
 
 ```js
 export default {
-  extends: ["stylelint-plugin-grid/configs/grid-recommended"]
+ extends: ["stylelint-plugin-grid/configs/grid-recommended"],
 };
 ```
 
@@ -31,12 +31,12 @@ Enable individual rules when you need a tighter policy:
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-invalid-areas": true,
-    "grid/validate-area-shapes": true,
-    "grid/no-unused-areas": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-invalid-areas": true,
+  "grid/validate-area-shapes": true,
+  "grid/no-unused-areas": true,
+ },
 };
 ```
 
@@ -52,4 +52,4 @@ assumptions in `grid/no-unused-areas`, `grid/no-overlapping-areas`, and
 - [Current status](./guides/current-status.md) documents what the rules skip on
   purpose.
 - [`grid/no-invalid-areas`](./no-invalid-areas.md) is the first rule to understand
-because stricter template rules depend on parseable rows.
+  because stricter template rules depend on parseable rows.

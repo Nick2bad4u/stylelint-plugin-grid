@@ -9,6 +9,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { format, resolveConfig } from "prettier";
+
 import { escapeMarkdownTableCell } from "./_internal/escape-markdown-table-cell.mjs";
 
 /**
@@ -187,6 +189,29 @@ const detectLineEnding = (markdown) =>
  */
 const normalizeMarkdownLineEndings = (markdown, lineEnding) =>
     markdown.replaceAll(/\r?\n/gv, lineEnding);
+
+/**
+ * Format generated config documentation before comparing it with the repository
+ * copy.
+ *
+ * @param {string} markdown
+ * @param {string} filePath
+ * @param {"\n" | "\r\n"} lineEnding
+ *
+ * @returns {Promise<string>}
+ */
+const formatConfigMarkdown = async (markdown, filePath, lineEnding) => {
+    const prettierConfig = await resolveConfig(filePath);
+
+    return normalizeMarkdownLineEndings(
+        await format(markdown, {
+            ...prettierConfig,
+            filepath: filePath,
+            parser: "markdown",
+        }),
+        lineEnding
+    );
+};
 
 /**
  * @param {string} markdown
@@ -574,10 +599,14 @@ export const syncConfigDocs = async ({
             }),
             lineEnding
         );
-        const nextMarkdown = replaceSection(
-            normalizedMarkdown,
-            nextSection,
-            rulesInConfigSectionHeading
+        const nextMarkdown = await formatConfigMarkdown(
+            replaceSection(
+                normalizedMarkdown,
+                nextSection,
+                rulesInConfigSectionHeading
+            ),
+            configDocPath,
+            lineEnding
         );
 
         if (nextMarkdown === normalizedMarkdown) {
@@ -611,10 +640,14 @@ export const syncConfigDocs = async ({
         }),
         configIndexLineEnding
     );
-    const nextConfigIndexMarkdown = replaceSection(
-        normalizedConfigIndexMarkdown,
-        nextConfigIndexSection,
-        rulesByConfigSectionHeading
+    const nextConfigIndexMarkdown = await formatConfigMarkdown(
+        replaceSection(
+            normalizedConfigIndexMarkdown,
+            nextConfigIndexSection,
+            rulesByConfigSectionHeading
+        ),
+        configIndexDocPath,
+        configIndexLineEnding
     );
 
     if (nextConfigIndexMarkdown !== normalizedConfigIndexMarkdown) {

@@ -11,15 +11,15 @@ makes later edits risky. Use one placement strategy per block.
 
 ```css
 .item {
-  grid-area: sidebar;
-  grid-column: 2 / 4;
+ grid-area: sidebar;
+ grid-column: 2 / 4;
 }
 ```
 
 ```css
 .item {
-  grid-column: 1 / 3;
-  grid-column-start: 2;
+ grid-column: 1 / 3;
+ grid-column-start: 2;
 }
 ```
 
@@ -27,14 +27,14 @@ makes later edits risky. Use one placement strategy per block.
 
 ```css
 .item {
-  grid-area: sidebar;
+ grid-area: sidebar;
 }
 ```
 
 ```css
 .item {
-  grid-row: 1 / 3;
-  grid-column: 2 / 4;
+ grid-row: 1 / 3;
+ grid-column: 2 / 4;
 }
 ```
 
@@ -42,10 +42,10 @@ makes later edits risky. Use one placement strategy per block.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-conflicting-placement": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-conflicting-placement": true,
+ },
 };
 ```
 

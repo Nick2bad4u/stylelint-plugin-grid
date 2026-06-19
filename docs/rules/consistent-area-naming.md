@@ -10,7 +10,7 @@ The default style is `kebab-case`. Secondary option `style` also accepts
 
 ```css
 .layout {
-  grid-template-areas: "mainContent";
+ grid-template-areas: "mainContent";
 }
 ```
 
@@ -18,7 +18,7 @@ The default style is `kebab-case`. Secondary option `style` also accepts
 
 ```css
 .layout {
-  grid-template-areas: "main-content";
+ grid-template-areas: "main-content";
 }
 ```
 
@@ -26,9 +26,9 @@ The default style is `kebab-case`. Secondary option `style` also accepts
 
 ```js
 export default {
-  rules: {
-    "grid/consistent-area-naming": [true, { style: "snake-case" }]
-  }
+ rules: {
+  "grid/consistent-area-naming": [true, { style: "snake-case" }],
+ },
 };
 ```
 

@@ -354,13 +354,13 @@ describe("sync-configs-rules-matrix automation", () => {
         expect(writes).toHaveLength(2);
         expect(writes[0]?.encoding).toBe("utf8");
         expect(writes[0]?.contents).toContain("## Rules in this config");
-        expect(writes[0]?.contents).toContain(
-            "| [`strict-rule`](https://example.test/docs/rules/strict-rule) | 🔧 | Strict-only rule. |"
+        expect(writes[0]?.contents).toMatch(
+            /\| \[`strict-rule`\]\(https:\/\/example\.test\/docs\/rules\/strict-rule\) +\| +🔧 +\| +Strict-only rule\. +\|/v
         );
         expect(writes[1]?.encoding).toBe("utf8");
         expect(writes[1]?.contents).toContain("## Rules by Config");
-        expect(writes[1]?.contents).toContain(
-            "| [`strict-rule`](../strict-rule.md) | 🔧 | ✅ | Strict-only rule. |"
+        expect(writes[1]?.contents).toMatch(
+            /\| \[`strict-rule`\]\(\.\.\/strict-rule\.md\) +\| +🔧 +\| +✅ +\| +Strict-only rule\. +\|/v
         );
     });
 

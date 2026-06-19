@@ -11,11 +11,11 @@ usually indicate layout collisions in your codebase.
 
 ```css
 .header {
-  grid-area: header;
+ grid-area: header;
 }
 
 .mobileHeader {
-  grid-area: header;
+ grid-area: header;
 }
 ```
 
@@ -23,11 +23,11 @@ usually indicate layout collisions in your codebase.
 
 ```css
 .header {
-  grid-area: header;
+ grid-area: header;
 }
 
 .sidebar {
-  grid-area: sidebar;
+ grid-area: sidebar;
 }
 ```
 

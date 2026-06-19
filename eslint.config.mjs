@@ -5,10 +5,6 @@ const config = [
     ...nick2bad4u.configs.withoutStylelint2,
 
     {
-        ignores: ["docs/docusaurus/typedoc-plugins/**"],
-    },
-
-    {
         files: ["**/*.{ts,tsx,cts,mts}"],
         rules: {
             "no-use-before-define": [
@@ -41,6 +37,13 @@ const config = [
         files: ["docs/docusaurus/src/**/*.{ts,tsx}"],
         rules: {
             "import-x/no-unresolved": "off",
+        },
+    },
+
+    {
+        files: [".github/workflows/auto-merge-dependabot-caller.yml"],
+        rules: {
+            "github-actions/no-external-job": "off",
         },
     },
 

@@ -15,8 +15,8 @@ cascade layers.
 
 ```css
 .cards {
-  grid-auto-flow: column;
-  grid-template-columns: repeat(3, 1fr);
+ grid-auto-flow: column;
+ grid-template-columns: repeat(3, 1fr);
 }
 ```
 
@@ -24,15 +24,15 @@ cascade layers.
 
 ```css
 .cards {
-  grid-auto-flow: column;
-  grid-auto-rows: minmax(10rem, auto);
+ grid-auto-flow: column;
+ grid-auto-rows: minmax(10rem, auto);
 }
 ```
 
 ```css
 .cards {
-  grid-auto-flow: column;
-  grid-template-rows: repeat(3, minmax(0, 1fr));
+ grid-auto-flow: column;
+ grid-template-rows: repeat(3, minmax(0, 1fr));
 }
 ```
 
@@ -40,10 +40,10 @@ cascade layers.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/require-explicit-rows-with-column-flow": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/require-explicit-rows-with-column-flow": true,
+ },
 };
 ```
 

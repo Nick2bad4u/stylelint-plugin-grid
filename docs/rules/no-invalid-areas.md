@@ -12,15 +12,15 @@ This rule reports:
 
 ```css
 .layout {
-  grid-template-areas:
-    "header header"
-    "nav";
+ grid-template-areas:
+  "header header"
+  "nav";
 }
 ```
 
 ```css
 .layout {
-  grid-template-areas: "main 1bad";
+ grid-template-areas: "main 1bad";
 }
 ```
 
@@ -28,9 +28,9 @@ This rule reports:
 
 ```css
 .layout {
-  grid-template-areas:
-    "header header"
-    "nav main";
+ grid-template-areas:
+  "header header"
+  "nav main";
 }
 ```
 
@@ -38,10 +38,10 @@ This rule reports:
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-invalid-areas": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-invalid-areas": true,
+ },
 };
 ```
 

@@ -7,11 +7,11 @@ declared by `grid-template-areas` in the same stylesheet.
 
 ```css
 .layout {
-  grid-template-areas: "header main";
+ grid-template-areas: "header main";
 }
 
 .sidebar {
-  grid-area: sidebr;
+ grid-area: sidebr;
 }
 ```
 
@@ -19,11 +19,11 @@ declared by `grid-template-areas` in the same stylesheet.
 
 ```css
 .layout {
-  grid-template-areas: "header main";
+ grid-template-areas: "header main";
 }
 
 .header {
-  grid-area: header;
+ grid-area: header;
 }
 ```
 

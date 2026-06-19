@@ -11,7 +11,7 @@ to the rest of the layout rules.
 
 ```css
 .layout {
-  grid-template-columns: 1fr 2fr;
+ grid-template-columns: 1fr 2fr;
 }
 ```
 
@@ -19,13 +19,13 @@ to the rest of the layout rules.
 
 ```css
 .layout {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+ grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 }
 ```
 
 ```css
 .layout {
-  grid-template-columns: repeat(2, 1fr);
+ grid-template-columns: repeat(2, 1fr);
 }
 ```
 
@@ -33,10 +33,10 @@ to the rest of the layout rules.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/prefer-minmax-zero-fr": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/prefer-minmax-zero-fr": true,
+ },
 };
 ```
 

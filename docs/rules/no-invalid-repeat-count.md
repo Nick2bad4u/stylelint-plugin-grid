@@ -11,13 +11,13 @@ those cases.
 
 ```css
 .layout {
-  grid-template-columns: repeat(0, 1fr);
+ grid-template-columns: repeat(0, 1fr);
 }
 ```
 
 ```css
 .layout {
-  grid-template-rows: repeat(2.5, auto);
+ grid-template-rows: repeat(2.5, auto);
 }
 ```
 
@@ -25,13 +25,13 @@ those cases.
 
 ```css
 .layout {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+ grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 ```
 
 ```css
 .layout {
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+ grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 }
 ```
 
@@ -39,10 +39,10 @@ those cases.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-invalid-repeat-count": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-invalid-repeat-count": true,
+ },
 };
 ```
 

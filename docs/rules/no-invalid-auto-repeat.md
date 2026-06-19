@@ -13,13 +13,13 @@ reporting runtime-dependent values such as `var()` and `env()`.
 
 ```css
 .cards {
-  grid-template-columns: repeat(auto-fit, 1fr);
+ grid-template-columns: repeat(auto-fit, 1fr);
 }
 ```
 
 ```css
 .cards {
-  grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
+ grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
 }
 ```
 
@@ -27,13 +27,13 @@ reporting runtime-dependent values such as `var()` and `env()`.
 
 ```css
 .cards {
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+ grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 }
 ```
 
 ```css
 .cards {
-  grid-template-columns: repeat(auto-fill, [card] minmax(0, 1fr));
+ grid-template-columns: repeat(auto-fill, [card] minmax(0, 1fr));
 }
 ```
 
@@ -41,10 +41,10 @@ reporting runtime-dependent values such as `var()` and `env()`.
 
 ```js
 export default {
-  plugins: ["stylelint-plugin-grid"],
-  rules: {
-    "grid/no-invalid-auto-repeat": true
-  }
+ plugins: ["stylelint-plugin-grid"],
+ rules: {
+  "grid/no-invalid-auto-repeat": true,
+ },
 };
 ```
 
