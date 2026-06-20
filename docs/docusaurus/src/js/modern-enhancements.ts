@@ -29,7 +29,7 @@ const browserWindow: unknown = Reflect.get(globalThis, "window");
 
 if (isEnhancementsWindow(browserWindow)) {
     browserWindow.initializeAdvancedFeatures = initializeAdvancedFeatures;
-    globalThis.queueMicrotask(() => {
+    queueMicrotask(() => {
         initializeAdvancedFeatures();
     });
 }

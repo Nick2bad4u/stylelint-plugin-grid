@@ -64,7 +64,7 @@ function getInvalidRepeatCount(repeatBody: string): string | undefined {
 }
 
 function isPositiveIntegerToken(value: string): boolean {
-    return integerPattern.test(value) && Number.parseInt(value, 10) > 0;
+    return integerPattern.test(value) && Number(value) > 0;
 }
 
 const ruleFunction: RuleBase<boolean, undefined> =

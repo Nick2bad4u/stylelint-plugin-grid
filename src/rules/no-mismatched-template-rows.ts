@@ -44,30 +44,29 @@ const ruleFunction: RuleBase<boolean, undefined> =
         }
 
         for (const template of collectGridTemplateAreas(root)) {
-            if (isEmpty(template.diagnostics)) {
-                const rowsDeclaration = findSiblingDeclaration(
-                    template.declaration,
-                    "grid-template-rows"
-                );
-                const trackRows = isDefined(rowsDeclaration)
-                    ? countGridTracks(rowsDeclaration.value)
-                    : undefined;
+            if (!isEmpty(template.diagnostics)) {
+                continue;
+            }
 
-                if (
-                    isDefined(rowsDeclaration) &&
-                    isDefined(trackRows) &&
-                    trackRows !== template.rows.length
-                ) {
-                    report({
-                        message: messages.rejected(
-                            template.rows.length,
-                            trackRows
-                        ),
-                        node: rowsDeclaration,
-                        result,
-                        ruleName,
-                    });
-                }
+            const rowsDeclaration = findSiblingDeclaration(
+                template.declaration,
+                "grid-template-rows"
+            );
+            const trackRows = isDefined(rowsDeclaration)
+                ? countGridTracks(rowsDeclaration.value)
+                : undefined;
+
+            if (
+                isDefined(rowsDeclaration) &&
+                isDefined(trackRows) &&
+                trackRows !== template.rows.length
+            ) {
+                report({
+                    message: messages.rejected(template.rows.length, trackRows),
+                    node: rowsDeclaration,
+                    result,
+                    ruleName,
+                });
             }
         }
     };

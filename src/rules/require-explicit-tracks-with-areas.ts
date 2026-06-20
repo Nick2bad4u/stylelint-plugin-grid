@@ -65,38 +65,40 @@ const ruleFunction: RuleBase<boolean, SecondaryOptions | undefined> =
         const requireRows = secondary?.rows ?? false;
 
         for (const template of collectGridTemplateAreas(root)) {
-            if (isEmpty(template.diagnostics)) {
-                if (
-                    requireColumns &&
-                    !findSiblingDeclaration(
-                        template.declaration,
-                        "grid-template-columns"
-                    )
-                ) {
-                    report({
-                        message: messages.rejected("grid-template-columns"),
-                        node: template.declaration,
-                        result,
-                        ruleName,
-                        word: template.declaration.prop,
-                    });
-                }
+            if (!isEmpty(template.diagnostics)) {
+                continue;
+            }
 
-                if (
-                    requireRows &&
-                    !findSiblingDeclaration(
-                        template.declaration,
-                        "grid-template-rows"
-                    )
-                ) {
-                    report({
-                        message: messages.rejected("grid-template-rows"),
-                        node: template.declaration,
-                        result,
-                        ruleName,
-                        word: template.declaration.prop,
-                    });
-                }
+            if (
+                requireColumns &&
+                !findSiblingDeclaration(
+                    template.declaration,
+                    "grid-template-columns"
+                )
+            ) {
+                report({
+                    message: messages.rejected("grid-template-columns"),
+                    node: template.declaration,
+                    result,
+                    ruleName,
+                    word: template.declaration.prop,
+                });
+            }
+
+            if (
+                requireRows &&
+                !findSiblingDeclaration(
+                    template.declaration,
+                    "grid-template-rows"
+                )
+            ) {
+                report({
+                    message: messages.rejected("grid-template-rows"),
+                    node: template.declaration,
+                    result,
+                    ruleName,
+                    word: template.declaration.prop,
+                });
             }
         }
     };

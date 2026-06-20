@@ -91,17 +91,11 @@ const cssLengthUnits: ReadonlySet<string> = new Set([
 const lengthPercentagePattern = /^[+\-]?(?:\d+|\d*\.\d+)(?<unit>%|[A-Za-z]+)$/v;
 const zeroPattern = /^[+\-]?(?:0|0?\.0+)$/v;
 
-function containsRuntimeValue(token: string): boolean {
-    const normalizedToken = token.toLowerCase();
-
-    return normalizedToken.includes("var(") || normalizedToken.includes("env(");
-}
-
 function getInvalidAutoRepeatTrack(trackList: string): string | undefined {
     for (const token of splitTopLevelWhitespace(trackList)) {
         const normalizedToken = token.toLowerCase();
 
-        if (!isLineNameList(token) && !containsRuntimeValue(token)) {
+        if (!isLineNameList(token) && !hasRuntimeValue(token)) {
             if (
                 setHas(invalidBareAutoRepeatTrackTokens, normalizedToken) ||
                 isFlexTrackBreadth(normalizedToken)
@@ -153,6 +147,12 @@ function getRepeatKeyword(
     }
 
     return undefined;
+}
+
+function hasRuntimeValue(token: string): boolean {
+    const normalizedToken = token.toLowerCase();
+
+    return normalizedToken.includes("var(") || normalizedToken.includes("env(");
 }
 
 function hasStringPrefix(value: string, prefix: string): boolean {

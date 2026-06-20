@@ -1,6 +1,6 @@
 // @ts-check
 /** @type {NodeJS.ProcessEnv} */
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, n/no-process-env -- Stryker config is a JS runtime config file that must read CI from the Node process environment.
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access -- Stryker config is a JS runtime config file that must read CI from the Node process environment.
 const processEnvironment = process.env;
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- `NodeJS.ProcessEnv` is an index-signature object; destructuring keeps JS typecheck and lint rules aligned.
 const { CI: ciEnvironmentValue = "" } = processEnvironment;

@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
 import { themes as prismThemes } from "prism-react-renderer";
 
 /** Route base path where docs site is deployed (GitHub Pages project path). */
-const processEnvironment = globalThis.process.env;
+// eslint-disable-next-line n/no-process-env -- Docusaurus configuration is environment-driven.
+const processEnvironment = process.env;
 const baseUrl =
     processEnvironment["DOCUSAURUS_BASE_URL"] ?? "/stylelint-plugin-grid/";
 /** Opt-in flag for experimental Docusaurus performance features. */
@@ -28,7 +29,8 @@ const siteDescription =
 /** Social preview image used for Open Graph and Twitter cards. */
 const socialCardImagePath = "img/logo.png";
 /** Absolute social preview image URL. */
-const socialCardImageUrl = new URL(socialCardImagePath, siteUrl).toString();
+const socialCardImage = new URL(socialCardImagePath, siteUrl);
+const socialCardImageUrl = socialCardImage.href;
 /** Client module path for runtime DOM enhancement bootstrap script. */
 const modernEnhancementsClientModule = fileURLToPath(
     new URL("src/js/modern-enhancements.ts", import.meta.url)
@@ -40,8 +42,10 @@ const pwaThemeColor = "#0B1815";
 const pwaTileColor = "#0B1815";
 /** Safari pinned-tab mask icon color. */
 const pwaMaskIconColor = "#34D399";
+// eslint-disable-next-line unicorn/prefer-temporal -- Docusaurus still runs in Node versions where Temporal is not guaranteed in all toolchains.
+const currentDate = new Date();
 /** Current copyright year rendered in static docs chrome. */
-const copyrightYear = String(new Date().getFullYear());
+const copyrightYear = String(currentDate.getFullYear());
 /** Footer copyright HTML used by the site theme config. */
 const footerCopyright =
     `© ${copyrightYear} ` +
@@ -49,7 +53,7 @@ const footerCopyright =
     '<a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">🦖 Docusaurus</a>.';
 
 /** Obfuscated key for the v4 legacy post-build head attribute removal flag. */
-const removeHeadAttrFlagKey = [
+const legacyPostBuildHeadAttributeFlagKey = [
     "remove",
     "Le",
     "gacyPostBuildHeadAttribute",
@@ -101,63 +105,55 @@ const vscodeLanguageServerTypesEsmEntry = resolveOptionalModule(
  * packages are actually installed in the current workspace.
  */
 const suppressKnownWebpackWarningsPlugin: PluginModule = () => ({
-    configureWebpack() {
-        return {
-            ignoreWarnings: [
-                /**
-                 * Suppress the known webpack critical-dependency warning
-                 * emitted by the UMD build of vscode-languageserver-types.
-                 *
-                 * We already alias to the ESM entry when available, but some
-                 * transitive resolution paths still surface the UMD warning
-                 * during docs builds. This is third-party noise, not a
-                 * site-level problem.
-                 */
-                (warning: unknown) =>
-                    isWebpackWarningWithMessage(warning) &&
-                    warning.message.includes(
-                        "Critical dependency: require function is used in a way in which dependencies cannot be statically extracted"
-                    ),
-            ],
-            resolve: {
-                alias: {
-                    ...(vscodeCssLanguageServiceEsmEntry === undefined
-                        ? {}
-                        : {
-                              "vscode-css-languageservice$":
-                                  vscodeCssLanguageServiceEsmEntry,
-                          }),
-                    ...(vscodeLanguageServerTypesEsmEntry === undefined
-                        ? {}
-                        : {
-                              "vscode-languageserver-types$":
-                                  vscodeLanguageServerTypesEsmEntry,
-                              "vscode-languageserver-types/lib/umd/main.js$":
-                                  vscodeLanguageServerTypesEsmEntry,
-                          }),
-                },
+    configureWebpack: () => ({
+        ignoreWarnings: [
+            /**
+             * Suppress the known webpack critical-dependency warning emitted by
+             * the UMD build of vscode-languageserver-types.
+             *
+             * We already alias to the ESM entry when available, but some
+             * transitive resolution paths still surface the UMD warning during
+             * docs builds. This is third-party noise, not a site-level
+             * problem.
+             */
+            (warning: unknown) =>
+                isWebpackWarningWithMessage(warning) &&
+                warning.message.includes(
+                    "Critical dependency: require function is used in a way in which dependencies cannot be statically extracted"
+                ),
+        ],
+        resolve: {
+            alias: {
+                ...(vscodeCssLanguageServiceEsmEntry !== undefined && {
+                    "vscode-css-languageservice$":
+                        vscodeCssLanguageServiceEsmEntry,
+                }),
+                ...(vscodeLanguageServerTypesEsmEntry !== undefined && {
+                    "vscode-languageserver-types$":
+                        vscodeLanguageServerTypesEsmEntry,
+                    "vscode-languageserver-types/lib/umd/main.js$":
+                        vscodeLanguageServerTypesEsmEntry,
+                }),
             },
-        };
-    },
+        },
+    }),
     name: "suppress-known-webpack-warnings",
 });
 
 /** Docusaurus future flags, including optional experimental fast path. */
 const futureConfig = {
-    ...(enableExperimentalFaster
-        ? {
-              faster: {
-                  mdxCrossCompilerCache: true,
-                  rspackBundler: true,
-                  rspackPersistentCache: true,
-                  ssgWorkerThreads: true,
-              },
-          }
-        : {}),
+    ...(enableExperimentalFaster && {
+        faster: {
+            mdxCrossCompilerCache: true,
+            rspackBundler: true,
+            rspackPersistentCache: true,
+            ssgWorkerThreads: true,
+        },
+    }),
     v4: {
         fasterByDefault: true,
+        [legacyPostBuildHeadAttributeFlagKey]: true,
         mdx1CompatDisabledByDefault: true,
-        [removeHeadAttrFlagKey]: true,
         removeLegacyPostBuildHeadAttribute: true,
         // NOTE: Enabling cascade layers currently breaks our production CSS output
         // (CssMinimizer parsing errors -> large chunks of CSS dropped), which
@@ -447,19 +443,19 @@ const config = {
                     items: [
                         {
                             href: `https://github.com/${organizationName}/${projectName}/releases`,
-                            label: "\uEB09 Releases",
+                            label: "\u{EB09} Releases",
                         },
                         {
                             href: `https://nick2bad4u.github.io/stylelint-plugin-grid/stylelint-inspector/`,
-                            label: "\uE7D2 Stylelint Inspector",
+                            label: "\u{E7D2} Stylelint Inspector",
                         },
                         {
                             href: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout",
-                            label: "\uF02D CSS Grid",
+                            label: "\u{F02D} CSS Grid",
                         },
                         {
                             href: "https://stylelint.io/developer-guide/plugins/",
-                            label: "\uE65B Stylelint Plugins",
+                            label: "\u{E65B} Stylelint Plugins",
                         },
                     ],
                     title: "📁 Project",
@@ -468,19 +464,19 @@ const config = {
                     items: [
                         {
                             href: `https://github.com/${organizationName}/${projectName}`,
-                            label: "\uEA84 GitHub Repository",
+                            label: "\u{EA84} GitHub Repository",
                         },
                         {
                             href: `https://nick2bad4u.github.io/stylelint-plugin-grid/eslint-inspector/`,
-                            label: "\uE7D2 ESLint Inspector",
+                            label: "\u{E7D2} ESLint Inspector",
                         },
                         {
                             href: `https://github.com/${organizationName}/${projectName}/issues`,
-                            label: "\uF188 Report Issues",
+                            label: "\u{F188} Report Issues",
                         },
                         {
                             href: `https://www.npmjs.com/package/${projectName}`,
-                            label: "\uE616 NPM",
+                            label: "\u{E616} NPM",
                         },
                     ],
                     title: "⚙️ Support",
@@ -561,23 +557,23 @@ const config = {
                     items: [
                         {
                             href: `https://github.com/${organizationName}/${projectName}`,
-                            label: "• \uE709 GitHub",
+                            label: "• \u{E709} GitHub",
                         },
                         {
                             href: `https://www.npmjs.com/package/${projectName}`,
-                            label: "• \uE616 NPM",
+                            label: "• \u{E616} NPM",
                         },
                         {
                             className: "navbar-dropdown-divider-before",
                             href: "https://stylelint.io/developer-guide/plugins/",
-                            label: "🧪 \uE709 Stylelint Plugin Guide",
+                            label: "🧪 \u{E709} Stylelint Plugin Guide",
                         },
                         {
                             href: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout",
                             label: "CSS Grid",
                         },
                     ],
-                    label: "\uE65B GitHub",
+                    label: "\u{E65B} GitHub",
                     position: "right",
                     type: "dropdown",
                 },
@@ -592,7 +588,7 @@ const config = {
                             to: "/docs/developer/docusaurus-site-contract",
                         },
                     ],
-                    label: "\uDB80\uDE19 Dev",
+                    label: "\u{F0219} Dev",
                     position: "right",
                     to: "/docs/developer",
                     type: "dropdown",
@@ -604,7 +600,7 @@ const config = {
                             to: "/blog",
                         },
                     ],
-                    label: "\uEAA4 Blog",
+                    label: "\u{EAA4} Blog",
                     position: "right",
                     to: "/blog",
                     type: "dropdown",

@@ -88,5 +88,5 @@ function parseStrictInteger(value: string): number | undefined {
         return undefined;
     }
 
-    return Number.parseInt(value, 10);
+    return Number(value);
 }

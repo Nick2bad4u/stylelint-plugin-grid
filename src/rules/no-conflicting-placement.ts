@@ -65,29 +65,31 @@ const ruleFunction: RuleBase<boolean, undefined> =
             const slotDeclarations = new Map<PlacementSlot, Declaration>();
 
             for (const declaration of getDirectDeclarations(ruleNode)) {
-                if (isGridPlacementDeclaration(declaration)) {
-                    const propertyName = declaration.prop.toLowerCase();
-                    const slots = propertySlots[propertyName] ?? [];
-                    const previousDeclaration = slots
-                        .map((slot) => slotDeclarations.get(slot))
-                        .find(isDefined);
+                if (!isGridPlacementDeclaration(declaration)) {
+                    continue;
+                }
 
-                    if (isDefined(previousDeclaration)) {
-                        report({
-                            message: messages.rejected(
-                                propertyName,
-                                previousDeclaration.prop
-                            ),
-                            node: declaration,
-                            result,
-                            ruleName,
-                            word: declaration.prop,
-                        });
-                    }
+                const propertyName = declaration.prop.toLowerCase();
+                const slots = propertySlots[propertyName] ?? [];
+                const previousDeclaration = slots
+                    .map((slot) => slotDeclarations.get(slot))
+                    .find(isDefined);
 
-                    for (const slot of slots) {
-                        slotDeclarations.set(slot, declaration);
-                    }
+                if (isDefined(previousDeclaration)) {
+                    report({
+                        message: messages.rejected(
+                            propertyName,
+                            previousDeclaration.prop
+                        ),
+                        node: declaration,
+                        result,
+                        ruleName,
+                        word: declaration.prop,
+                    });
+                }
+
+                for (const slot of slots) {
+                    slotDeclarations.set(slot, declaration);
                 }
             }
         });

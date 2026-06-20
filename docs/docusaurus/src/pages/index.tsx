@@ -32,46 +32,49 @@ const heroBadges = [
     {
         description:
             "Built around Stylelint's native plugin-pack model and ESM config authoring.",
-        icon: "\uF013",
+        icon: "\u{F013}",
         label: "Stylelint-native",
     },
     {
         description:
             "Focused on authored grid templates, named areas, track counts, and safe layout primitives.",
-        icon: "\uF5FD",
+        icon: "\u{F5FD}",
         label: "Grid-aware",
     },
     {
         description:
             "Template-first infrastructure for rules, docs, sync scripts, and tests.",
-        icon: "\uF0AD",
+        icon: "\u{F0AD}",
         label: "Template-ready",
     },
 ] as const satisfies readonly HeroBadge[];
+
+const shareableConfigIcon = "\u{E690}";
+const publicRuleIcon = "\u{F0CA}";
 
 const heroStats = [
     {
         description:
             "Start with a conservative default or opt into the full stable catalog later.",
-        headline: `\uE690 ${String(docsCatalogStats.shareableConfigCount)} Shareable Config${docsCatalogStats.shareableConfigCount === 1 ? "" : "s"}`,
+        headline: `${shareableConfigIcon} ${String(docsCatalogStats.shareableConfigCount)} Shareable Config${docsCatalogStats.shareableConfigCount === 1 ? "" : "s"}`,
     },
     {
         description:
             "The plugin ships focused guardrails for malformed templates, non-rectangular areas, track-count drift, stale area references, and legacy gap aliases.",
-        headline: `\uF0CA ${String(docsCatalogStats.publicRuleCount)} Public Rule${docsCatalogStats.publicRuleCount === 1 ? "" : "s"}`,
+        headline: `${publicRuleIcon} ${String(docsCatalogStats.publicRuleCount)} Public Rule${docsCatalogStats.publicRuleCount === 1 ? "" : "s"}`,
     },
-    // eslint-disable-next-line perfectionist/sort-arrays -- We need this order
+
     {
         description:
             "Older Stylelint support for users of the previous major version.",
-        headline: "\uDB80\uDC68 Stylelint 16+",
+        headline: "\u{F0068} Stylelint 16+",
     },
 ] as const satisfies readonly HeroStat[];
 
-const overviewButtonIcon = "\uDB81\uDF1D";
-const compareConfigsButtonIcon = "\uDB85\uDC92";
-const heroKickerIcon = "\uF0AD";
-const heroKickerIcon2 = "\uF135";
+const overviewButtonIcon = "\u{F071D}";
+const compareConfigsButtonIcon = "\u{F1492}";
+const heroKickerIcon = "\u{F0AD}";
+const heroKickerIcon2 = "\u{F135}";
 const homepageDescription =
     "Explore stylelint-plugin-grid documentation, configs, and CSS Grid linting guidance.";
 const homepageKeywords =
@@ -96,21 +99,21 @@ const homeCards = [
     {
         description:
             "Compare the exported configs and understand why `recommended` stays conservative while `all` adds stricter opt-in rules.",
-        icon: "\uE690",
+        icon: "\u{E690}",
         title: "Configs",
         to: "/docs/rules/configs",
     },
     {
         description:
             "Install the package, enable a shareable config, and understand the plugin-pack export shape.",
-        icon: "\uF135",
+        icon: "\u{F135}",
         title: "Get Started",
         to: "/docs/rules/getting-started",
     },
     {
         description:
             "Read the current rule scope and static-analysis boundaries before enabling stricter checks.",
-        icon: "\uF02D",
+        icon: "\u{F02D}",
         title: "Current Status",
         to: "/docs/rules/guides/current-status",
     },

@@ -7,4 +7,4 @@
  * stable setup module path.
  */
 
-export const vitestSetupLoaded = true;
+export const isVitestSetupLoaded = true;

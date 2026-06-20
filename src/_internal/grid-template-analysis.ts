@@ -79,7 +79,7 @@ export function collectGridAreaUsages(root: Root): readonly GridAreaUsage[] {
         usages.push({
             declaration,
             name,
-            ...(isDefined(selector) ? { selector } : {}),
+            ...(isDefined(selector) && { selector }),
         });
     });
 
@@ -199,6 +199,7 @@ export function getAreaShapes(
 
     for (const [rowIndex, row] of template.rows.entries()) {
         for (const [columnIndex, token] of row.entries()) {
+            // eslint-disable-next-line unicorn/prefer-continue -- This branch avoids a nested-loop continue rejected by unicorn/no-break-in-nested-loop.
             if (!isBlankAreaToken(token) && isGridAreaName(token)) {
                 const current = shapes.get(token);
 
@@ -224,10 +225,10 @@ export function getAreaShapes(
         }
     }
 
-    // eslint-disable-next-line canonical/no-use-extend-native -- The repo already targets Array#toSorted; this avoids mutating the collected shape list.
-    return [...shapes.values()].toSorted((left, right) =>
-        left.name.localeCompare(right.name)
-    );
+    return shapes
+        .values()
+        .toArray()
+        .toSorted((left, right) => left.name.localeCompare(right.name));
 }
 
 /** Return whether a token is a valid blank cell marker. */
@@ -358,7 +359,7 @@ function countRepeatTracks(token: string): number | undefined {
 
     const body = token.slice("repeat(".length, -1);
     const [repeatText, trackListText] = splitTopLevelCommas(body);
-    const repeat = Number.parseInt(repeatText?.trim() ?? "", 10);
+    const repeat = Number(repeatText?.trim() ?? "");
 
     if (
         !isInteger(repeat) ||
@@ -499,28 +500,15 @@ function splitTopLevel(
     for (let index = 0; index < value.length; index += 1) {
         const character = value[index] ?? "";
 
-        switch (character) {
-            case "(": {
-                parenthesisDepth += 1;
-
-                break;
-            }
-            case ")": {
-                parenthesisDepth = Math.max(0, parenthesisDepth - 1);
-
-                break;
-            }
-            case "[": {
-                bracketDepth += 1;
-
-                break;
-            }
-            case "]": {
-                bracketDepth = Math.max(0, bracketDepth - 1);
-
-                break;
-            }
-            // No default
+        // eslint-disable-next-line unicorn/prefer-switch -- A switch inside this loop triggers unicorn/no-break-in-nested-loop for the required case exits.
+        if (character === "(") {
+            parenthesisDepth += 1;
+        } else if (character === ")") {
+            parenthesisDepth = Math.max(0, parenthesisDepth - 1);
+        } else if (character === "[") {
+            bracketDepth += 1;
+        } else if (character === "]") {
+            bracketDepth = Math.max(0, bracketDepth - 1);
         }
 
         if (

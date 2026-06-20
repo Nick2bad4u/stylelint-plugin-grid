@@ -313,24 +313,26 @@ describe("sync-configs-rules-matrix automation", () => {
                     },
                 },
             },
-            readFileFn: (filePath) =>
-                Promise.resolve(
-                    filePath.endsWith("index.md")
-                        ? [
-                              "# Configs",
-                              "",
-                              "## Rules by Config",
-                              "",
-                              "stale overview table",
-                          ].join("\n")
-                        : [
-                              "# strict",
-                              "",
-                              "## Rules in this config",
-                              "",
-                              "stale table",
-                          ].join("\n")
-                ),
+            readFileFn: (filePath) => {
+                const isIndexFile = filePath.endsWith("index.md");
+                const heading = isIndexFile
+                    ? "Rules by Config"
+                    : "Rules in this config";
+                const title = isIndexFile ? "Configs" : "strict";
+                const table = isIndexFile
+                    ? "stale overview table"
+                    : "stale table";
+
+                return Promise.resolve(
+                    [
+                        `# ${title}`,
+                        "",
+                        `## ${heading}`,
+                        "",
+                        table,
+                    ].join("\n")
+                );
+            },
             repositoryRootPath: "C:/repo",
             writeChanges: true,
             writeFileFn: (filePath, contents, encoding) => {
