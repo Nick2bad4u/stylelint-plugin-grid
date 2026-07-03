@@ -35,17 +35,17 @@ function getDisabledStylelintRulesFromFile(
 
 function getStylelintDisableCommentLines(filePath: string): readonly string[] {
     const fileContents = nodeFs.readFileSync(filePath, "utf8");
-    const disableLines: string[] = [];
+    const stylelintDisableComments: string[] = [];
 
     for (const line of fileContents.split(/\r?\n/v)) {
         const trimmedLine = line.trim();
 
         if (trimmedLine.startsWith("/* stylelint-disable ")) {
-            disableLines.push(trimmedLine);
+            stylelintDisableComments.push(trimmedLine);
         }
     }
 
-    return disableLines;
+    return stylelintDisableComments;
 }
 
 describe("docs stylelint guardrails", () => {
@@ -84,11 +84,11 @@ describe("docs stylelint guardrails", () => {
         const disabledRules = getDisabledStylelintRulesFromFile(
             "docs/docusaurus/src/css/custom.css"
         );
-        const disableLines = getStylelintDisableCommentLines(
+        const stylelintDisableComments = getStylelintDisableCommentLines(
             "docs/docusaurus/src/css/custom.css"
         );
 
-        expect(disableLines).toStrictEqual([]);
+        expect(stylelintDisableComments).toStrictEqual([]);
         expect(disabledRules).toStrictEqual([]);
     });
 
@@ -98,11 +98,11 @@ describe("docs stylelint guardrails", () => {
         const disabledRules = getDisabledStylelintRulesFromFile(
             "docs/docusaurus/src/pages/index.module.css"
         );
-        const disableLines = getStylelintDisableCommentLines(
+        const stylelintDisableComments = getStylelintDisableCommentLines(
             "docs/docusaurus/src/pages/index.module.css"
         );
 
-        expect(disableLines).toStrictEqual([]);
+        expect(stylelintDisableComments).toStrictEqual([]);
         expect(disabledRules).toStrictEqual([]);
     });
 });

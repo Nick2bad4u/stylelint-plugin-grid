@@ -14,22 +14,24 @@ describe("check-circular-deps script", () => {
     it("excludes only the intended path segments and css files", () => {
         expect.hasAssertions();
 
-        const excludeRegExp = createMadgeExcludeRegExp();
+        const exclusionPattern = createMadgeExcludeRegExp();
 
-        expect(excludeRegExp.test(path.join("src", ".cache", "file.ts"))).toBe(
-            true
-        );
         expect(
-            excludeRegExp.test(
+            exclusionPattern.test(path.join("src", ".cache", "file.ts"))
+        ).toBe(true);
+        expect(
+            exclusionPattern.test(
                 path.join("docs", "docusaurus", ".docusaurus", "app.js")
             )
         ).toBe(true);
-        expect(excludeRegExp.test(path.join("src", "styles.css"))).toBe(true);
-        expect(excludeRegExp.test(path.join("src", "scache", "file.ts"))).toBe(
-            false
+        expect(exclusionPattern.test(path.join("src", "styles.css"))).toBe(
+            true
         );
         expect(
-            excludeRegExp.test(path.join("src", "adocusaurus", "file.ts"))
+            exclusionPattern.test(path.join("src", "scache", "file.ts"))
+        ).toBe(false);
+        expect(
+            exclusionPattern.test(path.join("src", "adocusaurus", "file.ts"))
         ).toBe(false);
     });
 

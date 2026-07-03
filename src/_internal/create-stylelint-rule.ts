@@ -76,11 +76,11 @@ export const createStylelintRule = <
         ...baseMeta,
         docs,
     };
-    const typedRule: Rule<P, S, M> = Object.assign(rule, {
-        messages,
-        meta,
-        ruleName,
-    });
+    const typedRule = rule as Rule<P, S, M>;
+
+    typedRule.ruleName = ruleName;
+    typedRule.messages = messages;
+    typedRule.meta = meta;
 
     if (options.primaryOptionArray === true) {
         typedRule.primaryOptionArray = true;

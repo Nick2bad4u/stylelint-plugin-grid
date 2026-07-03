@@ -2,6 +2,10 @@ import nick2bad4u from "eslint-config-nick2bad4u";
 
 /** @type {import("eslint").Linter.Config[]} */
 const config = [
+    {
+        ignores: ["**/*.css"],
+    },
+
     ...nick2bad4u.configs.withoutStylelint2,
 
     {
@@ -37,6 +41,31 @@ const config = [
         files: ["docs/docusaurus/src/**/*.{ts,tsx}"],
         rules: {
             "import-x/no-unresolved": "off",
+        },
+    },
+
+    {
+        files: ["docs/docusaurus/site-docs/**/*.md", "docs/rules/**/*.md"],
+        rules: {
+            "markdown/no-multiple-h1": "off",
+        },
+    },
+
+    {
+        files: ["**/*.toml"],
+        name: "Local Stable TOML Formatting",
+        rules: {
+            // Tombi 1.1.7 formats the same TOML differently on Windows and Linux.
+            "tombi/tombi": "off",
+        },
+    },
+
+    {
+        files: ["src/**/*.ts"],
+        rules: {
+            "@typescript-eslint/no-unnecessary-condition": "off",
+            "@typescript-eslint/no-unsafe-type-assertion": "off",
+            "import-x/extensions": "off",
         },
     },
 

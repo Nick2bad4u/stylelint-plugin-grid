@@ -20,11 +20,9 @@ export interface ConfigMatrixConfigModule {
 export interface ConfigMatrixBuiltPluginModule {
     readonly configNames?: unknown;
     readonly configs?:
-        | Readonly<Record<string, ConfigMatrixConfigModule>>
-        | undefined;
+        Readonly<Record<string, ConfigMatrixConfigModule>> | undefined;
     readonly rules?:
-        | Readonly<Record<string, ConfigMatrixRuleModule>>
-        | undefined;
+        Readonly<Record<string, ConfigMatrixRuleModule>> | undefined;
 }
 
 export interface ConfigMatrixMetadata {
@@ -87,12 +85,10 @@ export function generateRulesSectionFromConfigsIndex(input: {
 export function syncConfigDocs(input: {
     readonly hasDocFile?: (path: string) => Promise<boolean>;
     readonly loadPluginMetadata?:
-        | (() => Promise<ConfigMatrixMetadata>)
-        | undefined;
+        (() => Promise<ConfigMatrixMetadata>) | undefined;
     readonly metadata?: ConfigMatrixMetadata | undefined;
     readonly readFileFn?:
-        | ((filePath: string, encoding: "utf8") => Promise<string>)
-        | undefined;
+        ((filePath: string, encoding: "utf8") => Promise<string>) | undefined;
     readonly repositoryRootPath?: string | undefined;
     readonly writeChanges: boolean;
     readonly writeFileFn?:
@@ -113,7 +109,6 @@ export function runCli(input?: {
     readonly cliArgs?: readonly string[] | undefined;
     readonly legacyAlias?: boolean;
     readonly loadPluginMetadata?:
-        | (() => Promise<ConfigMatrixMetadata>)
-        | undefined;
+        (() => Promise<ConfigMatrixMetadata>) | undefined;
     readonly repositoryRootPath?: string | undefined;
 }): Promise<void>;
