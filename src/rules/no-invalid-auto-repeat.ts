@@ -135,9 +135,10 @@ function getMinmaxArguments(
     return [minimum, maximum];
 }
 
-function getRepeatKeyword(
-    repeatBody: string
-): "auto-fill" | "auto-fit" | undefined {
+function getRepeatKeyword(repeatBody: string):
+    | "auto-fill"
+    | "auto-fit"
+    | undefined {
     const repeatCount = arrayFirst(splitTopLevelCommas(repeatBody))
         ?.trim()
         .toLowerCase();

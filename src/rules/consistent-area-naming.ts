@@ -20,7 +20,10 @@ const { report, ruleMessages, validateOptions } = stylelint.utils;
 
 const ruleName = createRuleName("consistent-area-naming");
 
-type AreaNamingStyle = "camel-case" | "kebab-case" | "snake-case";
+type AreaNamingStyle =
+    | "camel-case"
+    | "kebab-case"
+    | "snake-case";
 type SecondaryOptions = Readonly<{
     style?: AreaNamingStyle;
 }>;

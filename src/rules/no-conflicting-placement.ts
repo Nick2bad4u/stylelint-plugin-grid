@@ -33,7 +33,11 @@ const docs = {
     url: createRuleDocsUrl("no-conflicting-placement"),
 } as const;
 
-type PlacementSlot = "column-end" | "column-start" | "row-end" | "row-start";
+type PlacementSlot =
+    | "column-end"
+    | "column-start"
+    | "row-end"
+    | "row-start";
 
 const propertySlots: Readonly<Record<string, readonly PlacementSlot[]>> = {
     "grid-area": [
