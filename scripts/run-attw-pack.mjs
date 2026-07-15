@@ -6,6 +6,8 @@ import { mkdir, readdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
+import { parseNpmPackMetadata } from "./_internal/npm-pack-metadata.mjs";
+
 const arguments_ = process.argv.slice(2);
 const targetDirectory = path.resolve(
     arguments_.find(
@@ -59,18 +61,8 @@ const packOutput = execFileSync(
         ],
     }
 );
-const [packedPackage] = JSON.parse(packOutput);
-
-if (
-    typeof packedPackage !== "object" ||
-    packedPackage === null ||
-    !("filename" in packedPackage) ||
-    typeof packedPackage.filename !== "string"
-) {
-    throw new TypeError("npm pack did not return a package filename.");
-}
-
-const tarballPath = path.join(packDirectory, packedPackage.filename);
+const packMetadata = parseNpmPackMetadata(packOutput);
+const tarballPath = path.join(packDirectory, packMetadata.filename);
 
 execFileSync(
     "tar",
