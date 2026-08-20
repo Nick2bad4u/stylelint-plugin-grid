@@ -17,6 +17,20 @@ const readPackageJson = (path: string): Record<string, unknown> => {
     return packageJson;
 };
 
+const requireRecordProperty = (
+    record: Record<string, unknown>,
+    property: string,
+    source: string
+): Record<string, unknown> => {
+    const value = record[property];
+
+    if (!isRecord(value)) {
+        throw new TypeError(`${source} ${property} must be an object.`);
+    }
+
+    return value;
+};
+
 describe("npm release safety policy", () => {
     const packageJson = readPackageJson("package.json");
     const docsPackageJson = readPackageJson("docs/docusaurus/package.json");
@@ -65,14 +79,16 @@ describe("npm release safety policy", () => {
     it("builds config inspectors from locked local dependencies", () => {
         expect.hasAssertions();
 
-        const scripts = packageJson["scripts"];
-        const devDependencies = packageJson["devDependencies"];
-
-        if (!isRecord(scripts) || !isRecord(devDependencies)) {
-            throw new TypeError(
-                "package.json scripts and devDependencies must be objects."
-            );
-        }
+        const scripts = requireRecordProperty(
+            packageJson,
+            "scripts",
+            "package.json"
+        );
+        const devDependencies = requireRecordProperty(
+            packageJson,
+            "devDependencies",
+            "package.json"
+        );
 
         expect(devDependencies["@eslint/config-inspector"]).toBe("^3.0.4");
         expect(devDependencies["stylelint-config-inspector"]).toBe("^2.3.5");
@@ -83,6 +99,20 @@ describe("npm release safety policy", () => {
             /^stylelint-config-inspector build /v
         );
         expect(Object.values(scripts).join("\n")).not.toContain("@latest");
+    });
+
+    it("generates release notes offline before publishing the release commit", () => {
+        expect.hasAssertions();
+
+        const scripts = requireRecordProperty(
+            packageJson,
+            "scripts",
+            "package.json"
+        );
+
+        expect(scripts["changelog:release-notes"]).toBe(
+            "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/stylelint-plugin-grid --offline --current"
+        );
     });
 
     it("bootstraps npm 12 outside the project before project npm commands", () => {
