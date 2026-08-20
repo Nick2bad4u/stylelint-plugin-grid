@@ -36,6 +36,7 @@ describe("npm release safety policy", () => {
             "@swc/core@1.16.1": true,
             "core-js@3.50.0": false,
             "esbuild@0.28.2": true,
+            "fsevents@2.3.3": false,
             "unrs-resolver@1.12.2": true,
         });
         expect(readText(".npmrc").trim().split(/\r?\n/v)).toStrictEqual([
