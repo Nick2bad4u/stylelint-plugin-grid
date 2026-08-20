@@ -62,8 +62,20 @@ const toFileHref = (filePath) => {
  * @typedef {Readonly<{
  *     invalidOptionWarnings?: readonly unknown[];
  *     parseErrors?: readonly unknown[];
- *     warnings?: readonly unknown[];
+ *     warnings?: readonly WarningLike[];
  * }>} StylelintResultLike
+ */
+
+/**
+ * @typedef {Readonly<{
+ *     column?: number;
+ *     endColumn?: number;
+ *     endLine?: number;
+ *     line?: number;
+ *     rule?: string;
+ *     severity?: string;
+ *     text?: string;
+ * }>} WarningLike
  */
 
 /**
@@ -73,9 +85,11 @@ const toFileHref = (filePath) => {
  *             code: string;
  *             codeFilename: string;
  *             config: import("stylelint").Config;
+ *             fix?: boolean;
  *         }>
  *     ) => Promise<
  *         Readonly<{
+ *             code?: string;
  *             results: readonly StylelintResultLike[];
  *         }>
  *     >;
@@ -644,6 +658,154 @@ export function createScenarios({ gridPluginConfigs, plugin }) {
 }
 
 /**
+ * Require one Stylelint result without parse or option diagnostics.
+ *
+ * @param {Readonly<{ results: readonly StylelintResultLike[] }>} lintResult
+ * @param {string} scenarioName
+ *
+ * @returns {StylelintResultLike}
+ */
+function requireValidLintResult(lintResult, scenarioName) {
+    const [result] = lintResult.results;
+
+    if (result === undefined) {
+        throw new Error(`${scenarioName}: Stylelint did not return a result.`);
+    }
+
+    const parseErrors = result.parseErrors ?? [];
+    const invalidOptionWarnings = result.invalidOptionWarnings ?? [];
+
+    if (parseErrors.length > 0) {
+        throw new Error(
+            `${scenarioName}: encountered parse errors (${parseErrors.length}).`
+        );
+    }
+
+    if (invalidOptionWarnings.length > 0) {
+        throw new Error(
+            `${scenarioName}: encountered invalid option warnings (${invalidOptionWarnings.length}).`
+        );
+    }
+
+    return result;
+}
+
+/**
+ * Verify one exact public-rule diagnostic through the recommended config.
+ *
+ * @param {Readonly<{
+ *     config: import("stylelint").Config;
+ *     stylelint: StylelintLike;
+ * }>} input
+ * @param {Readonly<{ logger?: InfoLogger | undefined }>} [options]
+ *
+ * @returns {Promise<void>}
+ */
+async function runDiagnosticScenario(
+    { config, stylelint },
+    { logger = console } = {}
+) {
+    const scenarioName = "recommended-config-invalid-diagnostic";
+    const lintResult = await stylelint.lint({
+        code: ".item { grid-column: 0 / 2; }",
+        codeFilename: "invalid.css",
+        config,
+    });
+    const result = requireValidLintResult(lintResult, scenarioName);
+    const warnings = result.warnings ?? [];
+
+    if (warnings.length !== 1) {
+        throw new Error(
+            `${scenarioName}: expected one warning, received ${warnings.length}.`
+        );
+    }
+
+    const [warning] = warnings;
+    const actualWarning = {
+        column: warning?.column,
+        endColumn: warning?.endColumn,
+        endLine: warning?.endLine,
+        line: warning?.line,
+        rule: warning?.rule,
+        severity: warning?.severity,
+        text: warning?.text,
+    };
+    const expectedWarning = {
+        column: 22,
+        endColumn: 23,
+        endLine: 1,
+        line: 1,
+        rule: "grid/no-zero-grid-lines",
+        severity: "error",
+        text: "Do not use Grid line `0`; CSS Grid line numbering starts at `1` and `-1`. (grid/no-zero-grid-lines)",
+    };
+
+    if (!isDeepStrictEqual(actualWarning, expectedWarning)) {
+        throw new Error(`${scenarioName}: warning contract did not match.`);
+    }
+
+    logger.log(`${pc.green("✓")} ${pc.bold(scenarioName)} matched exactly.`);
+}
+
+/**
+ * Verify exact, parseable, warning-free, idempotent autofix behavior.
+ *
+ * @param {Readonly<{
+ *     config: import("stylelint").Config;
+ *     stylelint: StylelintLike;
+ * }>} input
+ * @param {Readonly<{ logger?: InfoLogger | undefined }>} [options]
+ *
+ * @returns {Promise<void>}
+ */
+async function runFixScenario(
+    { config, stylelint },
+    { logger = console } = {}
+) {
+    const scenarioName = "recommended-config-gap-autofix";
+    const source =
+        ".layout { grid-gap: 1rem; grid-column-gap: 2rem; grid-row-gap: 3rem; }";
+    const expected = ".layout { gap: 1rem; column-gap: 2rem; row-gap: 3rem; }";
+    const firstPass = await stylelint.lint({
+        code: source,
+        codeFilename: "fix.css",
+        config,
+        fix: true,
+    });
+    const firstResult = requireValidLintResult(firstPass, scenarioName);
+
+    if (firstPass.code !== expected) {
+        throw new Error(`${scenarioName}: first-pass output did not match.`);
+    }
+
+    if ((firstResult.warnings ?? []).length > 0) {
+        throw new Error(`${scenarioName}: first pass retained warnings.`);
+    }
+
+    const secondPass = await stylelint.lint({
+        code: firstPass.code,
+        codeFilename: "fix.css",
+        config,
+        fix: true,
+    });
+    const secondResult = requireValidLintResult(secondPass, scenarioName);
+
+    if (secondPass.code !== expected) {
+        throw new Error(
+            `${scenarioName}: second-pass output was not idempotent.`
+        );
+    }
+
+    if ((secondResult.warnings ?? []).length > 0) {
+        throw new Error(`${scenarioName}: second pass retained warnings.`);
+    }
+
+    logger.log(
+        `${pc.green("✓")} ${pc.bold(scenarioName)} fixed exactly and idempotently.`
+    );
+}
+
+/**
  * @param {Readonly<{
  *     argv?: readonly string[];
  *     loadBuiltPluginSurfaceFn?:
@@ -697,6 +859,22 @@ export async function runStylelintCompatSmoke({
             stylelint,
         });
     }
+
+    const recommendedConfig = {
+        ...builtPluginSurface.gridPluginConfigs["grid-recommended"],
+        plugins: Array.from(
+            builtPluginSurface.gridPluginConfigs["grid-recommended"].plugins
+        ),
+        rules: {
+            ...builtPluginSurface.gridPluginConfigs["grid-recommended"].rules,
+        },
+    };
+
+    await runDiagnosticScenario(
+        { config: recommendedConfig, stylelint },
+        { logger }
+    );
+    await runFixScenario({ config: recommendedConfig, stylelint }, { logger });
 
     logger.log(
         pc.bold(pc.green("Stylelint compatibility smoke checks passed."))

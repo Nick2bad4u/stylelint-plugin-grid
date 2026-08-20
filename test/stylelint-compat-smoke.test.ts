@@ -131,16 +131,46 @@ describe("stylelint compatibility smoke script", () => {
         expect.hasAssertions();
 
         const codeFilenames: string[] = [];
-        const lint = vi.fn<
-            (input: Readonly<Parameters<StylelintLike["lint"]>[0]>) => Promise<{
-                results: {
-                    invalidOptionWarnings: [];
-                    parseErrors: [];
-                    warnings: [];
-                }[];
-            }>
-        >((input) => {
+        const lint = vi.fn<StylelintLike["lint"]>((input) => {
             codeFilenames.push(input.codeFilename);
+
+            if (input.codeFilename === "invalid.css") {
+                return Promise.resolve({
+                    results: [
+                        {
+                            invalidOptionWarnings: [],
+                            parseErrors: [],
+                            warnings: [
+                                {
+                                    column: 22,
+                                    endColumn: 23,
+                                    endLine: 1,
+                                    line: 1,
+                                    rule: "grid/no-zero-grid-lines",
+                                    severity: "error",
+                                    text: "Do not use Grid line `0`; CSS Grid line numbering starts at `1` and `-1`. (grid/no-zero-grid-lines)",
+                                },
+                            ],
+                        },
+                    ],
+                });
+            }
+
+            if (input.codeFilename === "fix.css") {
+                return Promise.resolve({
+                    code: input.code
+                        .replaceAll("grid-column-gap", "column-gap")
+                        .replaceAll("grid-row-gap", "row-gap")
+                        .replaceAll("grid-gap", "gap"),
+                    results: [
+                        {
+                            invalidOptionWarnings: [],
+                            parseErrors: [],
+                            warnings: [],
+                        },
+                    ],
+                });
+            }
 
             return Promise.resolve({
                 results: [
@@ -165,11 +195,14 @@ describe("stylelint compatibility smoke script", () => {
             stylelintRuntimeVersion: "16.22.0",
         });
 
-        expect(lint).toHaveBeenCalledTimes(3);
+        expect(lint).toHaveBeenCalledTimes(6);
         expect(codeFilenames).toStrictEqual([
             "Component.module.css",
             "Component.module.css",
             "Component.module.css",
+            "invalid.css",
+            "fix.css",
+            "fix.css",
         ]);
     });
 
