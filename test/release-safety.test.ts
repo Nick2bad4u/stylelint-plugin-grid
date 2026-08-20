@@ -72,8 +72,12 @@ describe("npm release safety policy", () => {
         const bootstrapWorkingDirectories = workflows.match(
             /working-directory: "\$\{\{ runner\.temp \}\}"/gv
         );
+        const disabledAutomaticCaches = workflows.match(
+            /package-manager-cache: false/gv
+        );
 
         expect(bootstrapWorkingDirectories).toHaveLength(4);
+        expect(disabledAutomaticCaches).toHaveLength(4);
         expect(workflows).not.toContain('cache: "npm"');
         expect(workflows).toContain(
             "require(require('node:path').join(process.env.GITHUB_WORKSPACE, 'package.json'))"
