@@ -2,117 +2,179 @@ import * as path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
-    createCompatibilityCheckCommands,
-    createRestoreDependenciesCommand,
+    createPreparationCommands,
+    createRuntimeCommands,
     getNpmCommand,
     getWindowsCommandShell,
     isDirectExecution,
     runStylelint16Compat,
 } from "../scripts/run-stylelint16-compat.mjs";
 
-const isErrorLike = (value: unknown): value is Readonly<{ message: string }> =>
-    typeof value === "object" &&
-    value !== null &&
-    "message" in value &&
-    typeof value.message === "string";
-
 describe("run-stylelint16-compat wrapper", () => {
-    it("builds before installing Stylelint 16 and running the smoke check", () => {
+    it("creates isolated build, pack, install, and smoke commands", () => {
         expect.hasAssertions();
 
         expect(
-            createCompatibilityCheckCommands({
-                nodeCommand: "node",
+            createPreparationCommands({
                 npmCommand: "npm",
                 platform: "linux",
-                stylelintCompatSmokeScriptPath:
-                    "/repo/scripts/stylelint-compat-smoke.mjs",
+                repositoryRootPath: "/repo",
+                tempDirectoryPath: "/temp/compat",
             })
         ).toStrictEqual([
             {
                 args: ["run", "build"],
                 command: "npm",
+                cwd: "/repo",
                 shell: false,
             },
+            {
+                args: [
+                    "pack",
+                    "--json",
+                    "--ignore-scripts",
+                    "--pack-destination",
+                    "/temp/compat",
+                ],
+                captureOutput: true,
+                command: "npm",
+                cwd: "/repo",
+                shell: false,
+            },
+        ]);
+        expect(
+            createRuntimeCommands({
+                nodeCommand: "node",
+                npmCommand: "npm",
+                platform: "linux",
+                runtimeDirectoryPath: "/temp/compat/runtime-1",
+            })
+        ).toStrictEqual([
             {
                 args: [
                     "install",
-                    "--no-save",
-                    "--legacy-peer-deps",
-                    "stylelint@^16",
+                    "--ignore-scripts",
+                    "--no-audit",
+                    "--no-fund",
                 ],
                 command: "npm",
+                cwd: "/temp/compat/runtime-1",
                 shell: false,
             },
             {
                 args: [
-                    "/repo/scripts/stylelint-compat-smoke.mjs",
+                    path.join(
+                        "/temp/compat/runtime-1",
+                        "scripts",
+                        "stylelint-compat-smoke.mjs"
+                    ),
                     "--expect-stylelint-major=16",
                 ],
                 command: "node",
+                cwd: "/temp/compat/runtime-1",
                 shell: false,
             },
         ]);
     });
 
-    it("creates a Windows-aware restore install command", () => {
-        expect.hasAssertions();
-
-        expect(getNpmCommand("win32")).toBe("npm.cmd");
-        expect(
-            getWindowsCommandShell({
-                COMSPEC: "custom-cmd.exe",
-            })
-        ).toBe("custom-cmd.exe");
-        expect(
-            createRestoreDependenciesCommand({
-                npmCommand: "npm.cmd",
-                platform: "win32",
-            })
-        ).toStrictEqual({
-            args: [
-                "install",
-                "--ignore-scripts",
-                "--no-audit",
-                "--no-fund",
-                "--legacy-peer-deps",
-            ],
-            command: "npm.cmd",
-            shell: true,
-        });
-    });
-
-    it("restores manifests and dependencies even when the smoke check fails", async () => {
+    it("tests two Stylelint 16 boundaries without restoring repository dependencies", async () => {
         expect.hasAssertions();
 
         const copiedFiles: string[] = [];
-        const restoredFiles: string[] = [];
+        const copiedDirectories: string[] = [];
+        const createdDirectories: string[] = [];
         const executedCommands: string[] = [];
+        const packageJsonFiles: string[] = [];
         const removedPaths: string[] = [];
-        let invocationIndex = 0;
-        const tempBackupDirectory = "/temp/stylelint16-backup";
+        const tempDirectoryPath = "/temp/stylelint16-compat";
+
+        await runStylelint16Compat({
+            copyFileFn: (sourcePath, destinationPath) => {
+                copiedFiles.push(
+                    `${String(sourcePath)}->${String(destinationPath)}`
+                );
+
+                return Promise.resolve();
+            },
+            cpFn: (sourcePath, destinationPath) => {
+                copiedDirectories.push(
+                    `${String(sourcePath)}->${String(destinationPath)}`
+                );
+
+                return Promise.resolve();
+            },
+            createTempDirectoryFn: () => Promise.resolve(tempDirectoryPath),
+            mkdirFn: (targetPath) => {
+                createdDirectories.push(String(targetPath));
+
+                return Promise.resolve(undefined);
+            },
+            nodeCommand: "node",
+            npmCommand: "npm",
+            platform: "linux",
+            repositoryRootPath: "/repo",
+            rmFn: (targetPath) => {
+                removedPaths.push(String(targetPath));
+
+                return Promise.resolve();
+            },
+            runCommandFn: (input) => {
+                executedCommands.push(
+                    `${input.command} ${input.args.join(" ")} @ ${input.cwd}`
+                );
+
+                return input.captureOutput === true
+                    ? JSON.stringify([
+                          { filename: "stylelint-plugin-grid.tgz" },
+                      ])
+                    : "";
+            },
+            stylelintCompatSmokeScriptPath:
+                "/repo/scripts/stylelint-compat-smoke.mjs",
+            stylelintSpecs: ["16.0.0", "16.26.1"],
+            tmpDirectoryPath: "/temp",
+            windowsCommandShell: "cmd.exe",
+            writeFileFn: (targetPath, contents) => {
+                if (
+                    typeof targetPath !== "string" ||
+                    typeof contents !== "string"
+                ) {
+                    throw new TypeError(
+                        "Expected a text package manifest path."
+                    );
+                }
+
+                packageJsonFiles.push(`${targetPath}:${contents}`);
+
+                return Promise.resolve();
+            },
+        });
+
+        expect(executedCommands).toHaveLength(6);
+        expect(executedCommands).not.toContain(
+            expect.stringContaining("--legacy-peer-deps")
+        );
+        expect(executedCommands).not.toContain(
+            expect.stringContaining("npm ci")
+        );
+        expect(createdDirectories).toHaveLength(2);
+        expect(copiedFiles).toHaveLength(4);
+        expect(copiedDirectories).toHaveLength(2);
+        expect(packageJsonFiles).toHaveLength(2);
+        expect(packageJsonFiles[0]).toContain('"stylelint": "16.0.0"');
+        expect(packageJsonFiles[1]).toContain('"stylelint": "16.26.1"');
+        expect(removedPaths).toStrictEqual([tempDirectoryPath]);
+    });
+
+    it("always removes the isolated project after a failure", async () => {
+        expect.hasAssertions();
+
+        const removedPaths: string[] = [];
 
         await expect(
             runStylelint16Compat({
-                copyFileFn: (sourcePath, destinationPath) => {
-                    copiedFiles.push(
-                        `${String(sourcePath)}->${String(destinationPath)}`
-                    );
-
-                    return Promise.resolve();
-                },
-                cpFn: (sourcePath, destinationPath) => {
-                    restoredFiles.push(
-                        `${String(sourcePath)}->${String(destinationPath)}`
-                    );
-
-                    return Promise.resolve();
-                },
-                mkdtempFn: () => Promise.resolve(tempBackupDirectory),
-                nodeCommand: "node",
+                createTempDirectoryFn: () => Promise.resolve("/temp/compat"),
                 npmCommand: "npm",
-                packageJsonPath: "/repo/package.json",
-                packageLockJsonPath: "/repo/package-lock.json",
                 platform: "linux",
                 repositoryRootPath: "/repo",
                 rmFn: (targetPath) => {
@@ -120,137 +182,54 @@ describe("run-stylelint16-compat wrapper", () => {
 
                     return Promise.resolve();
                 },
-                runCommandFn: (input) => {
-                    executedCommands.push(
-                        `${input.command} ${input.args.join(" ")}`
-                    );
-                    invocationIndex += 1;
-
-                    if (invocationIndex === 3) {
-                        throw new Error("simulated smoke failure");
-                    }
+                runCommandFn: () => {
+                    throw new Error("simulated build failure");
                 },
-                stylelintCompatSmokeScriptPath:
-                    "/repo/scripts/stylelint-compat-smoke.mjs",
                 tmpDirectoryPath: "/temp",
-                windowsCommandShell: "cmd.exe",
             })
-        ).rejects.toThrow("simulated smoke failure");
-
-        expect(copiedFiles).toStrictEqual([
-            `/repo/package.json->${path.join(tempBackupDirectory, "package.json")}`,
-            `/repo/package-lock.json->${path.join(tempBackupDirectory, "package-lock.json")}`,
-        ]);
-        expect(restoredFiles).toStrictEqual([
-            `${path.join(tempBackupDirectory, "package.json")}->/repo/package.json`,
-            `${path.join(tempBackupDirectory, "package-lock.json")}->/repo/package-lock.json`,
-        ]);
-        expect(executedCommands).toStrictEqual([
-            "npm run build",
-            "npm install --no-save --legacy-peer-deps stylelint@^16",
-            "node /repo/scripts/stylelint-compat-smoke.mjs --expect-stylelint-major=16",
-            "npm install --ignore-scripts --no-audit --no-fund --legacy-peer-deps",
-        ]);
-        expect(removedPaths).toStrictEqual([tempBackupDirectory]);
+        ).rejects.toThrow("simulated build failure");
+        expect(removedPaths).toStrictEqual(["/temp/compat"]);
     });
 
-    it("preserves the original smoke failure when cleanup also fails", async () => {
+    it("preserves the primary failure when isolated cleanup also fails", async () => {
         expect.hasAssertions();
 
-        const executedCommands: string[] = [];
-        let invocationIndex = 0;
-
-        let thrownError: unknown = undefined;
+        let thrownError: unknown;
 
         try {
             await runStylelint16Compat({
-                copyFileFn: () => Promise.resolve(),
-                cpFn: () => Promise.resolve(),
-                mkdtempFn: () => Promise.resolve("/temp/stylelint16-backup"),
-                nodeCommand: "node",
+                createTempDirectoryFn: () => Promise.resolve("/temp/compat"),
                 npmCommand: "npm",
-                packageJsonPath: "/repo/package.json",
-                packageLockJsonPath: "/repo/package-lock.json",
                 platform: "linux",
                 repositoryRootPath: "/repo",
-                rmFn: () => Promise.resolve(),
-                runCommandFn: (input) => {
-                    executedCommands.push(
-                        `${input.command} ${input.args.join(" ")}`
-                    );
-                    invocationIndex += 1;
-
-                    if (invocationIndex === 3) {
-                        throw new Error("simulated smoke failure");
-                    }
-
-                    if (invocationIndex === 4) {
-                        throw new Error("simulated restore failure");
-                    }
+                rmFn: () => Promise.reject(new Error("cleanup failed")),
+                runCommandFn: () => {
+                    throw new Error("build failed");
                 },
-                stylelintCompatSmokeScriptPath:
-                    "/repo/scripts/stylelint-compat-smoke.mjs",
                 tmpDirectoryPath: "/temp",
-                windowsCommandShell: "cmd.exe",
             });
         } catch (error) {
             thrownError = error;
         }
 
         expect(thrownError).toBeInstanceOf(AggregateError);
-
-        const aggregateError = thrownError as AggregateError;
-        const messages = aggregateError.errors.map((item: unknown) =>
-            isErrorLike(item) ? item.message : String(item)
-        );
-
-        expect(aggregateError.message).toContain(
-            "cleanup encountered additional errors"
-        );
-        expect(messages).toContain("simulated smoke failure");
-        expect(messages).toContain(
-            "Failed to restore dependencies after the Stylelint 16 compatibility check."
-        );
-
-        expect(executedCommands).toStrictEqual([
-            "npm run build",
-            "npm install --no-save --legacy-peer-deps stylelint@^16",
-            "node /repo/scripts/stylelint-compat-smoke.mjs --expect-stylelint-major=16",
-            "npm install --ignore-scripts --no-audit --no-fund --legacy-peer-deps",
+        expect((thrownError as AggregateError).errors).toHaveLength(2);
+        expect((thrownError as AggregateError).errors).toStrictEqual([
+            expect.objectContaining({ message: "build failed" }),
+            expect.objectContaining({
+                message:
+                    "Failed to remove compatibility directory: /temp/compat",
+            }),
         ]);
     });
 
-    it("surfaces cleanup failures even when the compatibility check succeeds", async () => {
+    it("provides Windows command and direct-execution helpers", () => {
         expect.hasAssertions();
 
-        await expect(
-            runStylelint16Compat({
-                copyFileFn: () => Promise.resolve(),
-                cpFn: () => Promise.resolve(),
-                mkdtempFn: () => Promise.resolve("/temp/stylelint16-backup"),
-                nodeCommand: "node",
-                npmCommand: "npm",
-                packageJsonPath: "/repo/package.json",
-                packageLockJsonPath: "/repo/package-lock.json",
-                platform: "linux",
-                repositoryRootPath: "/repo",
-                rmFn: () => {
-                    throw new Error("simulated temp cleanup failure");
-                },
-                runCommandFn: () => {},
-                stylelintCompatSmokeScriptPath:
-                    "/repo/scripts/stylelint-compat-smoke.mjs",
-                tmpDirectoryPath: "/temp",
-                windowsCommandShell: "cmd.exe",
-            })
-        ).rejects.toThrow(
-            "Failed to remove temporary backup directory: /temp/stylelint16-backup"
+        expect(getNpmCommand("win32")).toBe("npm.cmd");
+        expect(getWindowsCommandShell({ COMSPEC: "custom-cmd.exe" })).toBe(
+            "custom-cmd.exe"
         );
-    });
-
-    it("exposes a direct-execution guard so imports do not trigger the wrapper", () => {
-        expect.hasAssertions();
-
         expect(
             isDirectExecution({
                 argvEntry: "C:/repo/scripts/run-stylelint16-compat.mjs",
@@ -258,7 +237,6 @@ describe("run-stylelint16-compat wrapper", () => {
                     "file:///C:/repo/scripts/run-stylelint16-compat.mjs",
             })
         ).toBe(true);
-
         expect(
             isDirectExecution({
                 argvEntry: "C:/repo/test/run-stylelint16-compat.test.ts",

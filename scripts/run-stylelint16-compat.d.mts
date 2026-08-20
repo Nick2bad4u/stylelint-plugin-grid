@@ -1,6 +1,8 @@
 export interface Stylelint16CompatCommandSpec {
     readonly args: readonly string[];
+    readonly captureOutput?: boolean | undefined;
     readonly command: string;
+    readonly cwd: string;
     readonly shell: boolean;
 }
 
@@ -13,49 +15,51 @@ export function isDirectExecution(input: {
     readonly currentImportUrl: string;
 }): boolean;
 
-export function createCompatibilityCheckCommands(input?: {
+export function createPreparationCommands(input: {
+    readonly npmCommand?: string | undefined;
+    readonly platform?: string | undefined;
+    readonly repositoryRootPath?: string | undefined;
+    readonly tempDirectoryPath: string;
+}): readonly Stylelint16CompatCommandSpec[];
+
+export function createRuntimeCommands(input: {
     readonly nodeCommand?: string | undefined;
     readonly npmCommand?: string | undefined;
     readonly platform?: string | undefined;
-    readonly stylelintCompatSmokeScriptPath?: string | undefined;
+    readonly runtimeDirectoryPath: string;
 }): readonly Stylelint16CompatCommandSpec[];
 
-export function createRestoreDependenciesCommand(input?: {
-    readonly npmCommand?: string | undefined;
-    readonly platform?: string | undefined;
-}): Stylelint16CompatCommandSpec;
-
-export function runCommand(input: {
-    readonly args: readonly string[];
-    readonly command: string;
-    readonly repositoryRootPath?: string | undefined;
-    readonly shell?: boolean | undefined;
-    readonly windowsCommandShell?: string | undefined;
-}): void;
+export function runCommand(
+    input: Stylelint16CompatCommandSpec & {
+        readonly windowsCommandShell?: string | undefined;
+    }
+): string;
 
 export function runStylelint16Compat(input?: {
     readonly copyFileFn?:
         typeof import("node:fs/promises").copyFile | undefined;
     readonly cpFn?: typeof import("node:fs/promises").cp | undefined;
-    readonly mkdtempFn?: ((prefix: string) => Promise<string>) | undefined;
+    readonly createTempDirectoryFn?:
+        ((prefix: string) => Promise<string>) | undefined;
+    readonly mkdirFn?: typeof import("node:fs/promises").mkdir | undefined;
     readonly nodeCommand?: string | undefined;
     readonly npmCommand?: string | undefined;
-    readonly packageJsonPath?: string | undefined;
-    readonly packageLockJsonPath?: string | undefined;
     readonly platform?: string | undefined;
     readonly repositoryRootPath?: string | undefined;
     readonly rmFn?: typeof import("node:fs/promises").rm | undefined;
     readonly runCommandFn?:
         | ((
               input: Stylelint16CompatCommandSpec & {
-                  readonly repositoryRootPath?: string | undefined;
                   readonly windowsCommandShell?: string | undefined;
               }
-          ) => void)
+          ) => string)
         | undefined;
     readonly stylelintCompatSmokeScriptPath?: string | undefined;
+    readonly stylelintSpecs?: readonly string[] | undefined;
     readonly tmpDirectoryPath?: string | undefined;
     readonly windowsCommandShell?: string | undefined;
+    readonly writeFileFn?:
+        typeof import("node:fs/promises").writeFile | undefined;
 }): Promise<void>;
 
 export function runCli(): Promise<void>;

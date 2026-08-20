@@ -83,6 +83,20 @@ describe("npm pack metadata parsing", () => {
         expect(() => parseNpmPackMetadata(packOutput)).toThrow(expectedMessage);
     });
 
+    it.each([
+        "../example-package-1.0.0.tgz",
+        "nested/example-package-1.0.0.tgz",
+        String.raw`nested\example-package-1.0.0.tgz`,
+        "example-package-1.0.0.zip",
+        " example-package-1.0.0.tgz",
+    ])("rejects an unsafe filename: %s", (filename) => {
+        expect.hasAssertions();
+
+        expect(() =>
+            parseNpmPackMetadata(JSON.stringify([{ filename }]))
+        ).toThrow("filename must be a safe .tgz basename");
+    });
+
     it("rejects an unsupported top-level shape", () => {
         expect.hasAssertions();
 

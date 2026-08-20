@@ -1,5 +1,7 @@
 // @ts-check
 
+import path from "node:path";
+
 /**
  * @typedef {Readonly<{ filename: string }>} NpmPackMetadata
  */
@@ -54,7 +56,20 @@ const normalizeNpmPackMetadata = (metadata) => {
         );
     }
 
-    return { filename: entry.filename };
+    const filename = entry.filename.trim();
+
+    if (
+        filename !== entry.filename ||
+        path.posix.basename(filename) !== filename ||
+        path.win32.basename(filename) !== filename ||
+        path.posix.extname(filename) !== ".tgz"
+    ) {
+        throw new TypeError(
+            "ATTW pack check failed: npm pack --json filename must be a safe .tgz basename."
+        );
+    }
+
+    return { filename };
 };
 
 /**
