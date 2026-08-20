@@ -60,6 +60,25 @@ describe("npm release safety policy", () => {
         expect(automation).not.toContain("--legacy-peer-deps");
         expect(automation).not.toContain("--dangerously-allow-all-scripts");
     });
+
+    it("bootstraps npm 12 outside the project before project npm commands", () => {
+        expect.hasAssertions();
+
+        const workflows = [
+            readText(".github/workflows/ci.yml"),
+            readText(".github/workflows/deploy-docusaurus.yml"),
+            readText(".github/workflows/release.yml"),
+        ].join("\n");
+        const bootstrapWorkingDirectories = workflows.match(
+            /working-directory: "\$\{\{ runner\.temp \}\}"/gv
+        );
+
+        expect(bootstrapWorkingDirectories).toHaveLength(4);
+        expect(workflows).not.toContain('cache: "npm"');
+        expect(workflows).toContain(
+            "require(require('node:path').join(process.env.GITHUB_WORKSPACE, 'package.json'))"
+        );
+    });
 });
 
 describe("release workflow transaction", () => {
