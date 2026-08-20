@@ -62,6 +62,29 @@ describe("npm release safety policy", () => {
         expect(automation).not.toContain("--dangerously-allow-all-scripts");
     });
 
+    it("builds config inspectors from locked local dependencies", () => {
+        expect.hasAssertions();
+
+        const scripts = packageJson["scripts"];
+        const devDependencies = packageJson["devDependencies"];
+
+        if (!isRecord(scripts) || !isRecord(devDependencies)) {
+            throw new TypeError(
+                "package.json scripts and devDependencies must be objects."
+            );
+        }
+
+        expect(devDependencies["@eslint/config-inspector"]).toBe("^3.0.4");
+        expect(devDependencies["stylelint-config-inspector"]).toBe("^2.3.5");
+        expect(scripts["build:eslint-inspector"]).toMatch(
+            /^config-inspector build /v
+        );
+        expect(scripts["build:stylelint-inspector"]).toMatch(
+            /^stylelint-config-inspector build /v
+        );
+        expect(Object.values(scripts).join("\n")).not.toContain("@latest");
+    });
+
     it("bootstraps npm 12 outside the project before project npm commands", () => {
         expect.hasAssertions();
 
