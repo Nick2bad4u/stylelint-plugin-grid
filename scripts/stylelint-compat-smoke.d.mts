@@ -8,7 +8,15 @@ export interface ConfigScenario {
 export interface StylelintResultLike {
     readonly invalidOptionWarnings?: readonly unknown[];
     readonly parseErrors?: readonly unknown[];
-    readonly warnings?: readonly unknown[];
+    readonly warnings?: readonly {
+        readonly column?: number;
+        readonly endColumn?: number;
+        readonly endLine?: number;
+        readonly line?: number;
+        readonly rule?: string;
+        readonly severity?: string;
+        readonly text?: string;
+    }[];
 }
 
 export interface StylelintLike {
@@ -16,7 +24,9 @@ export interface StylelintLike {
         readonly code: string;
         readonly codeFilename: string;
         readonly config: import("stylelint").Config;
+        readonly fix?: boolean;
     }): Promise<{
+        readonly code?: string;
         readonly results: readonly StylelintResultLike[];
     }>;
 }

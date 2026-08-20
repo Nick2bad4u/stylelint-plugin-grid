@@ -682,20 +682,71 @@ describe("grid rule behavior", () => {
     it("autofixes legacy grid gap aliases", async () => {
         expect.hasAssertions();
 
-        const result = await runStylelintWithConfig({
-            code: `
+        const source = `
                 .layout {
                     grid-gap: 1rem;
                     grid-column-gap: 2rem;
                     grid-row-gap: 3rem;
                 }
-            `,
+            `;
+        const expected = `
+                .layout {
+                    gap: 1rem;
+                    column-gap: 2rem;
+                    row-gap: 3rem;
+                }
+            `;
+        const firstPass = await runStylelintWithConfig({
+            code: source,
+            config: { rules: { "grid/prefer-gap-properties": true } },
+            fix: true,
+        });
+        const firstPassCode = firstPass.code ?? "";
+        const secondPass = await runStylelintWithConfig({
+            code: firstPassCode,
             config: { rules: { "grid/prefer-gap-properties": true } },
             fix: true,
         });
 
-        expect(result.code).toContain("gap: 1rem");
-        expect(result.code).toContain("column-gap: 2rem");
-        expect(result.code).toContain("row-gap: 3rem");
+        expect(firstPassCode).toBe(expected);
+        expect(firstPass.results[0]?.parseErrors).toHaveLength(0);
+        expect(firstPass.results[0]?.warnings).toHaveLength(0);
+        expect(secondPass.code).toBe(expected);
+        expect(secondPass.results[0]?.parseErrors).toHaveLength(0);
+        expect(secondPass.results[0]?.warnings).toHaveLength(0);
+    });
+
+    it("does not autofix legacy grid gap aliases when disabled", async () => {
+        expect.hasAssertions();
+
+        const source = ".layout { grid-gap: 1rem; }";
+        const result = await runStylelintWithConfig({
+            code: source,
+            config: { rules: { "grid/prefer-gap-properties": null } },
+            fix: true,
+        });
+
+        expect(result.code).toBe(source);
+        expect(result.results[0]?.invalidOptionWarnings).toHaveLength(0);
+        expect(result.results[0]?.parseErrors).toHaveLength(0);
+        expect(result.results[0]?.warnings).toHaveLength(0);
+    });
+
+    it("does not autofix legacy grid gap aliases with an invalid option", async () => {
+        expect.hasAssertions();
+
+        const source = ".layout { grid-gap: 1rem; }";
+        const result = await runStylelintWithConfig({
+            code: source,
+            config: {
+                rules: { "grid/prefer-gap-properties": "invalid" },
+            },
+            fix: true,
+        });
+
+        expect(result.code).toBe(source);
+        expect(result.results[0]?.invalidOptionWarnings).toHaveLength(1);
+        expect(result.results[0]?.parseErrors).toHaveLength(0);
+        expect(result.results[0]?.warnings).toHaveLength(0);
     });
 });

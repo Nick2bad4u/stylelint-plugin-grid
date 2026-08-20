@@ -11,6 +11,7 @@ import {
     createRuleDocsUrl,
     createRuleName,
 } from "../_internal/plugin-constants.js";
+import { supportsInstalledStylelintReportFixCallback } from "../_internal/stylelint-version-capabilities.js";
 
 const { report, ruleMessages, validateOptions } = stylelint.utils;
 
@@ -42,7 +43,7 @@ function getReplacement(
 }
 
 const ruleFunction: RuleBase<boolean, undefined> =
-    (primary) => (root, result) => {
+    (primary, _secondaryOptions, context) => (root, result) => {
         if (
             !validateOptions(result, ruleName, {
                 actual: primary,
@@ -52,10 +53,20 @@ const ruleFunction: RuleBase<boolean, undefined> =
             return;
         }
 
+        const shouldApplyLegacyFix =
+            !supportsInstalledStylelintReportFixCallback &&
+            context.fix === true;
+
         root.walkDecls((declaration) => {
             const replacement = getReplacement(declaration);
 
             if (!isDefined(replacement)) {
+                return;
+            }
+
+            if (shouldApplyLegacyFix) {
+                declaration.prop = replacement;
+
                 return;
             }
 
