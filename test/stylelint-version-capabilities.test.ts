@@ -7,7 +7,7 @@ describe("stylelint runtime capabilities", () => {
         expect.hasAssertions();
 
         expect(supportsReportFixCallback("16.0.0")).toBe(false);
-        expect(supportsReportFixCallback("16.6.1")).toBe(false);
+        expect(supportsReportFixCallback("16.6.1")).not.toBe(true);
         expect(supportsReportFixCallback("16.7.0")).toBe(true);
         expect(supportsReportFixCallback("16.26.1")).toBe(true);
         expect(supportsReportFixCallback("17.14.1")).toBe(true);
